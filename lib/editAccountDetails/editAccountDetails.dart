@@ -1,0 +1,108 @@
+import 'package:flutter/material.dart';
+
+class EditAccountDetails extends StatelessWidget {
+  const EditAccountDetails({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      body: Column(
+        children: <Widget>[
+          AppBarFb2(),
+          TopBarFb3(
+              title: "BloodLink",
+              upperTitle:
+                  "\nEdit Profile") // there is a juggar here with this \n thing
+        ],
+      ),
+    );
+  }
+}
+
+class TopBarFb3 extends StatelessWidget {
+  final String title;
+  final String upperTitle;
+  TopBarFb3({required this.title, required this.upperTitle, Key? key})
+      : super(key: key);
+  final primaryColor = Color.fromARGB(255, 222, 44, 44);
+  final secondaryColor = const Color(0xff6D28D9);
+  final accentColor = const Color(0xffffffff);
+  final backgroundColor = const Color(0xffffffff);
+  final errorColor = const Color(0xffEF4444);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.15,
+      decoration: BoxDecoration(
+          color: primaryColor,
+          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60))),
+      // gradient: LinearGradient(colors: [primaryColor, secondaryColor])),
+      // child: Padding(
+      //   padding: const EdgeInsets.all(25.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Text(title,
+          //     textAlign: TextAlign.center,
+          //     style: const TextStyle(
+          //         color: Colors.white70,
+          //         fontSize: 20,
+          //         fontWeight: FontWeight.bold)),
+          Center(
+              child: Text(upperTitle,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal)))
+        ],
+      ),
+      // ),
+    );
+  }
+}
+
+// - - - - - - - - - - - - Instructions - - - - - - - - - - - - - -
+// Place AppBarFb1 inside the app bar property of a Scaffold
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
+  @override
+  final Size preferredSize;
+
+  AppBarFb2({Key? key})
+      : preferredSize = const Size.fromHeight(56.0),
+        super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    const primaryColor = Color(0xffde2c2c);
+    const secondaryColor = Color(0xff6D28D9);
+    const accentColor = Color(0xffffffff);
+    const backgroundColor = Color(0xffffffff);
+    const errorColor = Color(0xffEF4444);
+
+    return AppBar(
+      centerTitle: true,
+      title: const Text("BloodLink", style: TextStyle(color: Colors.white)),
+      backgroundColor: primaryColor,
+      actions: [
+        // IconButton(
+        // icon: Icon(
+        // Icons.share,
+        // color: accentColor,
+        // ),
+        // onPressed: () {},
+        // )
+      ],
+      leading: IconButton(
+        icon: Icon(
+          Icons.keyboard_arrow_left,
+          color: accentColor,
+        ),
+        onPressed: () {},
+      ),
+    );
+  }
+}
