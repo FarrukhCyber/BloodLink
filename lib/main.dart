@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:signup_signin/screens/signup.dart';
+// import 'package:signup_signin/screens/signup.dart';
+import 'package:signup_signin/screens-2/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: signup(),
+      routes: {
+        '/': (context) => const login(),
+        // '/signup': (context) => const signup_page()
+      },
+      // home: login(),
     );
   }
 }

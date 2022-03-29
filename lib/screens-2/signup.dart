@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+// import 'package:signup_signin/services/authenticate.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:signup_signin/screens-2/homepage.dart';
 
 class signup extends StatefulWidget {
   const signup({Key? key}) : super(key: key);
@@ -15,7 +18,12 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
   final passwordEditingController = new TextEditingController();
   final confirmPasswordEditingController = new TextEditingController();
   final phoneNumberEditingController = new TextEditingController();
-  String dropDownvalue = 'A Positive (A+)';
+  String dropDownValue = 'A Positive (A+)';
+  String? name;
+  String? pass;
+  String? phone;
+  String? email;
+  String? blood;
   var items = [
     'A Positive (A+)',
     'A Negative (A-)',
@@ -24,6 +32,7 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
     'O Positive (O+)',
     'O Negative (O-)'
   ];
+
   @override
   void initState() {
     super.initState();
@@ -117,7 +126,15 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
       child: MaterialButton(
           padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           minWidth: MediaQuery.of(context).size.width,
-          onPressed: () {},
+          onPressed: () {
+            // AuthService().sign(name, pass, blood, phone, email).then((val) {
+            //   if (val.data['success']) {
+            //     Fluttertoast.showToast(msg: "Worked");
+            //     Navigator.of(context)
+            //         .push(MaterialPageRoute(builder: (context) => homepage()));
+            //   }
+            // });
+          },
           child: Text(
             "Continue",
             textAlign: TextAlign.center,
@@ -155,7 +172,7 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
                       phoneField,
                       SizedBox(height: 20),
                       DropdownButton(
-                        value: 'A Positive (A+)', //dropDownvalue,
+                        value: dropDownValue, // Change
                         icon: const Icon(Icons.keyboard_arrow_down),
                         items: items.map((String items) {
                           return DropdownMenuItem(
@@ -165,7 +182,7 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
                         }).toList(),
                         onChanged: (String? newValue) {
                           setState(() {
-                            dropDownvalue = newValue!;
+                            dropDownValue = newValue!;
                           });
                         },
                       ),
