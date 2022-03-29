@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:signup_signin/screens-2/homepage.dart';
 import 'signup.dart';
 // import 'package:signup_signin/services/authenticate.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:signup_signin/screens-2/homepage.dart';
+import 'package:http/http.dart' as http;
 
 class login extends StatefulWidget {
   const login({Key? key}) : super(key: key);
@@ -19,8 +22,8 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
   final passwordEditingController = new TextEditingController();
   bool isAPIcallProcess = false;
   bool hidePassword = true;
-  String? name;
-  String? pass;
+  var name = "";
+  var pass = "";
 
   @override
   void initState() {
@@ -42,8 +45,11 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
       autofocus: false,
       obscureText: true,
       controller: passwordEditingController, //check this
-      onSaved: (value) {
-        passwordEditingController.text = value!;
+      // onSaved: (value) {
+      //   passwordEditingController.text = value!;
+      //   pass = value;
+      // },
+      onChanged: (value) {
         pass = value;
       },
       textInputAction: TextInputAction.next,
@@ -57,8 +63,12 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
       autofocus: false,
       keyboardType: TextInputType.name,
       controller: userNameEditingController, //check this
-      onSaved: (value) {
-        userNameEditingController.text = value!;
+      // onSaved: (value) {
+      //   print(value);
+      //   userNameEditingController.text = value!;
+      //   name = value;
+      // },
+      onChanged: (value) {
         name = value;
       },
       textInputAction: TextInputAction.next,
@@ -76,6 +86,10 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
           padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           minWidth: MediaQuery.of(context).size.width,
           onPressed: () {
+            // print(name);
+            // print(pass);
+            print("Hello");
+            login_func(name, pass);
             // AuthService().login(name, pass).then((val) {
             //   if (val.data['success']) {
             //     Fluttertoast.showToast(msg: "Worked");
@@ -144,4 +158,25 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
       )),
     );
   }
+}
+
+login_func(name, pass) async {
+  var url = "http://127.0.0.1:8080/login";
+  final http.Response response = await http.post(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'name': name,
+      'pass': pass,
+    }),
+  );
+  print("this one");
+  print(response.body);
+  // if (response.statusCode == 201) {
+  //   print("Success");
+  // } else {
+  //   throw Exception("Failed to login");
+  // }
 }
