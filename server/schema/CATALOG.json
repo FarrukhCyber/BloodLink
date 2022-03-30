@@ -1,0 +1,18 @@
+[{
+  "_id": {
+    "$oid": "623a35b6f8c0fb9fc097ecf1"
+  },
+  "id": 0,
+  "name": "farrukh",
+  "email": "user@gmail.com",
+  "contact_num": 336,
+  "blood_group": "O+",
+  "vaccinated": true,
+  "last_donated": {
+    "$timestamp": {
+      "t": 0,
+      "i": 12
+    }
+  },
+  "city": "Lahore"
+}]

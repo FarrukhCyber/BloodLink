@@ -1,0 +1,19 @@
+[{
+  "_id": {
+    "$oid": "623a3750f8c0fb9fc097ecf7"
+  },
+  "user_contact_num": 1,
+  "blood_group": "o-",
+  "diabetes": false,
+  "blood_disease": false,
+  "vaccinated": false,
+  "gender": "Male",
+  "last_donated": {
+    "$timestamp": {
+      "t": 0,
+      "i": 12
+    }
+  },
+  "region": "Ichra",
+  "plasma": 0
+}]

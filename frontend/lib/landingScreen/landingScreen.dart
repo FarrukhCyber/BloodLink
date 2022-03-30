@@ -6,56 +6,137 @@ class LandingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.red,
-      body: Padding(
-        padding: const EdgeInsets.all(110.0),
-        child: Column(
-          children: const <Widget>[
-            GradientButtonFb1(
-              text: "LogIn",
-            )
-          ],
-        ),
+      backgroundColor: const Color.fromRGBO(243, 243, 243, 35),
+      body: Column(
+        children: <Widget>[
+          Logo(key: key),
+          Buttons(
+            key: key,
+          )
+        ],
       ),
     );
   }
 }
 
-class GradientButtonFb1 extends StatelessWidget {
-  final String text;
-  // final Function() onPressed;
-  const GradientButtonFb1({required this.text, Key? key}) : super(key: key);
-  // const GradientButtonFb1({required this.text, required this.onPressed, Key? key}) : super(key: key);
+class Logo extends StatelessWidget {
+  const Logo({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xff4338CA);
-    const secondaryColor = Color(0xff6D28D9);
-    const accentColor = Color(0xffffffff);
+    return Container(
+      padding: EdgeInsets.only(top: 60),
+      child: const Image(
+        image: AssetImage("assets/bloodlink.png"),
+        height: 220,
+        width: 220,
+      ),
+      alignment: Alignment.center,
+    );
+  }
+}
 
-    const double borderRadius = 15;
+class LoginButton extends StatelessWidget {
+  const LoginButton({Key? key}) : super(key: key);
 
-    return DecoratedBox(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(borderRadius),
-            gradient:
-                const LinearGradient(colors: [primaryColor, secondaryColor])),
-        child: ElevatedButton(
-          style: ButtonStyle(
-              elevation: MaterialStateProperty.all(0),
-              alignment: Alignment.center,
-              padding: MaterialStateProperty.all(const EdgeInsets.only(
-                  right: 75, left: 75, top: 15, bottom: 15)),
-              backgroundColor: MaterialStateProperty.all(Colors.transparent),
-              shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(borderRadius)),
-              )),
-          onPressed: () => {},
-          child: Text(
-            text,
-            style: const TextStyle(color: accentColor, fontSize: 16),
-          ),
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all(Colors.white),
+          backgroundColor:
+              MaterialStateProperty.all(Color.fromARGB(255, 193, 0, 0)),
+          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+              const EdgeInsets.symmetric(vertical: 15, horizontal: 80)),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ))),
+      child: const Text(
+        "Login",
+        style: TextStyle(fontSize: 20.0),
+      ),
+      onPressed: () => {
+        // Navigator.pushNamed(
+        //   context,
+        //   '/login',
+        // ),
+        print("I'm login")
+      },
+    );
+  }
+}
+
+class GuestButton extends StatelessWidget {
+  const GuestButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
+      style: OutlinedButton.styleFrom(
+          padding: const EdgeInsets.all(15),
+          side: const BorderSide(color: Colors.red),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0))),
+      child: const Text("Continue as a Guest",
+          style: TextStyle(
+            color: Colors.red,
+            fontSize: 20.0,
+          )),
+      onPressed: () => {
+        // Navigator.pushNamed(
+        //   context,
+        //   '/guest',
+        // ),
+
+        print("I'm guest")
+      },
+    );
+  }
+}
+
+class SigupButton extends StatelessWidget {
+  const SigupButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        onPressed: () => {
+              // Navigator.pushNamed(s
+              //   context,
+              //   '/signup',
+              // ),
+              debugPrint("I'm signup")
+            },
+        child: const Text(
+          "Don't have an Account? Sign up",
+          style: TextStyle(fontSize: 15, color: Colors.red),
         ));
+  }
+}
+
+class Buttons extends StatelessWidget {
+  const Buttons({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(top: 150),
+      child: Column(
+        children: <Widget>[
+          LoginButton(
+            key: key,
+          ),
+          SizedBox(height: 15),
+          GuestButton(
+            key: key,
+          ),
+          SizedBox(height: 15),
+          SigupButton(
+            key: key,
+          )
+        ],
+      ),
+    );
   }
 }

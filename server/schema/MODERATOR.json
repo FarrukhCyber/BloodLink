@@ -1,0 +1,11 @@
+[{
+  "_id": {
+    "$oid": "623a383ef8c0fb9fc097ecfc"
+  },
+  "moderator_id": 2,
+  "moderator_name": "mod",
+  "admin_id": 1,
+  "email": "mod@gmail.com",
+  "password": "password",
+  "contact_num": 336
+}]

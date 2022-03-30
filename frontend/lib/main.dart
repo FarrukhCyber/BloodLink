@@ -13,12 +13,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: LandingScreen(
-        key: key,
-      ),
+      routes: {
+        '/' : ((context) => LandingScreen(key: key,)),
+        // '/login': (context) => ,// Add Login class
+        // '/guest': (context) => ,// Add guest class
+        // '/signup': (context) => ,// Add signup class
+      },
+    
+      debugShowCheckedModeBanner: false,
+     
     );
   }
 }
