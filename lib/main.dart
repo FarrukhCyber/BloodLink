@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 // import 'package:signup_signin/screens/signup.dart';
 import 'package:signup_signin/screens-2/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // imp https://dart.dev/null-safety/unsound-null-safety
+/*
+flutter run --no-sound-null-safety lib/main.dart
+*/
 // flutter cook book
 // flutter gallery
 
