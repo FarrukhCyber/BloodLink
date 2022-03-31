@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'modifAccountDetails/modifyAccountDetails.dart';
 
 class EditAccountDetails extends StatelessWidget {
   const EditAccountDetails({Key? key}) : super(key: key);
@@ -12,9 +13,60 @@ class EditAccountDetails extends StatelessWidget {
           TopBarFb3(
               title: "BloodLink",
               upperTitle:
-                  "\nEdit Profile") // there is a juggar here with this \n thing
+                  "\nEdit Profile"), // there is a juggar here with this \n thing
+          Heading(title: "\n  Personal Information"),
+          // GradientButtonFb1(text: "Edit")
         ],
       ),
+    );
+  }
+}
+
+class Heading extends StatelessWidget {
+  final String title;
+  Heading({required this.title, Key? key}) : super(key: key);
+  final primaryColor = const Color.fromARGB(255, 222, 44, 44);
+  final secondaryColor = const Color(0xff6D28D9);
+  final accentColor = const Color(0xffffffff);
+  final backgroundColor = const Color(0xffffffff);
+  final errorColor = const Color(0xffEF4444);
+  final double borderRadius = 15;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.08,
+      // color: Color.fromARGB(200, 200, 300, 300),
+      decoration: BoxDecoration(color: secondaryColor),
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title,
+                style: const TextStyle(
+                    color: Color.fromARGB(255, 222, 44, 44),
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold)),
+            Align(
+                alignment: Alignment.topLeft,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(0),
+                      alignment: Alignment.center,
+                      padding: MaterialStateProperty.all(const EdgeInsets.only(
+                          right: 20, left: 20, top: 10, bottom: 10)),
+                      backgroundColor: MaterialStateProperty.all(primaryColor),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(borderRadius)),
+                      )),
+                  onPressed: null,
+                  child: const Text(
+                    "Edit",
+                    style: TextStyle(color: Color(0xffffffff), fontSize: 16),
+                  ),
+                ))
+          ]),
     );
   }
 }
@@ -63,10 +115,6 @@ class TopBarFb3 extends StatelessWidget {
     );
   }
 }
-
-// - - - - - - - - - - - - Instructions - - - - - - - - - - - - - -
-// Place AppBarFb1 inside the app bar property of a Scaffold
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
   @override
