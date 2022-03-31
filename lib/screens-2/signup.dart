@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-// import 'package:signup_signin/services/authenticate.dart';
+import 'dart:convert';
+import 'dart:io';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:signup_signin/screens-2/homepage.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class signup extends StatefulWidget {
   const signup({Key? key}) : super(key: key);
@@ -19,11 +22,12 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
   final confirmPasswordEditingController = new TextEditingController();
   final phoneNumberEditingController = new TextEditingController();
   String dropDownValue = 'A Positive (A+)';
-  String? name;
-  String? pass;
-  String? phone;
-  String? email;
-  String? blood;
+  var name = "";
+  var pass = "";
+  var confirmPass = "";
+  var phone = "";
+  var email = "";
+  var blood = 'A Positive (A+)';
   var items = [
     'A Positive (A+)',
     'A Negative (A-)',
@@ -53,8 +57,9 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
       autofocus: false,
       controller: emailEditingController, //check this
       keyboardType: TextInputType.emailAddress,
-      onSaved: (value) {
-        emailEditingController.text = value!;
+      onChanged: (value) {
+        //emailEditingController.text = value!;
+        email = value;
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
@@ -67,8 +72,9 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
       autofocus: false,
       obscureText: true,
       controller: passwordEditingController, //check this
-      onSaved: (value) {
-        passwordEditingController.text = value!;
+      onChanged: (value) {
+        //passwordEditingController.text = value!;
+        pass = value;
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
@@ -81,8 +87,9 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
       autofocus: false,
       obscureText: true,
       controller: confirmPasswordEditingController, //check this
-      onSaved: (value) {
-        confirmPasswordEditingController.text = value!;
+      onChanged: (value) {
+        // confirmPasswordEditingController.text = value!;
+        confirmPass = value;
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
@@ -95,8 +102,9 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
       autofocus: false,
       keyboardType: TextInputType.name,
       controller: userNameEditingController, //check this
-      onSaved: (value) {
-        userNameEditingController.text = value!;
+      onChanged: (value) {
+        // userNameEditingController.text = value!;
+        name = value;
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
@@ -109,8 +117,9 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
       autofocus: false,
       keyboardType: TextInputType.name,
       controller: phoneNumberEditingController, //check this
-      onSaved: (value) {
-        phoneNumberEditingController.text = value!;
+      onChanged: (value) {
+        // phoneNumberEditingController.text = value!;
+        phone = value;
       },
       textInputAction: TextInputAction.done,
       decoration: InputDecoration(
@@ -126,14 +135,66 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
       child: MaterialButton(
           padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           minWidth: MediaQuery.of(context).size.width,
-          onPressed: () {
-            // AuthService().sign(name, pass, blood, phone, email).then((val) {
-            //   if (val.data['success']) {
-            //     Fluttertoast.showToast(msg: "Worked");
-            //     Navigator.of(context)
-            //         .push(MaterialPageRoute(builder: (context) => homepage()));
-            //   }
-            // });
+          onPressed: () async {
+            print("In func");
+            print(name);
+            print(pass);
+            print(confirmPass);
+            print(phone);
+            print(blood);
+            print(email);
+            print("Hello from signup on press");
+            if (pass != confirmPass) {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                        title: const Text('Passwords dont match'),
+                        content: const Text('Please re-enter the passwords'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'Ok'),
+                            child: const Text('Ok'),
+                          ),
+                        ],
+                      ));
+            } else {
+              await signup_func(name, pass, email, phone, blood);
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              String? msg = prefs.getString("signup");
+              print("message is:");
+              print(msg);
+              if (msg == "Email exists") {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                          title: const Text('Email exists'),
+                          content: const Text(
+                              'Please choose another email or login'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'Ok'),
+                              child: const Text('Ok'),
+                            ),
+                          ],
+                        ));
+              } else if (msg != "null") {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => homepage()));
+              } else {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                          title: const Text('There was an error'),
+                          content: const Text('Checking'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'Ok'),
+                              child: const Text('Ok'),
+                            ),
+                          ],
+                        ));
+              }
+            }
           },
           child: Text(
             "Continue",
@@ -161,14 +222,34 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
+                      Text(
+                        "UserName",
+                      ),
+                      SizedBox(height: 5),
                       userNameField,
                       SizedBox(height: 35),
+                      Text(
+                        "Email",
+                      ),
+                      SizedBox(height: 5),
                       emailField,
                       SizedBox(height: 35),
+                      Text(
+                        "Password",
+                      ),
+                      SizedBox(height: 5),
                       passwordField,
                       SizedBox(height: 35),
+                      Text(
+                        "Confirm Password",
+                      ),
+                      SizedBox(height: 5),
                       confirmPasswordField,
                       SizedBox(height: 35),
+                      Text(
+                        "Phone",
+                      ),
+                      SizedBox(height: 5),
                       phoneField,
                       SizedBox(height: 20),
                       DropdownButton(
@@ -183,6 +264,7 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
                         onChanged: (String? newValue) {
                           setState(() {
                             dropDownValue = newValue!;
+                            blood = newValue;
                           });
                         },
                       ),
@@ -194,5 +276,45 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
                 ))),
       )),
     );
+  }
+}
+
+signup_func(name, pass, email, phone, blood) async {
+  var url = "http://localhost:8080/signup";
+  print("In signup");
+  try {
+    final http.Response response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'userName': name,
+        'password': pass,
+        'phoneNumber': phone,
+        'bloodType': blood,
+        'email': email
+      }),
+    );
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var parse = jsonDecode(response.body);
+    if (parse["signup"] == null) {
+      print("it is null");
+      // message = "null";
+      await prefs.setString('signup', "null");
+    } else
+      await prefs.setString('signup', parse["signup"]);
+
+    print("Message received:");
+    print(parse["signup"]);
+  } on HttpException catch (err) {
+    print(err);
+    return null;
+  } on Error catch (error) {
+    print(error);
+    return null;
+  } on Object catch (error) {
+    print(error);
+    return null;
   }
 }

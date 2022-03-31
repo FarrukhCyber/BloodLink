@@ -26,6 +26,7 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
   bool hidePassword = true;
   var name = "";
   var pass = "";
+  var message = "";
 
   @override
   void initState() {
@@ -89,13 +90,28 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
           minWidth: MediaQuery.of(context).size.width,
           onPressed: () async {
             print("Hello");
-            login_func(name, pass);
+            await login_func(name, pass);
             SharedPreferences prefs = await SharedPreferences.getInstance();
             String? msg = prefs.getString("msg");
+            print("message is:");
             print(msg);
-            if (msg != null) {
+            if (msg != "null") {
               Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => homepage()));
+            } else {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                        title: const Text('Creddentials are Incorrect!'),
+                        content: const Text(
+                            'Please re-enter the credentials or signup instead'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'Ok'),
+                            child: const Text('Ok'),
+                          ),
+                        ],
+                      ));
             }
           },
           child: Text(
@@ -170,14 +186,21 @@ login_func(name, pass) async {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        'name': name,
-        'pass': pass,
+        'userName': name,
+        'password': pass,
       }),
     );
     print("this one");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var parse = jsonDecode(response.body);
-    await prefs.setString('msg', parse["msg"]);
+    if (parse["msg"] == null) {
+      print("it is null");
+      // message = "null";
+      await prefs.setString('msg', "null");
+    } else
+      await prefs.setString('msg', parse["msg"]);
+
+    print("Message received:");
     print(parse["msg"]);
   } on HttpException catch (err) {
     print(err);

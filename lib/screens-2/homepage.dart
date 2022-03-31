@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class homepage extends StatefulWidget {
   const homepage({Key? key}) : super(key: key);
@@ -25,6 +26,6 @@ class _homepageState extends State<homepage>
 
   @override
   Widget build(BuildContext context) {
-    return Container(child: Text("Homepage"));
+    return Scaffold(appBar: AppBar(title: const Text("Bloodlink")));
   }
 }
