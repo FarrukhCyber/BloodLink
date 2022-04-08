@@ -6,7 +6,8 @@ const regUsersSchema = new mongoose.Schema({
     password: String,
     gender : String,
     donor: Boolean,
-    user_contact_num: Number
+    user_contact_num: String,
+    blood_group: String
 });
 
 const RegisteredUsersModel = mongoose.model("REGISTERED_USER", regUsersSchema);

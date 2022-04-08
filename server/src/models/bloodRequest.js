@@ -1,0 +1,18 @@
+const mongoose = require("mongoose");
+
+const bloodRequestSchema = new mongoose.Schema({
+    req_id: Number, //TODO: make it auto increment
+    attendant_name: String,
+    attendant_num: String,
+    blood_group: String,
+    status: Boolean,
+    quantity: String,
+    user_contact_num: String,
+    admin_id: Number,
+    moderator_id: Number,
+    deadline: Date,
+    hospital : String,
+});
+
+const RequestModel = mongoose.model("BLOOD_REQUEST", bloodRequestSchema);
+module.exports = RequestModel;
