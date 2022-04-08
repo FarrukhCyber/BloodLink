@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_6/pages/googleSignIn.dart';
-import 'signUp1.dart';
+import 'package:bloodlink/screens/googleSignIn.dart';
+import 'signup.dart';
 import '../api/google_signin_api.dart';
 import 'googleSignIn.dart';
 import 'package:google_sign_in/google_sign_in.dart';

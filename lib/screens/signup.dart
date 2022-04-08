@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'signUp1.dart';
 
 
 class signup extends StatefulWidget {
