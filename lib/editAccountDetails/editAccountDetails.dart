@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'modifAccountDetails/modifyAccountDetails.dart';
 
@@ -15,12 +16,36 @@ class EditAccountDetails extends StatelessWidget {
               upperTitle:
                   "\nEdit Profile"), // there is a juggar here with this \n thing
           Heading(title: "\n  Personal Information"),
+          // Line()
           // GradientButtonFb1(text: "Edit")
         ],
       ),
     );
   }
 }
+
+// class Line extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       color: Colors.white,
+//       child: (Row(
+//         children: <Widget>[
+//           // ...
+//           Expanded(
+//             child: Column(
+//               children: <Widget>[
+//                 Text("Book Name"),
+//                 Text("Author name"),
+//                 Divider(color: Colors.black)
+//               ],
+//             ),
+//           )
+//         ],
+//       )),
+//     );
+//   }
+// }
 
 class Heading extends StatelessWidget {
   final String title;
@@ -37,22 +62,28 @@ class Heading extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.08,
       // color: Color.fromARGB(200, 200, 300, 300),
-      decoration: BoxDecoration(color: secondaryColor),
+      decoration: BoxDecoration(color: accentColor),
       child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title,
-                style: const TextStyle(
-                    color: Color.fromARGB(255, 222, 44, 44),
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold)),
-            Align(
-                alignment: Alignment.topLeft,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title, // this is personal information
+            style: const TextStyle(
+                color: Color.fromARGB(255, 222, 44, 44),
+                fontSize: 15,
+                fontWeight: FontWeight.bold),
+            // textAlign: TextAlign.left,
+          ),
+          Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                margin: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width * 0.40),
                 child: ElevatedButton(
                   style: ButtonStyle(
                       elevation: MaterialStateProperty.all(0),
-                      alignment: Alignment.center,
+                      alignment: Alignment.centerRight,
                       padding: MaterialStateProperty.all(const EdgeInsets.only(
                           right: 20, left: 20, top: 10, bottom: 10)),
                       backgroundColor: MaterialStateProperty.all(primaryColor),
@@ -61,12 +92,17 @@ class Heading extends StatelessWidget {
                             borderRadius: BorderRadius.circular(borderRadius)),
                       )),
                   onPressed: null,
-                  child: const Text(
+                  child: Text(
                     "Edit",
                     style: TextStyle(color: Color(0xffffffff), fontSize: 16),
+                    // textAlign: TextAlign.right,
                   ),
-                ))
-          ]),
+                ),
+              )),
+          // <Widget> Divider(color: Colors.black)
+        ],
+      ),
+      // Divider(color: Colors.black)
     );
   }
 }
@@ -155,3 +191,41 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
   }
 }
 //heloo github
+
+// login_func(name, pass) async {
+//   var url = "http://localhost:4000/small";
+//   print("In login");
+//   try {
+//     final http.Response response = await http.get( //how get does, google
+//       Uri.parse(url),
+//       headers: <String, String>{
+//         'Content-Type': 'application/json; charset=UTF-8',
+//       },
+//       body: jsonEncode(<String, String>{
+//         'userName': name,
+//         'password': pass,
+//       }),
+//     );
+//     print("this one");
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     var parse = jsonDecode(response.body);
+//     if (parse["msg"] == null) {
+//       print("it is null");
+//       // message = "null";
+//       await prefs.setString('msg', "null");
+//     } else
+//       await prefs.setString('msg', parse["msg"]);
+
+//     print("Message received:");
+//     print(parse["msg"]);
+//   } on HttpException catch (err) {
+//     print(err);
+//     return null;
+//   } on Error catch (error) {
+//     print(error);
+//     return null;
+//   } on Object catch (error) {
+//     print(error);
+//     return null;
+//   }
+// }
