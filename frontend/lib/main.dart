@@ -1,4 +1,4 @@
-import 'package:flutter_application_2/registerDonor.dart';
+import 'package:flutter_application_2/screens/registerDonor.dart';
 import 'package:flutter/material.dart';
 
 void main() {

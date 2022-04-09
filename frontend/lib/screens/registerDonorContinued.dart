@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:csc_picker/csc_picker.dart';
-import 'package:flutter_application_2/registerDonor.dart';
+import 'package:flutter_application_2/screens/registerDonor.dart';
+import 'package:flutter_application_2/screens/networkHandler.dart';
 
 bool diabetesSelection = false;
 bool plasmaSelection = false;
@@ -28,6 +29,7 @@ class registerDonorContinued extends StatefulWidget {
 
 class _registerDonorContinuedState extends State<registerDonorContinued> {
   @override
+  NetworkHandler networkHandler = NetworkHandler();
   final listDropdown = <String>['Choose', 'Yes', 'No'];
   @override
   Widget build(BuildContext context) {
@@ -258,6 +260,27 @@ class _registerDonorContinuedState extends State<registerDonorContinued> {
           print(plasmaSelection);
           print(diabetesSelection);
           print(dateSelection);
+          () async {
+            Map<String, dynamic> res = {
+              'user_contact_num': widget.contact,
+              "blood_group": widget.bloodGroup,
+              "diabetes": diseaseSelect,
+              "blood_disease": diseaseSelect,
+              "vaccinated": vaccinatedSelect,
+              "last_donated": dateSelection,
+              "region": widget.region,
+              "gender": widget.gender,
+              "plasma": plasmaSelection
+            };
+            var responseRegister =
+                await networkHandler.post('/register_donor', res);
+            if (responseRegister.statusCode == 200 ||
+                responseRegister.statusCode == 201) {
+              print('successful');
+            } else {
+              print('unsucessful');
+            }
+          };
         },
         child: Text(
           label,
@@ -300,13 +323,13 @@ class _DropDownMenuState extends State<DropDownMenu> {
             setState(() {
               widget.dropDownValue = newValue!;
               if (widget.selection == 'vaccine') {
-                vaccinatedSelect= newValue=='Yes'? true:false;
+                vaccinatedSelect = newValue == 'Yes' ? true : false;
               } else if (widget.selection == 'disease') {
-                diseaseSelect = newValue=='Yes'? true:false;
+                diseaseSelect = newValue == 'Yes' ? true : false;
               } else if (widget.selection == 'plasma') {
-                plasmaSelection = newValue=='Yes'? true:false;
+                plasmaSelection = newValue == 'Yes' ? true : false;
               } else if (widget.selection == 'diabetes') {
-                diabetesSelection = newValue=='Yes'? true:false;
+                diabetesSelection = newValue == 'Yes' ? true : false;
               }
             });
           },

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:csc_picker/csc_picker.dart';
-import 'package:flutter_application_2/registerDonorContinued.dart';
+import 'package:flutter_application_2/screens/registerDonorContinued.dart';
 
 String bloodGroupSelection = "";
 String genderSelection = "";
