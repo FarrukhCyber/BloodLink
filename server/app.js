@@ -9,5 +9,5 @@ mongoose.connect(url , { useNewUrlParser: true, useUnifiedTopology: true }).then
     ()=> console.log("Connection Successful")
 ).catch( (err) => console.log(err))
 
-const useRouter = require("./routes/demoRoutes")
-app.use("/demo", useRouter)
+// const useRouter = require("./routes/demoRoutes")
+// app.use("/demo", useRouter)
