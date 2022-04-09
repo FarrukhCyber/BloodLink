@@ -37,7 +37,7 @@ function sendEmails() {
 
 const getPostData = (result) => {
     return {
-        post: `Blood Type: ${result.blood_group} Hospital: ${result.hospital} Contact: ${result.attendant_num}` ,
+        post: `Blood Type: ${result.blood_group} \n Hospital: ${result.hospital} \nContact: ${result.attendant_num}` ,
         platforms: ["facebook"]
     }
 }
@@ -75,8 +75,8 @@ router.post("/" , (req, res) => {
         console.log(json)
     }
 
-    // socialMediaPosting()
-    sendEmails()
+    socialMediaPosting()
+    // sendEmails()
 })
 
 module.exports = router
