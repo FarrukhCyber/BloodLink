@@ -8,7 +8,7 @@ const newSchema = new Schema({
     phoneNumber:Number,
     bloodType:String,
     gender:String, 
-    age: Number,
+    age: Date,
     donor:Boolean
 })
 
