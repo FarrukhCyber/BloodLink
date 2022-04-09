@@ -41,6 +41,7 @@ dependencies:
   flutter_progress_hud: ^2.0.0
   shared_preferences: ^2.0.13
   material_design_icons_flutter: ^5.0.6595
+  email_validator: ^2.0.1
   # flutter_session: ^0.1.1
   
 dev_dependencies:

@@ -1,0 +1,7 @@
+TO:DO
+- Phonenumber must be unique
+- Email must be unique
+- username must be unique
+
+
+Done:

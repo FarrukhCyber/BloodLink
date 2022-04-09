@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:io';
+import 'package:email_validator/email_validator.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 import 'package:signup_signin/screens-2/homepage.dart';
 import 'package:http/http.dart' as http;
@@ -53,6 +54,12 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
   void dispose() {
     super.dispose();
     _controller.dispose();
+    emailEditingController.dispose(); // newly added
+    passwordEditingController.dispose();
+    confirmPasswordEditingController.dispose();
+    phoneNumberEditingController.dispose();
+    ageEditingController.dispose();
+    userNameEditingController.dispose();
   }
 
   @override
@@ -65,6 +72,9 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
         //emailEditingController.text = value!;
         email = value;
       },
+      validator: (value) => value != null && !EmailValidator.validate(value)
+          ? 'Enter a valid email'
+          : null,
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
           // prefixIcon: Icon(Icons.mail),
