@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:bloodlink/screens/signup.dart';
 
 class Otp extends StatefulWidget {
   FirebaseAuth authen;
@@ -246,6 +247,8 @@ class _OtpState extends State<Otp> {
             backgroundColor: Color.fromARGB(255, 193, 0, 0),
             textColor: Colors.white,
             fontSize: 16.0);
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => signup(phoneNo: widget.phoneNo)));
       });
     } catch (error) {
       Fluttertoast.showToast(

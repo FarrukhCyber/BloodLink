@@ -37,6 +37,12 @@ dependencies:
   firebase_core: ^1.14.0
   firebase_auth: ^3.3.13
   fluttertoast: ^8.0.9
+  http: ^0.13.4
+  flutter_progress_hud: ^2.0.0
+  shared_preferences: ^2.0.13
+  material_design_icons_flutter: ^5.0.6595
+  email_validator: ^2.0.1
+  dio: 
 
 
 dev_dependencies:
