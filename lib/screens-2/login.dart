@@ -87,13 +87,23 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
         },
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-            // prefixIcon: Icon(Icons.mail),
-            contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-            hintText: "Username",
-            labelText: 'Username',
-            border: UnderlineInputBorder(
-              borderSide: BorderSide(color: red.withOpacity(.1), width: 2.0),
-            )));
+          // prefixIcon: Icon(Icons.mail),
+          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+          hintText: "Username",
+          labelText: 'Username',
+          border: UnderlineInputBorder(
+            borderSide: BorderSide(color: red.withOpacity(.1), width: 2.0),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: red, width: 2.0),
+          ),
+          errorBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: red, width: 2.0),
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: red.withOpacity(.1), width: 2.0),
+          ),
+        ));
     final loginButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(6),
