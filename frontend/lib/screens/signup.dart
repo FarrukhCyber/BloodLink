@@ -8,6 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bloodlink/utils/user_info.dart';
 
+DateTime dateSelection = DateTime.now();
+
 class signup extends StatefulWidget {
   String phoneNo;
   signup({Key? key, required this.phoneNo}) : super(key: key);
@@ -57,7 +59,6 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
     emailEditingController.dispose(); // newly added
     passwordEditingController.dispose();
     confirmPasswordEditingController.dispose();
-    ageEditingController.dispose();
     userNameEditingController.dispose();
   }
 
@@ -156,7 +157,8 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
                         ],
                       ));
             } else {
-              await signup_func(name, pass, email, widget.phoneNo, blood, gender, age);
+              await signup_func(
+                  name, pass, email, widget.phoneNo, blood, gender, dateSelection);
               SharedPreferences prefs = await SharedPreferences.getInstance();
               String? msg = prefs.getString("signup");
               print("message is:");
@@ -268,10 +270,10 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
                       confirmPasswordField,
                       SizedBox(height: 35),
                       Text(
-                        "Age",
+                        "Date of Birth",
                       ),
                       SizedBox(height: 5),
-                      ageField,
+                      getDate(title: "Select Date"),
                       SizedBox(height: 20),
                       DropdownButton(
                         value: dropDownValue, // Change
@@ -326,7 +328,7 @@ signup_func(name, pass, email, phone, blood, gender, age) async {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{
+      body: jsonEncode(<String, dynamic>{
         'userName': name,
         'password': pass,
         'phoneNumber': phone,
@@ -356,5 +358,45 @@ signup_func(name, pass, email, phone, blood, gender, age) async {
   } on Object catch (error) {
     print(error);
     return null;
+  }
+}
+
+class getDate extends StatefulWidget {
+  getDate({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  _DropDownState createState() => _DropDownState();
+}
+
+class _DropDownState extends State<getDate> {
+  DateTime selectedDate = DateTime.now();
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2015, 8),
+      lastDate: DateTime(2101),
+      builder: (context, child) => Theme(
+        data: ThemeData().copyWith(
+          colorScheme: ColorScheme.dark(
+            primary: Color.fromARGB(255, 222, 44, 44),
+            onPrimary: Colors.white,
+            surface: Color.fromARGB(255, 222, 44, 44),
+            onSurface: Colors.black,
+          ),
+          dialogBackgroundColor: Colors.white,
+        ),
+        child: child!,
+      ),
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+        dateSelection = picked;
+      });
+    }
   }
 }
