@@ -286,8 +286,10 @@ class _DropDownState extends State<getDate> {
             height: 0,
           ),
           RaisedButton(
+            color: Color.fromARGB(255, 222, 44, 44),
             onPressed: () => _selectDate(context),
-            child: Text('Please select date on which blood is required'),
+            child: Text('Please select date on which blood is required',
+                style: TextStyle(color: Color(0xffffffff))),
           ),
         ],
       ),
@@ -315,10 +317,14 @@ class _getTimeState extends State<getTime> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                      Color.fromARGB(255, 222, 44, 44))),
               onPressed: () {
                 _selectTime(context);
               },
-              child: Text("Please select time by which blood is requried"),
+              child: Text("Please select time by which blood is requried",
+                  style: TextStyle(color: Color(0xffffffff))),
             ),
             Text("${_selectedTime.hour}:${_selectedTime.minute}"),
           ],
@@ -332,6 +338,18 @@ class _getTimeState extends State<getTime> {
       context: context,
       initialTime: _selectedTime,
       initialEntryMode: TimePickerEntryMode.dial,
+      builder: (context, child) => Theme(
+        data: ThemeData().copyWith(
+          colorScheme: ColorScheme.dark(
+            primary: Color.fromARGB(255, 222, 44, 44),
+            onPrimary: Colors.white,
+            surface: Colors.white,
+            onSurface: Color.fromARGB(255, 222, 44, 44),
+          ),
+          // dialogBackgroundColor: Color.fromARGB(255, 17, 70, 168),
+        ),
+        child: child!,
+      ),
     );
     if (obtainedTime != null && obtainedTime != _selectedTime) {
       setState(() {
