@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:signup_signin/screens-2/homepage.dart';
 import 'signup.dart';
 // import 'package:signup_signin/services/authenticate.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:signup_signin/screens-2/homepage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:signup_signin/utils/user_info.dart';
 
 class login extends StatefulWidget {
   const login({Key? key}) : super(key: key);
@@ -60,6 +61,7 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
           // prefixIcon: Icon(Icons.mail),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Password",
+          labelText: 'Password',
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
     );
     final userNameField = TextFormField(
@@ -71,6 +73,13 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
       //   userNameEditingController.text = value!;
       //   name = value;
       // },
+      validator: (String? value) {
+        // add stuff here
+        return (value != null && value.contains('@'))
+            ? 'Do not use the @ char.'
+            : null;
+      },
+
       onChanged: (value) {
         name = value;
       },
@@ -79,12 +88,13 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
           // prefixIcon: Icon(Icons.mail),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Username",
+          labelText: 'Username',
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
     );
     final loginButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(30),
-      color: Colors.redAccent,
+      color: Colors.red,
       child: MaterialButton(
           padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           minWidth: MediaQuery.of(context).size.width,
@@ -96,8 +106,23 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
             print("message is:");
             print(msg);
             if (msg != "null") {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => homepage()));
+              UserSimplePreferences.setUsername(
+                  prefs.getString("userName") ?? "ERROR"); // CHECK --
+              UserSimplePreferences.setEmail(
+                  prefs.getString("email") ?? "ERROR");
+              UserSimplePreferences.setPhoneNumber(
+                  prefs.getString("phoneNumber") ?? "ERROR");
+              UserSimplePreferences.setAge(prefs.getString("age") ?? "ERROR");
+              UserSimplePreferences.setBloodType(
+                  prefs.getString("bloodType") ?? "ERROR");
+              UserSimplePreferences.setPassword(
+                  prefs.getString("password") ?? "ERROR");
+              UserSimplePreferences.setGender(
+                  prefs.getString("gender") ?? "ERROR");
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => homepage(
+                        userName: name,
+                      )));
             } else {
               showDialog(
                   context: context,
@@ -118,13 +143,15 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
             "Login",
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+                fontSize: 20,
+                color: Colors.white, //Color(0xffC10100),
+                fontWeight: FontWeight.bold),
           )),
     );
     final newButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(30),
-      color: Colors.redAccent,
+      color: Colors.red,
       child: MaterialButton(
           padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           minWidth: MediaQuery.of(context).size.width,
@@ -136,15 +163,12 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
             "Create a new Account",
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+                fontSize: 20,
+                color: Colors.white, //Color(0xffC10100),
+                fontWeight: FontWeight.bold),
           )),
     );
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Bloodlink"),
-        backgroundColor: Colors.red,
-        centerTitle: true,
-      ),
       backgroundColor: Colors.white,
       body: Center(
           child: SingleChildScrollView(
@@ -158,8 +182,12 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Image.asset('assets/bloodlink.png',
-                          height: 100, fit: BoxFit.fill),
+                      Image.asset(
+                        'assets/bloodlink.png',
+                        height: 100,
+                        fit: BoxFit.fill,
+                        color: Colors.red,
+                      ),
                       SizedBox(height: 35),
                       userNameField,
                       SizedBox(height: 35),
@@ -177,7 +205,7 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
 }
 
 login_func(name, pass) async {
-  var url = "http://localhost:8080/login";
+  var url = "http://localhost:8080/auth/login";
   print("In login");
   try {
     final http.Response response = await http.post(
@@ -197,8 +225,24 @@ login_func(name, pass) async {
       print("it is null");
       // message = "null";
       await prefs.setString('msg', "null");
-    } else
+    } else {
       await prefs.setString('msg', parse["msg"]);
+      await prefs.setString('userName', parse["userName"]);
+      await prefs.setString('phoneNumber', parse["phoneNumber"]);
+      await prefs.setString('bloodType', parse["bloodType"]);
+      await prefs.setString('password', parse["password"]);
+      await prefs.setString('gender', parse["gender"]);
+      await prefs.setString('age', parse["age"]);
+      await prefs.setString('email', parse["email"]);
+      print("Here they are");
+      print(parse["userName"]);
+      print(parse["email"]);
+      print(parse["gender"]);
+      print(parse["age"]);
+      print(parse["phoneNumber"]);
+      print(parse["password"]);
+      print(parse["bloodType"]);
+    }
 
     print("Message received:");
     print(parse["msg"]);

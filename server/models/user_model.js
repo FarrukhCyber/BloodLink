@@ -6,7 +6,11 @@ const newSchema = new Schema({
     password:String,
     email:String,
     phoneNumber:Number,
-    bloodType:String
+    bloodType:String,
+    gender:String, 
+    age: Number,
+    donor:Boolean
 })
 
 module.exports = mongoose.model('User', newSchema)
+

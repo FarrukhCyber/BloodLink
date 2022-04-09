@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:io';
-// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:signup_signin/screens-2/homepage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:signup_signin/utils/user_info.dart';
 
-class signup extends StatefulWidget {
-  const signup({Key? key}) : super(key: key);
+class editProfile extends StatefulWidget {
+  const editProfile({Key? key}) : super(key: key);
 
   @override
-  State<signup> createState() => _signupState();
+  State<editProfile> createState() => _editProfileState();
 }
 
-class _signupState extends State<signup> with SingleTickerProviderStateMixin {
+class _editProfileState extends State<editProfile> {
   late AnimationController _controller;
   final _formkey = GlobalKey<FormState>();
   final userNameEditingController = new TextEditingController();
@@ -42,12 +41,6 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
     'O Negative (O-)'
   ];
   var genderItems = ['Male', 'Female', 'Other'];
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(vsync: this);
-  }
 
   @override
   void dispose() {
