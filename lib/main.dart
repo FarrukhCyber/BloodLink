@@ -79,7 +79,7 @@ class HomeScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => LoginWithPhone()));
-                },
+                },//from here
                 child: Text("Login with Phone")),
           ],
         ),
