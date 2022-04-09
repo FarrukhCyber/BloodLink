@@ -1,3 +1,4 @@
+import 'package:create_blood_request/createBloodRequest/createBloodRequestPage2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +30,7 @@ class CreateBloodRequest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Color.fromARGB(255, 229, 229, 229),
       body: Column(
         children: <Widget>[
           AppBarFb2(),
@@ -47,7 +48,8 @@ class CreateBloodRequest extends StatelessWidget {
               labelText: "Attendant Phone Number"),
           DropDownMenu(),
           getDate(title: "Please select a date"),
-          getTime()
+          getTime(),
+          PairButton(text: "Hello")
         ],
       ),
     );
@@ -356,5 +358,79 @@ class _getTimeState extends State<getTime> {
         _selectedTime = obtainedTime;
       });
     }
+  }
+}
+
+class PairButton extends StatelessWidget {
+  final String text;
+  // final Function() onPressed;
+  const PairButton({required this.text, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    const primaryColor = Color.fromARGB(255, 222, 44, 44);
+    // const secondaryColor = Color(0xff6D28D9);
+    const accentColor = Color(0xffffffff);
+
+    const double borderRadius = 15;
+
+    return DecoratedBox(
+        decoration:
+            BoxDecoration(borderRadius: BorderRadius.circular(borderRadius)
+                // gradient:
+                // const LinearGradient(colors: [primaryColor, secondaryColor])
+                ),
+        child: Container(
+          margin: EdgeInsets.fromLTRB(
+              0, MediaQuery.of(context).size.height * 0.03, 0, 0),
+          child: Row(
+            children: [
+              Container(
+                margin: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.height * 0.1, 0, 0, 0),
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(0),
+                      alignment: Alignment.center,
+                      padding: MaterialStateProperty.all(const EdgeInsets.only(
+                          right: 30, left: 30, top: 10, bottom: 10)),
+                      backgroundColor: MaterialStateProperty.all(Colors.white),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(borderRadius)),
+                      )),
+                  onPressed: null,
+                  child: Text(
+                    "Cancel",
+                    style: const TextStyle(color: primaryColor, fontSize: 16),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.height * 0.02, 0, 0, 0),
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(0),
+                      alignment: Alignment.center,
+                      padding: MaterialStateProperty.all(const EdgeInsets.only(
+                          right: 30, left: 30, top: 10, bottom: 10)),
+                      backgroundColor: MaterialStateProperty.all(primaryColor),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(borderRadius)),
+                      )),
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => CreateBloodRequestPage2(key: key))),
+                  // onPressed: () => CreateBloodRequestPage2(key: key),
+                  child: Text(
+                    "Contiue",
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ));
   }
 }
