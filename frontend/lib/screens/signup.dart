@@ -9,6 +9,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bloodlink/utils/user_info.dart';
 
 DateTime dateSelection = DateTime.now();
+var red = Color(0xffde2c2c);
+var backgroundColor = Color.fromARGB(255, 229, 229, 229);
+var opacity = 0.3;
+var darkred = Color(0xffc10110);
+var pass = "";
+var confirmPass = "";
 
 class signup extends StatefulWidget {
   String phoneNo;
@@ -29,8 +35,8 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
   String dropDownValue = 'A Positive (A+)';
   String genderValue = 'Male';
   var name = "";
-  var pass = "";
-  var confirmPass = "";
+  // var pass = "";
+  // var confirmPass = "";
   var phone = "";
   var email = "";
   var age = "";
@@ -64,54 +70,31 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    // var red = Color(0xffde2c2c);
+    // var backgroundColor = Color.fromARGB(255, 229, 229, 229);
+    // var opacity = 0.3;
+    // var darkred = Color(0xffc10110);
     final emailField = TextFormField(
       autofocus: false,
       controller: emailEditingController, //check this
       keyboardType: TextInputType.emailAddress,
       onChanged: (value) {
-        //emailEditingController.text = value!;
         email = value;
       },
-      validator: (value) => value != null && !EmailValidator.validate(value)
+      validator: (value) => value != null && EmailValidator.validate(value)
           ? 'Enter a valid email'
           : null,
       textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-          // prefixIcon: Icon(Icons.mail),
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Enter Email",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+      decoration: decoration("Email", "Required", red, opacity),
     );
-    final passwordField = TextFormField(
-      autofocus: false,
-      obscureText: true,
-      controller: passwordEditingController, //check this
-      onChanged: (value) {
-        //passwordEditingController.text = value!;
-        pass = value;
-      },
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-          // prefixIcon: Icon(Icons.mail),
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Password",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
-    );
-    final confirmPasswordField = TextFormField(
-      autofocus: false,
-      obscureText: true,
-      controller: confirmPasswordEditingController, //check this
-      onChanged: (value) {
-        // confirmPasswordEditingController.text = value!;
-        confirmPass = value;
-      },
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-          // prefixIcon: Icon(Icons.mail),
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Confirm Password",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
-    );
+    final passwordField = passwordBuilder(
+        label: "Password",
+        hint: "Required",
+        controller: passwordEditingController);
+    final confirmPasswordField = passwordBuilder(
+        label: "Confirm Password",
+        hint: "Required",
+        controller: confirmPasswordEditingController);
     final userNameField = TextFormField(
       autofocus: false,
       keyboardType: TextInputType.name,
@@ -121,16 +104,12 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
         name = value;
       },
       textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-          // prefixIcon: Icon(Icons.mail),
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Username",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
+      decoration: decoration("Username", "Required", red, opacity),
     );
     final signupButton = Material(
       elevation: 5,
-      borderRadius: BorderRadius.circular(30),
-      color: Colors.redAccent,
+      borderRadius: BorderRadius.circular(6),
+      color: red,
       child: MaterialButton(
           padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           minWidth: MediaQuery.of(context).size.width,
@@ -157,8 +136,10 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
                         ],
                       ));
             } else {
+              DateTime dateonly = DateTime(
+                  dateSelection.year, dateSelection.month, dateSelection.day);
               await signup_func(
-                  name, pass, email, widget.phoneNo, blood, gender, dateSelection);
+                  name, pass, email, widget.phoneNo, blood, gender, dateonly);
               SharedPreferences prefs = await SharedPreferences.getInstance();
               String? msg = prefs.getString("signup");
               print("message is:");
@@ -211,32 +192,17 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
                 fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
           )),
     );
-    final ageField = TextFormField(
-      autofocus: false,
-      controller: ageEditingController, //check this
-      keyboardType: TextInputType.number,
-      onChanged: (value) {
-        //emailEditingController.text = value!;
-        age = value;
-      },
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-          // prefixIcon: Icon(Icons.mail),
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Enter Age",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
-    );
     return Scaffold(
       appBar: AppBar(
         title: const Text("Bloodlink"),
-        backgroundColor: Colors.red,
+        backgroundColor: red,
         centerTitle: true,
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: backgroundColor,
       body: Center(
           child: SingleChildScrollView(
         child: Container(
-            color: Colors.white,
+            color: backgroundColor,
             child: Padding(
                 padding: const EdgeInsets.all(36.0),
                 child: Form(
@@ -245,34 +211,14 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Text(
-                        "UserName",
-                      ),
-                      SizedBox(height: 5),
                       userNameField,
                       SizedBox(height: 35),
-                      Text(
-                        "Email",
-                      ),
-                      SizedBox(height: 5),
                       emailField,
                       SizedBox(height: 35),
-                      Text(
-                        "Password",
-                      ),
-                      SizedBox(height: 5),
                       passwordField,
                       SizedBox(height: 35),
-                      Text(
-                        "Confirm Password",
-                      ),
-                      SizedBox(height: 5),
                       confirmPasswordField,
                       SizedBox(height: 35),
-                      Text(
-                        "Date of Birth",
-                      ),
-                      SizedBox(height: 5),
                       getDate(title: "Select Date"),
                       SizedBox(height: 20),
                       DropdownButton(
@@ -399,4 +345,125 @@ class _DropDownState extends State<getDate> {
       });
     }
   }
+
+  @override
+  Widget build(BuildContext context) {
+    // throw UnimplementedError();
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.85,
+      margin: EdgeInsets.fromLTRB(
+          0, MediaQuery.of(context).size.height * 0.03, 0, 0),
+      child: Column(
+        children: [
+          Text(
+            "${selectedDate.toLocal()}".split(' ')[0],
+            style: TextStyle(
+              color: Color.fromARGB(255, 193, 0, 0),
+              decoration: TextDecoration.underline,
+            ),
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.015,
+          ),
+          ElevatedButton(
+            //padding: EdgeInsets.all(1.0),
+            //olor: Color.fromARGB(255, 193, 0, 0),
+            style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all(Colors.white),
+                backgroundColor:
+                    MaterialStateProperty.all(Color.fromARGB(255, 193, 0, 0)),
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                    EdgeInsets.symmetric(vertical: 10, horizontal: 50)),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ))),
+            onPressed: () => _selectDate(context),
+            child: Text(
+              "Select Date",
+              style: TextStyle(color: Colors.white, fontSize: 18.0),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+decoration(String label, String hint, red, opacity) => InputDecoration(
+      labelText: label,
+      floatingLabelBehavior: FloatingLabelBehavior.always,
+      filled: true,
+      contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+      hintText: hint,
+      labelStyle: TextStyle(color: red),
+      border: UnderlineInputBorder(
+        borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
+      ),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: red, width: 2.0),
+      ),
+      errorBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: red, width: 2.0),
+      ),
+      enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
+      ),
+    );
+
+class passwordBuilder extends StatefulWidget {
+  final String label;
+  final String hint;
+  final TextEditingController controller;
+  const passwordBuilder(
+      {Key? key,
+      required this.label,
+      required this.hint,
+      required this.controller})
+      : super(key: key);
+
+  @override
+  State<passwordBuilder> createState() => _passwordBuilderState();
+}
+
+class _passwordBuilderState extends State<passwordBuilder> {
+  bool isHidden = true;
+  @override
+  Widget build(BuildContext context) => TextFormField(
+        controller: widget.controller,
+        obscureText: isHidden,
+        decoration: InputDecoration(
+          labelText: widget.label,
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          filled: true,
+          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+          hintText: widget.hint,
+          labelStyle: TextStyle(color: red),
+          suffixIcon: IconButton(
+            color: red,
+            icon:
+                isHidden ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
+            onPressed: togglePasswordVisibility,
+          ),
+          border: UnderlineInputBorder(
+            borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: red, width: 2.0),
+          ),
+          errorBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: red, width: 2.0),
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
+          ),
+        ),
+        keyboardType: TextInputType.visiblePassword,
+        autofillHints: [AutofillHints.password],
+        validator: (password) => password != null && password.length < 5
+            ? 'Enter min. 5 characters'
+            : null,
+      );
+
+  void togglePasswordVisibility() => setState(() => isHidden = !isHidden);
 }
