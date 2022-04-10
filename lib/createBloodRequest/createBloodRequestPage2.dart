@@ -15,80 +15,15 @@ class CreateBloodRequestPage2 extends StatelessWidget {
           TopBarFb3(
               title: "Initiate a Request",
               upperTitle: "\nWhere is the blood required"),
-          Container(
-            margin:
-                EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.05),
-            child: Card(
-              elevation: 10,
-              child: InkWell(
-                splashColor: Colors.blue.withAlpha(30),
-                onTap: () {
-                  print('Card tapped.');
-                },
-                child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.85,
-                    height: MediaQuery.of(context).size.height * 0.15,
-                    child: Row(
-                      children: [
-                        Container(
-                          alignment: Alignment.topLeft,
-                          // padding: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                          padding: EdgeInsets.fromLTRB(
-                              MediaQuery.of(context).size.width * 0.0250,
-                              MediaQuery.of(context).size.width * 0.0120,
-                              0,
-                              0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Column(
-                                // mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Use my current location',
-                                    style: TextStyle(
-                                        color: Color.fromARGB(255, 222, 44, 44),
-                                        fontWeight: FontWeight.bold,
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                                0.05),
-                                    textAlign: TextAlign.right,
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      '\n Use your current location as requested\n location',
-                                      style: TextStyle(
-                                          color: Color.fromARGB(255, 0, 0, 0),
-                                          // fontWeight: FontWeight.bold,
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.04),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(
-                              top: MediaQuery.of(context).size.width * 0.2,
-                              left: MediaQuery.of(context).size.width * 0.03),
-                          child: Icon(
-                            Icons.my_location,
-                            color: Color.fromARGB(255, 222, 44, 44),
-                            size: 30,
-                          ),
-                        ),
-                        //
-                      ],
-                    )),
-              ),
-            ),
+          const CardwithText(
+            heading: "Use my current location",
+            text: "\nUse your current location as required \n location",
+            symbol: Icons.my_location,
           ),
-          // InfoCard(title: "Use my Current Location", onMoreTap: null)
+          const CardwithText(
+              heading: "Enter a custom location",
+              text: "\nChoose a location manually on map   ",
+              symbol: Icons.location_on)
         ],
       ),
     );
@@ -177,128 +112,93 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
   }
 }
 
-// class InfoCard extends StatelessWidget {
-//   final String title;
-//   final String body;
-//   final Function() onMoreTap;
-
-//   final String subInfoTitle;
-//   final String subInfoText;
-//   final Widget subIcon;
-
-//   const InfoCard(
-//       {required this.title,
-//       this.body =
-//           """Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudi conseqr!""",
-//       required this.onMoreTap,
-//       this.subIcon = const CircleAvatar(
-//         child: Icon(
-//           Icons.directions,
-//           color: Colors.white,
-//         ),
-//         backgroundColor: Colors.orange,
-//         radius: 25,
-//       ),
-//       this.subInfoText = "545 miles",
-//       this.subInfoTitle = "Directions",
-//       Key? key})
-//       : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: EdgeInsets.all(25.0),
-//       decoration: BoxDecoration(
-//           borderRadius: BorderRadius.circular(25.0),
-//           boxShadow: [
-//             BoxShadow(
-//               color: Colors.black.withOpacity(.05),
-//               offset: Offset(0, 10),
-//               blurRadius: 0,
-//               spreadRadius: 0,
-//             )
-//           ],
-//           gradient: RadialGradient(
-//             colors: [Colors.orangeAccent, Colors.orange],
-//             focal: Alignment.topCenter,
-//             radius: .85,
-//           )),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         mainAxisSize: MainAxisSize.min,
-//         children: [
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//             children: [
-//               Text(
-//                 title,
-//                 style: TextStyle(
-//                     color: Colors.white,
-//                     fontSize: 26,
-//                     fontWeight: FontWeight.bold),
-//               ),
-//               Container(
-//                 width: 75,
-//                 height: 30,
-//                 decoration: BoxDecoration(
-//                   borderRadius: BorderRadius.circular(100.0),
-//                   gradient: LinearGradient(
-//                       colors: [Colors.white, Colors.white],
-//                       begin: Alignment.topCenter,
-//                       end: Alignment.bottomCenter),
-//                 ),
-//                 child: GestureDetector(
-//                   onTap: onMoreTap,
-//                   child: Center(
-//                       child: Text(
-//                     "More",
-//                     style: TextStyle(color: Colors.orange),
-//                   )),
-//                 ),
-//               ),
-//             ],
-//           ),
-//           SizedBox(height: 10),
-//           Text(
-//             body,
-//             style:
-//                 TextStyle(color: Colors.white.withOpacity(.75), fontSize: 14),
-//           ),
-//           SizedBox(height: 15),
-//           Container(
-//             width: double.infinity,
-//             height: 75,
-//             decoration: BoxDecoration(
-//               borderRadius: BorderRadius.circular(25.0),
-//               color: Colors.white,
-//             ),
-//             child: Padding(
-//               padding: const EdgeInsets.all(8.0),
-//               child: Row(
-//                 children: [
-//                   subIcon,
-//                   SizedBox(width: 10),
-//                   Column(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       Text(subInfoTitle),
-//                       Text(
-//                         subInfoText,
-//                         style: TextStyle(
-//                           color: Colors.orange,
-//                           fontSize: 22,
-//                           fontWeight: FontWeight.bold,
-//                         ),
-//                       ),
-//                     ],
-//                   )
-//                 ],
-//               ),
-//             ),
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
+class CardwithText extends StatelessWidget {
+  @override
+  final String heading;
+  final String text;
+  final IconData symbol;
+  // final Size preferredSize;
+  const CardwithText(
+      {required this.heading,
+      required this.text,
+      required this.symbol,
+      Key? key})
+      : super(key: key);
+  // CardwithText({Key? key})
+  //     // : preferredSize = const Size.fromHeight(56.0),
+  //     : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.05),
+      child: Card(
+        elevation: 10,
+        child: InkWell(
+          splashColor: Colors.blue.withAlpha(30),
+          onTap: () {
+            print('Card tapped.');
+          },
+          child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.85,
+              height: MediaQuery.of(context).size.height * 0.15,
+              child: Row(
+                children: [
+                  Container(
+                    alignment: Alignment.topLeft,
+                    // padding: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                    padding: EdgeInsets.fromLTRB(
+                        MediaQuery.of(context).size.width * 0.0250,
+                        MediaQuery.of(context).size.width * 0.0120,
+                        0,
+                        0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Column(
+                          // mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              heading,
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 222, 44, 44),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.06),
+                              textAlign: TextAlign.right,
+                            ),
+                            Expanded(
+                              child: Text(
+                                text,
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 0, 0, 0),
+                                    // fontWeight: FontWeight.bold,
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.04),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.width * 0.15,
+                        left: MediaQuery.of(context).size.width * 0.05),
+                    child: Icon(
+                      symbol,
+                      color: Color.fromARGB(255, 222, 44, 44),
+                      size: 36,
+                    ),
+                  ),
+                  //
+                ],
+              )),
+        ),
+      ),
+    );
+    // InfoCard(title: "Use my Current Location", onMoreTap: null)
+  }
+}
