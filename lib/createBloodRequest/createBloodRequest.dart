@@ -180,9 +180,11 @@ class InputFieldWithLabel extends StatelessWidget {
             const TextStyle(fontSize: 16, color: Color.fromARGB(255, 0, 0, 0)),
         decoration: InputDecoration(
           labelText: labelText,
+          labelStyle: TextStyle(color: primaryColor),
           floatingLabelBehavior: FloatingLabelBehavior.always,
           filled: true,
           hintText: hintText,
+          // hintStyle: TextStyle(color: Colors.red),
           hintStyle: TextStyle(color: Colors.grey.withOpacity(.75)),
           fillColor: Colors.transparent,
           contentPadding:

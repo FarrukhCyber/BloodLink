@@ -1,3 +1,5 @@
+import 'package:create_blood_request/createBloodRequest/createBloodRequest.dart';
+import 'package:create_blood_request/createBloodRequest/enterCustomLocation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -15,15 +17,16 @@ class CreateBloodRequestPage2 extends StatelessWidget {
           TopBarFb3(
               title: "Initiate a Request",
               upperTitle: "\nWhere is the blood required"),
-          const CardwithText(
+          const CurrentLocation(
             heading: "Use my current location",
             text: "\nUse your current location as required \n location",
             symbol: Icons.my_location,
           ),
-          const CardwithText(
-              heading: "Enter a custom location",
-              text: "\nChoose a location manually on map   ",
-              symbol: Icons.location_on)
+          const CustomLocation(
+            heading: "Enter a custom location",
+            text: "\nChoose a location manually on map   ",
+            symbol: Icons.location_on,
+          )
         ],
       ),
     );
@@ -102,29 +105,30 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
       // ),
       // onPressed: () {},
       // )
-      // leading: IconButton(
-      //     icon: Icon(
-      //       Icons.keyboard_arrow_left,
-      //       color: accentColor,
-      //     ),
-      //     onPressed: () => {}),
+      leading: IconButton(
+          icon: Icon(
+            Icons.keyboard_arrow_left,
+            color: accentColor,
+          ),
+          onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => CreateBloodRequest(key: key)))),
     );
   }
 }
 
-class CardwithText extends StatelessWidget {
+class CurrentLocation extends StatelessWidget {
   @override
   final String heading;
   final String text;
   final IconData symbol;
   // final Size preferredSize;
-  const CardwithText(
+  const CurrentLocation(
       {required this.heading,
       required this.text,
       required this.symbol,
       Key? key})
       : super(key: key);
-  // CardwithText({Key? key})
+  // CurrentLocation({Key? key})
   //     // : preferredSize = const Size.fromHeight(56.0),
   //     : super(key: key);
   @override
@@ -135,8 +139,107 @@ class CardwithText extends StatelessWidget {
         elevation: 10,
         child: InkWell(
           splashColor: Colors.blue.withAlpha(30),
-          onTap: () {
-            print('Card tapped.');
+          onTap: () => {
+            // print('Card tapped.');
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => EnterCustomLocation(
+                      key: key,
+                    )))
+          },
+          child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.85,
+              height: MediaQuery.of(context).size.height * 0.15,
+              child: Row(
+                children: [
+                  Container(
+                    alignment: Alignment.topLeft,
+                    // padding: EdgeInsets.fromLTRB(5, 10, 0, 0),
+                    padding: EdgeInsets.fromLTRB(
+                        MediaQuery.of(context).size.width * 0.0250,
+                        MediaQuery.of(context).size.width * 0.0120,
+                        0,
+                        0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Column(
+                          // mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              heading,
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 222, 44, 44),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize:
+                                      MediaQuery.of(context).size.width * 0.06),
+                              textAlign: TextAlign.right,
+                            ),
+                            Expanded(
+                              child: Text(
+                                text,
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 0, 0, 0),
+                                    // fontWeight: FontWeight.bold,
+                                    fontSize:
+                                        MediaQuery.of(context).size.width *
+                                            0.04),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.width * 0.15,
+                        left: MediaQuery.of(context).size.width * 0.05),
+                    child: Icon(
+                      symbol,
+                      color: Color.fromARGB(255, 222, 44, 44),
+                      size: 36,
+                    ),
+                  ),
+                  //
+                ],
+              )),
+        ),
+      ),
+    );
+    // InfoCard(title: "Use my Current Location", onMoreTap: null)
+  }
+}
+
+class CustomLocation extends StatelessWidget {
+  @override
+  final String heading;
+  final String text;
+  final IconData symbol;
+  // final Size preferredSize;
+  const CustomLocation(
+      {required this.heading,
+      required this.text,
+      required this.symbol,
+      Key? key})
+      : super(key: key);
+  // CustomLocation({Key? key})
+  //     // : preferredSize = const Size.fromHeight(56.0),
+  //     : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.05),
+      child: Card(
+        elevation: 10,
+        child: InkWell(
+          splashColor: Colors.blue.withAlpha(30),
+          onTap: () => {
+            // print('Card tapped.');
+            // Navigator.of(context).push(MaterialPageRoute(
+            //     builder: (context) => EnterCustomLocation(
+            //           key: key,
+            //         )))
           },
           child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.85,
