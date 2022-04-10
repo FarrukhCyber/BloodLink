@@ -8,9 +8,8 @@ class NetworkHandler {
 
   Future<http.Response> post(String url1, Map<String, dynamic> body) async {
     url1 = formater(url1);
-    var url = Uri.parse(url1);
     var response = await http.post(
-      url,
+      url1,
       headers: {
         "Content-type": "application/json",
       },

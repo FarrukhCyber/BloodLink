@@ -4,6 +4,7 @@ const port = 8080 || process.env.Port
 const app = express()
 //const submitRequestRoutes = require('./src/routes/submitRequestRoutes')
 const registerAsDonor = require('./src/routes/registerAsDonor')
+const myRequests = require('./src/routes/myRequests')
 
 app.use(express.json({extended:false}))
 
@@ -25,9 +26,8 @@ dbConnect()
 //-------------------------
 
 
-//app.use("/submit_request", submitRequestRoutes)
 app.use("/register_donor", registerAsDonor)
-
+app.use("/my_requests", myRequests)
 // 404 page
 app.use((req, res) => {
     res.status(404).render('404', { title: '404' });

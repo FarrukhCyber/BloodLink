@@ -6,7 +6,7 @@ const donorsSchema = new mongoose.Schema({
     diabetes: Boolean,
     blood_disease: Boolean,
     vaccinated: Boolean,
-    last_donated: String,
+    last_donated: Date,
     region: String,
     gender : String,
     plasma: Boolean,

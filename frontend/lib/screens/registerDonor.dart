@@ -34,6 +34,7 @@ class _registerDonorState extends State<registerDonor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: Column(
         mainAxisSize: MainAxisSize.min,
@@ -43,7 +44,8 @@ class _registerDonorState extends State<registerDonor> {
           TopBarFb3(context, "Donor Registeration"),
           Padding(
             padding: EdgeInsets.all(20),
-            child: Column(
+            child:
+            Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(height: MediaQuery.of(context).size.height * 0.02),
@@ -107,11 +109,7 @@ class _registerDonorState extends State<registerDonor> {
                 ),
                 NextButton("Continue", 0.7)
               ],
-            ),
-          ),
-
-          //InputFieldWithLabel(context, "City", "Region", region),
-        ],
+            ),),],
       ),
     );
   }
