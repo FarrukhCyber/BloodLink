@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:email_validator/email_validator.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:bloodlink/screens/homepage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,10 +10,26 @@ import 'package:bloodlink/utils/user_info.dart';
 DateTime dateSelection = DateTime.now();
 var red = Color(0xffde2c2c);
 var backgroundColor = Color.fromARGB(255, 229, 229, 229);
-var opacity = 0.3;
 var darkred = Color(0xffc10110);
+var opacity = 0.3;
 var pass = "";
 var confirmPass = "";
+var gender = "";
+var blood = '';
+var bloodItems = [
+  'Choose a blood group',
+  'A Positive (A+)',
+  'A Negative (A-)',
+  'B Positive (B+)',
+  'B Negative (B-)',
+  'AB Positive (AB+)',
+  'AB Negative (AB-)',
+  'O Positive (O+)',
+  'O Negative (O-)'
+];
+var genderItems = ['Choose a gender', 'Male', 'Female', 'Other'];
+String bloodValue = 'Choose a blood group';
+String genderValue = 'Choose a gender';
 
 class signup extends StatefulWidget {
   String phoneNo;
@@ -32,25 +47,11 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
   final passwordEditingController = new TextEditingController();
   final confirmPasswordEditingController = new TextEditingController();
   final ageEditingController = new TextEditingController();
-  String dropDownValue = 'A Positive (A+)';
-  String genderValue = 'Male';
+
   var name = "";
-  // var pass = "";
-  // var confirmPass = "";
   var phone = "";
   var email = "";
   var age = "";
-  var gender = "Male";
-  var blood = 'A Positive (A+)';
-  var items = [
-    'A Positive (A+)',
-    'A Negative (A-)',
-    'B Positive (B+)',
-    'B Negative (B-)',
-    'O Positive (O+)',
-    'O Negative (O-)'
-  ];
-  var genderItems = ['Male', 'Female', 'Other'];
 
   @override
   void initState() {
@@ -70,10 +71,6 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    // var red = Color(0xffde2c2c);
-    // var backgroundColor = Color.fromARGB(255, 229, 229, 229);
-    // var opacity = 0.3;
-    // var darkred = Color(0xffc10110);
     final emailField = TextFormField(
       autofocus: false,
       controller: emailEditingController, //check this
@@ -81,7 +78,7 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
       onChanged: (value) {
         email = value;
       },
-      validator: (value) => value != null && EmailValidator.validate(value)
+      validator: (value) => value != null && !EmailValidator.validate(value)
           ? 'Enter a valid email'
           : null,
       textInputAction: TextInputAction.next,
@@ -114,43 +111,23 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
           padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           minWidth: MediaQuery.of(context).size.width,
           onPressed: () async {
-            print("In func");
-            print(name);
-            print(pass);
-            print(confirmPass);
-            print(phone);
-            print(blood);
-            print(email);
-            print("Hello from signup on press");
-            if (pass != confirmPass) {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                        title: const Text('Passwords dont match'),
-                        content: const Text('Please re-enter the passwords'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, 'Ok'),
-                            child: const Text('Ok'),
-                          ),
-                        ],
-                      ));
-            } else {
-              DateTime dateonly = DateTime(
-                  dateSelection.year, dateSelection.month, dateSelection.day);
-              await signup_func(
-                  name, pass, email, widget.phoneNo, blood, gender, dateonly);
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              String? msg = prefs.getString("signup");
-              print("message is:");
-              print(msg);
-              if (msg == "Email exists") {
+            final form = _formkey.currentState;
+            if (form != null && form.validate()) {
+              print(name);
+              print(pass);
+              print(confirmPass);
+              print(phone);
+              print(blood);
+              print(email);
+              print(age);
+              print(gender);
+              print("Hello from signup on press");
+              if (pass != confirmPass) {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Email exists'),
-                          content: const Text(
-                              'Please choose another email or login'),
+                          title: const Text('Passwords dont match'),
+                          content: const Text('Please re-enter the passwords'),
                           actions: <Widget>[
                             TextButton(
                               onPressed: () => Navigator.pop(context, 'Ok'),
@@ -158,30 +135,51 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
                             ),
                           ],
                         ));
-              } else if (msg != "null") {
-                UserSimplePreferences.setUsername(name); // CHECK --
-                UserSimplePreferences.setEmail(email); // CHECK --
-                UserSimplePreferences.setGender(gender); // CHECK --
-                UserSimplePreferences.setBloodType(blood); // CHECK --
-                UserSimplePreferences.setAge(age); // CHECK --
-                UserSimplePreferences.setPassword(pass); // CHECK --
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => homepage(
-                          userName: name,
-                        )));
               } else {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                          title: const Text('There was an error'),
-                          content: const Text('Checking'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'Ok'),
-                              child: const Text('Ok'),
-                            ),
-                          ],
-                        ));
+                DateTime dateonly = DateTime(
+                    dateSelection.year, dateSelection.month, dateSelection.day);
+                await signup_func(
+                    name, pass, email, "12345", blood, gender, dateonly);
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                String? msg = prefs.getString("signup");
+                print("message is:");
+                print(msg);
+                if (msg == "Email exists") {
+                  errorGenerator(context, "Email exists",
+                      "Please choose another email or login");
+                } else if (msg == "Username exists") {
+                  errorGenerator(context, "Username exists",
+                      "Please choose another username or login");
+                } else if (msg == "null values") {
+                  errorGenerator(
+                      context, "Empty fields", "Please fill all the fields");
+                } else if (msg != "null" && msg != null) {
+                  print("IT WORKED");
+                  UserSimplePreferences.setUsername(name); // CHECK --
+                  UserSimplePreferences.setEmail(email); // CHECK --
+                  UserSimplePreferences.setGender(gender); // CHECK --
+                  UserSimplePreferences.setBloodType(blood); // CHECK --
+                  UserSimplePreferences.setAge(age); // CHECK --
+                  UserSimplePreferences.setPassword(pass); // CHECK --
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => homepage(
+                            userName: name,
+                          )));
+                } else {
+                  print("THERE WAS AN ERROR");
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                            title: const Text('There was an error'),
+                            content: const Text('Checking'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, 'Ok'),
+                                child: const Text('Ok'),
+                              ),
+                            ],
+                          ));
+                }
               }
             }
           },
@@ -203,6 +201,7 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
           child: SingleChildScrollView(
         child: Container(
             color: backgroundColor,
+            width: MediaQuery.of(context).size.width,
             child: Padding(
                 padding: const EdgeInsets.all(36.0),
                 child: Form(
@@ -219,41 +218,17 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
                       SizedBox(height: 35),
                       confirmPasswordField,
                       SizedBox(height: 35),
+                      DropDownMenu(
+                          item: bloodItems,
+                          dropDownValue: bloodValue,
+                          selection: "blood"),
+                      SizedBox(height: 20),
+                      DropDownMenu(
+                          item: genderItems,
+                          dropDownValue: genderValue,
+                          selection: "gender"),
+                      SizedBox(height: 20),
                       getDate(title: "Select Date"),
-                      SizedBox(height: 20),
-                      DropdownButton(
-                        value: dropDownValue, // Change
-                        icon: const Icon(Icons.keyboard_arrow_down),
-                        items: items.map((String items) {
-                          return DropdownMenuItem(
-                            value: items,
-                            child: Text(items),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            dropDownValue = newValue!;
-                            blood = newValue;
-                          });
-                        },
-                      ),
-                      SizedBox(height: 20),
-                      DropdownButton(
-                        value: genderValue, // Change
-                        icon: const Icon(Icons.keyboard_arrow_down),
-                        items: genderItems.map((String genderItems) {
-                          return DropdownMenuItem(
-                            value: genderItems,
-                            child: Text(genderItems),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            genderValue = newValue!;
-                            gender = newValue;
-                          });
-                        },
-                      ),
                       SizedBox(height: 20),
                       signupButton,
                       SizedBox(height: 15),
@@ -266,6 +241,19 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
 }
 
 signup_func(name, pass, email, phone, blood, gender, age) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  print("TESTING");
+  print(blood);
+  print(gender);
+  if (blood == "Choose a blood group") {
+    await prefs.setString('signup', "null values");
+    return;
+  }
+  if (gender == "Choose a gender") {
+    await prefs.setString('signup', "null values");
+    return;
+  }
+
   var url = "http://localhost:8080/auth/signup";
   print("In signup");
   try {
@@ -280,11 +268,10 @@ signup_func(name, pass, email, phone, blood, gender, age) async {
         'phoneNumber': phone,
         'bloodType': blood,
         'email': email,
-        'age': age,
+        'age': age.toString(),
         'gender': gender
       }),
     );
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     var parse = jsonDecode(response.body);
     if (parse["signup"] == null) {
       print("it is null");
@@ -430,40 +417,126 @@ class _passwordBuilderState extends State<passwordBuilder> {
   bool isHidden = true;
   @override
   Widget build(BuildContext context) => TextFormField(
-        controller: widget.controller,
-        obscureText: isHidden,
-        decoration: InputDecoration(
-          labelText: widget.label,
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-          filled: true,
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: widget.hint,
-          labelStyle: TextStyle(color: red),
-          suffixIcon: IconButton(
-            color: red,
-            icon:
-                isHidden ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
-            onPressed: togglePasswordVisibility,
-          ),
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: red, width: 2.0),
-          ),
-          errorBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: red, width: 2.0),
-          ),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
-          ),
+      controller: widget.controller,
+      obscureText: isHidden,
+      decoration: InputDecoration(
+        labelText: widget.label,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        filled: true,
+        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        hintText: widget.hint,
+        labelStyle: TextStyle(color: red),
+        suffixIcon: IconButton(
+          color: red,
+          icon: isHidden ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
+          onPressed: togglePasswordVisibility,
         ),
-        keyboardType: TextInputType.visiblePassword,
-        autofillHints: [AutofillHints.password],
-        validator: (password) => password != null && password.length < 5
-            ? 'Enter min. 5 characters'
-            : null,
-      );
+        border: UnderlineInputBorder(
+          borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: red, width: 2.0),
+        ),
+        errorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: red, width: 2.0),
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
+        ),
+      ),
+      keyboardType: TextInputType.visiblePassword,
+      autofillHints: [AutofillHints.password],
+      validator: (password) => checkPass(password ?? "") == false
+          ? 'Enter minimum 8 characters + 1 Uppercase + 1 Digit + 1 Special Character'
+          : null,
+      onChanged: (password) => {
+            if (widget.label == "Password")
+              pass = password
+            else
+              confirmPass = password
+          },
+      onSaved: (password) => {
+            if (widget.label == "Password")
+              password != null ? pass = password : null
+            else
+              password != null ? confirmPass = password : null
+          });
 
   void togglePasswordVisibility() => setState(() => isHidden = !isHidden);
+}
+
+errorGenerator(context, title, message) {
+  showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'Ok'),
+                child: const Text('Ok'),
+              ),
+            ],
+          ));
+}
+
+class DropDownMenu extends StatefulWidget {
+  var item;
+  String dropDownValue;
+  String selection;
+  DropDownMenu(
+      {Key? key,
+      required this.item,
+      required this.dropDownValue,
+      required this.selection})
+      : super(key: key);
+
+  @override
+  State<DropDownMenu> createState() => _DropDownMenuState();
+}
+
+class _DropDownMenuState extends State<DropDownMenu> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: MediaQuery.of(context).size.width * 0.85,
+        margin: EdgeInsets.fromLTRB(
+            0, MediaQuery.of(context).size.height * 0.01, 0, 0),
+        child: DropdownButton(
+          value: widget.dropDownValue,
+          icon: Icon(Icons.keyboard_arrow_down),
+          items: widget.item.map<DropdownMenuItem<String>>((String items) {
+            return DropdownMenuItem(value: items, child: Text(items));
+          }).toList(),
+          onChanged: (String? newValue) {
+            setState(() {
+              widget.dropDownValue = newValue!;
+              if (widget.selection == 'blood') {
+                blood = newValue;
+              } else {
+                gender = newValue;
+              }
+            });
+          },
+        ));
+  }
+}
+
+bool checkPass(String password) {
+  print("in pass");
+  print(password);
+  if (password == null || password.isEmpty) {
+    return false;
+  }
+  var minLength = 8;
+
+  bool hasUppercase = password.contains(new RegExp(r'[A-Z]'));
+  bool hasDigits = password.contains(new RegExp(r'[0-9]'));
+  bool hasSpecialCharacters =
+      password.contains(new RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+  bool hasMinLength = password.length > minLength;
+
+  print("Returning");
+  print(hasDigits & hasUppercase & hasSpecialCharacters & hasMinLength);
+  return hasDigits & hasUppercase & hasSpecialCharacters & hasMinLength;
 }

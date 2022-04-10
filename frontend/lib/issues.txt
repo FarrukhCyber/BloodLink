@@ -1,0 +1,5 @@
+ToDo:
+- When you signup and again without restarting the app... blood and gender retain values
+
+
+Fixed:
