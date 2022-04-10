@@ -30,7 +30,7 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
   String genderValue = 'Male';
   var name = "";
   var pass = "";
-  var confirmPass = "";
+  var confirmPass="";
   var phone = "";
   var email = "";
   var age = "";
@@ -157,8 +157,9 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
                         ],
                       ));
             } else {
+              DateTime dateofBirth = DateTime(dateSelection.year, dateSelection.month, dateSelection.day); 
               await signup_func(
-                  name, pass, email, widget.phoneNo, blood, gender, dateSelection);
+                  name, pass, email, widget.phoneNo, blood, gender, dateofBirth);
               SharedPreferences prefs = await SharedPreferences.getInstance();
               String? msg = prefs.getString("signup");
               print("message is:");
@@ -398,5 +399,46 @@ class _DropDownState extends State<getDate> {
         dateSelection = picked;
       });
     }
+  }
+   @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.85,
+      margin: EdgeInsets.fromLTRB(
+          0, MediaQuery.of(context).size.height * 0.03, 0, 0),
+      child: Column(
+        children:[ 
+            Text(
+              "${selectedDate.toLocal()}".split(' ')[0],
+              style: TextStyle(
+                color: Color.fromARGB(255, 193, 0, 0),
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.015,
+          ),
+          ElevatedButton(
+            //padding: EdgeInsets.all(1.0),
+            //olor: Color.fromARGB(255, 193, 0, 0),
+            style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all(Colors.white),
+                backgroundColor:
+                    MaterialStateProperty.all(Color.fromARGB(255, 193, 0, 0)),
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                    EdgeInsets.symmetric(vertical: 10, horizontal: 50)),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ))),
+            onPressed: () => _selectDate(context),
+            child: Text(
+              "Select Date",
+              style: TextStyle(color: Colors.white, fontSize: 18.0),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
