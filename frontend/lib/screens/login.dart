@@ -5,13 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:bloodlink/screens/homepage.dart';
 import 'package:bloodlink/screens/phone_auth.dart';
 import 'signup.dart';
-// import 'package:signup_signin/services/authenticate.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:bloodlink/screens/homepage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bloodlink/utils/user_info.dart';
+import 'package:bloodlink/screens/signup.dart';
 
 class login extends StatefulWidget {
   const login({Key? key}) : super(key: key);
@@ -47,10 +46,10 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    var red = Color(0xffc10110);
+    var red = Color(0xffde2c2c);
     var backgroundColor = Color.fromARGB(255, 229, 229, 229);
-    // appBar:
-    // AppBar(title: const Text("Bloodlink"));
+    var opacity = 0.3;
+    var darkred = Color(0xffc10110);
     final passwordField = TextFormField(
         autofocus: false,
         obscureText: true,
@@ -63,14 +62,7 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
           pass = value;
         },
         textInputAction: TextInputAction.next,
-        decoration: InputDecoration(
-            // prefixIcon: Icon(Icons.mail),
-            contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-            hintText: "Password",
-            labelText: 'Password',
-            border: UnderlineInputBorder(
-              borderSide: BorderSide(color: red.withOpacity(.1), width: 2.0),
-            )));
+        decoration: decoration("Password", "Required", red, opacity));
     final userNameField = TextFormField(
         autofocus: false,
         keyboardType: TextInputType.emailAddress,
@@ -87,24 +79,7 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
           name = value;
         },
         textInputAction: TextInputAction.next,
-        decoration: InputDecoration(
-          // prefixIcon: Icon(Icons.mail),
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Username",
-          labelText: 'Username',
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(color: red.withOpacity(.1), width: 2.0),
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: red, width: 2.0),
-          ),
-          errorBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: red, width: 2.0),
-          ),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: red.withOpacity(.1), width: 2.0),
-          ),
-        ));
+        decoration: decoration("Username", "Required", red, opacity));
     final loginButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(6),
@@ -175,7 +150,9 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
           minWidth: MediaQuery.of(context).size.width,
           onPressed: () {
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => LoginWithPhone()));
+                // .push(MaterialPageRoute(builder: (context) => LoginWithPhone()));
+                .push(MaterialPageRoute(
+                    builder: (context) => signup(phoneNo: "")));
           },
           child: Text(
             "Create a new Account",
@@ -275,3 +252,23 @@ login_func(name, pass) async {
     return null;
   }
 }
+
+decoration(String label, String hint, red, opacity) => InputDecoration(
+      labelText: label,
+      floatingLabelBehavior: FloatingLabelBehavior.always,
+      filled: true,
+      contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+      hintText: hint,
+      border: UnderlineInputBorder(
+        borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
+      ),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: red, width: 2.0),
+      ),
+      errorBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: red, width: 2.0),
+      ),
+      enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
+      ),
+    );
