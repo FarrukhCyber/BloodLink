@@ -18,6 +18,18 @@ class NetworkHandler {
     return response;
   }
 
+  Future<http.Response> get(String url1, body) async {
+    url1 = formater(url1);
+    print(url1);
+    print("--------------------------------------------...................");
+    var response = await http.get(url1, headers: {
+      "Content-type": "application/json",
+      "user_contact_num": body
+    });
+    print(response);
+    return response;
+  }
+
   Future<http.Response> patch(String url, Map<String, String> body) async {
     url = formater(url);
     var response = await http.patch(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter_application_2/screens/registerDonor.dart';
 //import 'package:flutter_application_2/screens/networkHandler.dart';
+import 'package:http/http.dart' as http;
 
 bool diabetesSelection = false;
 bool plasmaSelection = false;
@@ -272,6 +273,16 @@ class _registerDonorContinuedState extends State<registerDonorContinued> {
               "gender": widget.gender,
               "plasma": plasmaSelection
             };
+            var res1 = "03364984545";
+            var url1 = "http://localhost:8080/my_requests/";
+            //var responseRegister =
+            //    await networkHandler.get('/my_requests', res1);
+            //print(responseRegister);
+            final http.Response response = await http.get(Uri.parse(url1), headers: {
+              "Content-type": "application/json",
+              "user_contact_num": res1
+            });
+            print(response.body);
             /*var responseRegister =
                 await networkHandler.post('/register_donor', res);
             if (responseRegister.statusCode == 200 ||
