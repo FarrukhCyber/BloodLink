@@ -1,5 +1,11 @@
+import 'package:create_blood_request/createBloodRequest/createBloodRequestPage3.dart';
 import 'package:create_blood_request/createBloodRequest/createBloodRequest.dart';
-import 'package:create_blood_request/createBloodRequest/enterCustomLocation.dart';
+
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'package:create_blood_request/createBloodRequest/enterCustomLocation.dart';
+// import 'package:create_blood_request/createBloodRequest/main.dart';
+// import 'googleMaps/lib/main.dart';
+// import 'package:create_blood_request/createBloodRequest/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -140,9 +146,9 @@ class CurrentLocation extends StatelessWidget {
         child: InkWell(
           splashColor: Colors.blue.withAlpha(30),
           onTap: () => {
-            // print('Card tapped.');
+            // print('Card tapped.')
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => EnterCustomLocation(
+                builder: (context) => CreateBloodRequestPage3(
                       key: key,
                     )))
           },
