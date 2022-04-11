@@ -9,10 +9,10 @@ router.get('/login', (req,res)=>{
 
 router.post('/login', (req, res) => {
     console.log("IN LOGIN -- AUTH")
-    const {userName, password} = req.body
-    console.log(userName, password)
+    const {userName, password, phoneNumber} = req.body
+    console.log(userName, password, phoneNumber)
     // res.json({msg:"success"})
-    User.findOne({userName:req.body.userName, password:req.body.password}, (err, user)=>{
+    User.findOne({phoneNumber: Number(req.body.phoneNumber), password:req.body.password}, (err, user)=>{
         if(err){
             console.log("Sendnig", err)
             res.json({msg: "ERROR"})
@@ -26,7 +26,7 @@ router.post('/login', (req, res) => {
             else
             {
                 console.log("exists", user)
-                res.json({msg:user.email, 
+                res.json({msg:"Login Successful", 
                     userName: user.userName,
                     email:user.email,
                     password:user.password,
@@ -43,36 +43,52 @@ router.post('/login', (req, res) => {
 router.post('/signup', (req, res) => {
     console.log("IN SIGNUP -- AUTH")
     const {userName, password, phoneNumber, bloodType, email, gender, age} = req.body
-    console.log(userName, password, phoneNumber, bloodType, email)
+    console.log(userName, "|", email, "|", password, "|", phoneNumber, "|", bloodType, "|", gender, "|", age)
     if(!userName || !password || !phoneNumber || !bloodType || !email || !age || !gender)
-        console.log("null values")
+        {console.log("null values")
+        res.json({signup:"null values"})}
     else{
-    // res.json({msg:"success"})
-    User.findOne({email:email}, (err, user)=>{
+        dob = age.split(" ")[0]
+        console.log("Age/DOB: ", typeof(age), dob)
+        // res.json({msg:"success"})
+        // ensures username and email are unique 
+        User.findOne({email:email}, (err, user)=>{
         if(err){
             console.log("err: ", err)
             res.json({signup: "ERR"}) // please try again 
         }
         else{
-            if(user==null)
+            if(user==null) // if email exists 
             {
-                console.log("user is new ", user)
-                var tempUser = new User({
-                    userName:userName,
-                    password:password,
-                    bloodType:bloodType,
-                    phoneNumber:Number(phoneNumber),
-                    email:email,
-                    gender:gender,
-                    age:Number(age)
-                })
-                console.log(tempUser)
-                tempUser.save((err,doc)=>{
-                    if(!err) res.json({signup: tempUser.email,
-                    })
-                    else console.log("there was erorr", err)
-                })
-            }else {
+                User.findOne({userName:userName}, (err, user)=>{
+                    if(err){
+                        console.log("err: ", err)
+                        res.json({signup: "ERR"}) // please try again 
+                    }
+                    else{ 
+                        if(user==null){
+                        console.log("user is new ", user)
+                        var tempUser = new User({
+                            userName:userName,
+                            password:password,
+                            bloodType:bloodType,
+                            phoneNumber:Number(phoneNumber),
+                            email:email,
+                            gender:gender,
+                            age:dob
+                        })
+                    console.log(tempUser)
+                    tempUser.save((err,doc)=>{
+                        if(!err) res.json({signup: "Signup Successful",
+                        })
+                        else console.log("there was erorr", err)})}
+                        else{
+                        console.log("Sending user exists", user.email)
+                        res.json({signup: "Username exists"})                        
+                    }
+                }})
+            }
+            else {
                 console.log("Sending user exists", user.email)
                 res.json({signup: "Email exists"})
             }
@@ -94,3 +110,4 @@ module.exports = router;
 //     age:age,
 //     phoneNumber:phoneNumber
 // }
+
