@@ -7,7 +7,8 @@ const regUsersSchema = new mongoose.Schema({
     gender : String,
     donor: Boolean,
     user_contact_num: String,
-    blood_group: String
+    blood_group: String,
+    notification_id: String,
 });
 
 const RegisteredUsersModel = mongoose.model("REGISTERED_USER", regUsersSchema);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/landingScreen/landingScreen.dart';
+import 'package:frontend/push_notifications.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LandingScreen(
+      home: PushNotifications(
         key: key,
       ),
     );
