@@ -31,121 +31,125 @@ class _homepageState extends State<homepage>
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
     return Scaffold(
         drawer: navBar(
           userName: widget.userName,
           userEmail: "Email",
         ),
-        // appBar: AppBar(
-        //   title: const Text("Bloodlink"),
-        //   backgroundColor: Colors.red,
-        //   centerTitle: true,
-        // ),
         body: Center(
-          child: Column(
-            children: [
-              AppBarFb2(),
-              TopBarFb3(title: "BloodLink", upperTitle: "Welcome"),
-              Card(
-                elevation: 10,
-                child: InkWell(
-                  splashColor: Colors.blue.withAlpha(30),
-                  onTap: () {
-                    print('Card tapped.');
-                  },
-                  child: SizedBox(
-                      width: 300, // determines the size of the card
-                      height: 100,
-                      child: Row(
-                        children: [
-                          Padding(padding: EdgeInsets.fromLTRB(10, 0, 20, 0)),
-                          Text(
-                            'Initiate a new request',
-                            style: TextStyle(
-                                color: Color(0xff24A979),
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            width: 50,
-                          ),
-                          // Icon(Icons.), //
-                          Icon(
-                            MdiIcons.plusCircle,
-                            color: Color(0xff24A979),
-                            size: 30,
-                          ),
-                          //
-                        ],
-                      )),
+          child: Container(
+            width: width,
+            child: Column(
+              children: [
+                AppBarFb2(),
+                TopBarFb3(title: "BloodLink", upperTitle: "Welcome"),
+                SizedBox(
+                  height: 20,
                 ),
-              ),
-              Card(
-                elevation: 10,
-                child: InkWell(
-                  splashColor: Colors.blue.withAlpha(30),
-                  onTap: () {
-                    print('View Card tapped.');
-                  },
-                  child: SizedBox(
-                      width: 300, // determines the size of the card
-                      height: 100,
-                      child: Row(
-                        children: [
-                          Padding(padding: EdgeInsets.fromLTRB(10, 0, 20, 0)),
-                          Text(
-                            'View my request',
-                            style: TextStyle(
-                                color: Color(0xffA96424),
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            width: 50,
-                          ),
-                          // Icon(Icons.), //
-                          Icon(
-                            MdiIcons.clock,
-                            color: Color(0xffA96424),
-                            size: 30,
-                          ),
-                          //
-                        ],
-                      )),
+                Card(
+                  elevation: 10,
+                  child: InkWell(
+                    splashColor: Colors.blue.withAlpha(30),
+                    onTap: () {
+                      print('Card tapped.');
+                    },
+                    child: SizedBox(
+                        width: width * 0.85, // determines the size of the card
+                        height: 100,
+                        child: Row(
+                          children: [
+                            Padding(padding: EdgeInsets.fromLTRB(10, 0, 20, 0)),
+                            Text(
+                              'Initiate a new request',
+                              style: TextStyle(
+                                  color: Color(0xff24A979),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Icon(
+                              MdiIcons.plusCircle,
+                              color: Color(0xff24A979),
+                              size: 30,
+                            ),
+                            //
+                          ],
+                        )),
+                  ),
                 ),
-              ),
-              Card(
-                elevation: 10,
-                child: InkWell(
-                  splashColor: Colors.blue.withAlpha(30),
-                  onTap: () {
-                    print('Register Card tapped.');
-                  },
-                  child: SizedBox(
-                      width: 300, // determines the size of the card
-                      height: 100,
-                      child: Row(
-                        children: [
-                          Padding(padding: EdgeInsets.fromLTRB(10, 0, 20, 0)),
-                          Text(
-                            'Register as a donor',
-                            style: TextStyle(
-                                color: Color(0xffC10100),
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            width: 50,
-                          ),
-                          // Icon(Icons.), //
-                          Icon(
-                            MdiIcons.heart,
-                            color: Color(0xffC10100),
-                            size: 30,
-                          ),
-                          //
-                        ],
-                      )),
+                SizedBox(
+                  height: 20,
                 ),
-              ),
-            ],
+                Card(
+                  elevation: 10,
+                  child: InkWell(
+                    splashColor: Colors.blue.withAlpha(30),
+                    onTap: () {
+                      print('View Card tapped.');
+                    },
+                    child: SizedBox(
+                        width: width * 0.85, // determines the size of the card
+                        height: 100,
+                        child: Row(
+                          children: [
+                            Padding(padding: EdgeInsets.fromLTRB(10, 0, 20, 0)),
+                            Text(
+                              'View my request',
+                              style: TextStyle(
+                                  color: Color(0xffA96424),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              width: 50,
+                            ),
+                            // Icon(Icons.), //
+                            Icon(
+                              MdiIcons.clock,
+                              color: Color(0xffA96424),
+                              size: 30,
+                            ),
+                            //
+                          ],
+                        )),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Card(
+                  elevation: 10,
+                  child: InkWell(
+                    splashColor: Colors.blue.withAlpha(30),
+                    onTap: () {
+                      print('Register Card tapped.');
+                    },
+                    child: SizedBox(
+                        width: width * 0.85, // determines the size of the card
+                        height: 100,
+                        child: Row(
+                          children: [
+                            Padding(padding: EdgeInsets.fromLTRB(10, 0, 20, 0)),
+                            Text(
+                              'Register as a donor',
+                              style: TextStyle(
+                                  color: Color(0xffC10100),
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              width: 50,
+                            ),
+                            // Icon(Icons.), //
+                            Icon(
+                              MdiIcons.heart,
+                              color: Color(0xffC10100),
+                              size: 30,
+                            ),
+                            //
+                          ],
+                        )),
+                  ),
+                ),
+              ],
+            ),
           ),
         ));
   }
