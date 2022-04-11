@@ -153,7 +153,7 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
                 } else if (msg == "null values") {
                   errorGenerator(
                       context, "Empty fields", "Please fill all the fields");
-                } else if (msg != "null" && msg != null) {
+                } else if (msg == "Signup Successful") {
                   print("IT WORKED");
                   UserSimplePreferences.setUsername(name); // CHECK --
                   UserSimplePreferences.setEmail(email); // CHECK --

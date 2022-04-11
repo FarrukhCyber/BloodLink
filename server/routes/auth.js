@@ -26,7 +26,7 @@ router.post('/login', (req, res) => {
             else
             {
                 console.log("exists", user)
-                res.json({msg:user.email, 
+                res.json({msg:"Login Successful", 
                     userName: user.userName,
                     email:user.email,
                     password:user.password,
@@ -79,7 +79,7 @@ router.post('/signup', (req, res) => {
                         })
                     console.log(tempUser)
                     tempUser.save((err,doc)=>{
-                        if(!err) res.json({signup: tempUser.email,
+                        if(!err) res.json({signup: "Signup Successful",
                         })
                         else console.log("there was erorr", err)})}
                         else{

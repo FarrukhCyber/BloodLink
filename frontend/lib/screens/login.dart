@@ -12,6 +12,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:bloodlink/screens/signup.dart';
 
+const red = Color(0xffde2c2c);
+var backgroundColor = Color.fromARGB(255, 229, 229, 229);
+var opacity = 0.3;
+var darkred = Color(0xffc10110);
+var pass = "";
+var white = Colors.white;
+
 class login extends StatefulWidget {
   const login({Key? key}) : super(key: key);
 
@@ -28,7 +35,6 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
   bool isAPIcallProcess = false;
   bool hidePassword = true;
   var name = "";
-  var pass = "";
   var phone = "";
   var message = "";
 
@@ -49,25 +55,26 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    var red = Color(0xffde2c2c);
-    var backgroundColor = Color.fromARGB(255, 229, 229, 229);
-    var opacity = 0.3;
-    var darkred = Color(0xffc10110);
-    final passwordField = TextFormField(
-        autofocus: false,
-        obscureText: true,
-        controller: passwordEditingController, //check this
-        onSaved: (value) {
-          value != null ? pass = value : null;
-        },
-        onChanged: (value) {
-          pass = value;
-        },
-        validator: (password) => checkPass(password ?? "") == false
-            ? 'Enter minimum 8 characters + 1 Uppercase + 1 Digit + 1 Special Character'
-            : null,
-        textInputAction: TextInputAction.next,
-        decoration: decoration("Password", "Required", red, opacity));
+    // final passwordField = TextFormField(
+    //     // try to replace with the one in signup
+    //     autofocus: false,
+    //     obscureText: true,
+    //     controller: passwordEditingController, //check this
+    //     onSaved: (value) {
+    //       value != null ? pass = value : null;
+    //     },
+    //     onChanged: (value) {
+    //       pass = value;
+    //     },
+    //     validator: (password) => checkPass(password ?? "") == false
+    //         ? 'Enter minimum 8 characters + 1 Uppercase + 1 Digit + 1 Special Character'
+    //         : null,
+    //     textInputAction: TextInputAction.next,
+    //     decoration: decoration("Password", "Required", red, opacity));
+    final passwordField = passwordBuilder(
+        label: "Password",
+        hint: "Required",
+        controller: passwordEditingController);
     final userNameField = TextFormField(
         autofocus: false,
         keyboardType: TextInputType.emailAddress,
@@ -91,7 +98,7 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
           phone = value;
         },
         validator: (value) => isValidPhoneNumber(value ?? "") == false
-            ? "Please enter a number of lenght 14 and type +92 ..."
+            ? "Please enter a number of lenght 13 and type +92___"
             : null,
         textInputAction: TextInputAction.next,
         decoration: decoration("Phonenumber", "Required", red, opacity));
@@ -105,18 +112,19 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
           onPressed: () async {
             final form = _formkey.currentState;
             if (form != null && form.validate()) {
-              // check this
-              // checks if there is any validation issue
               print("Hello");
               await login_func(name, pass, phone);
               SharedPreferences prefs = await SharedPreferences.getInstance();
               String? msg = prefs.getString("msg");
               print("message is:");
               print(msg);
+
               if (msg == "ERROR") {
                 errorGenerator(context, "There was an error in server",
                     "Please try again in some time");
-              } else if (msg != "null" && msg != null) {
+              }
+              // else if (msg != "null" && msg != null) {
+              else if (msg == "Login Successful") {
                 UserSimplePreferences.setUsername(
                     prefs.getString("userName") ?? "ERROR"); // CHECK --
                 UserSimplePreferences.setEmail(
@@ -135,19 +143,8 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
                           userName: name,
                         )));
               } else {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Creddentials are Incorrect!'),
-                          content: const Text(
-                              'Please re-enter the credentials or signup instead'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'Ok'),
-                              child: const Text('Ok'),
-                            ),
-                          ],
-                        ));
+                errorGenerator(context, "Creddentials are Incorrect!",
+                    'Please re-enter the credentials or signup instead');
               }
             }
           },
@@ -162,22 +159,15 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
     final newButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(6),
-      color: red,
+      color: white,
       child: MaterialButton(
           padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           minWidth: MediaQuery.of(context).size.width,
-          onPressed: () {
-            Navigator.of(context)
-                // .push(MaterialPageRoute(builder: (context) => LoginWithPhone()));
-                .push(MaterialPageRoute(
-                    builder: (context) => signup(phoneNo: "")));
-          },
+          onPressed: () => print("ADMIN MODE"),
           child: Text(
-            "Create a new Account",
+            "Login as Admin instead",
             textAlign: TextAlign.center,
-            style:
-                TextStyle(fontSize: 20, color: Colors.white //Color(0xffC10100),
-                    ),
+            style: TextStyle(fontSize: 20, color: red),
           )),
     );
     return Scaffold(
@@ -209,6 +199,10 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
                       loginButton,
                       SizedBox(height: 15),
                       newButton,
+                      SizedBox(height: 15),
+                      Align(
+                          alignment: Alignment.bottomCenter,
+                          child: SigupButton()),
                     ],
                   ),
                 ))),
@@ -331,14 +325,97 @@ bool isValidPhoneNumber(String string) {
   if (string == null || string.isEmpty) {
     return false;
   }
-//^[+]*[(][0-9][)][0-9]
   // You may need to change this pattern to fit your requirement.
   // I just copied the pattern from here: https://regexr.com/3c53v
   const pattern = r'^[+][9][2][0-9]*';
+  // const pattern = r'^[0-9]*';
   final regExp = RegExp(pattern);
 
   if (!regExp.hasMatch(string) || string.length != 13) {
     return false;
   }
   return true;
+}
+
+class SigupButton extends StatelessWidget {
+  const SigupButton({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        onPressed: () => {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => signup(phoneNo: "")))
+            },
+        child: const Text(
+          "Don't have an Account? Sign up",
+          style: TextStyle(fontSize: 15, color: red),
+        ));
+  }
+}
+
+class passwordBuilder extends StatefulWidget {
+  final String label;
+  final String hint;
+  final TextEditingController controller;
+  const passwordBuilder(
+      {Key? key,
+      required this.label,
+      required this.hint,
+      required this.controller})
+      : super(key: key);
+
+  @override
+  State<passwordBuilder> createState() => _passwordBuilderState();
+}
+
+class _passwordBuilderState extends State<passwordBuilder> {
+  bool isHidden = true;
+  @override
+  Widget build(BuildContext context) => TextFormField(
+      controller: widget.controller,
+      obscureText: isHidden,
+      decoration: InputDecoration(
+        labelText: widget.label,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        filled: true,
+        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        hintText: widget.hint,
+        labelStyle: TextStyle(color: red),
+        suffixIcon: IconButton(
+          color: red,
+          icon: isHidden ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
+          onPressed: togglePasswordVisibility,
+        ),
+        border: UnderlineInputBorder(
+          borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: red, width: 2.0),
+        ),
+        errorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: red, width: 2.0),
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
+        ),
+      ),
+      keyboardType: TextInputType.visiblePassword,
+      autofillHints: [AutofillHints.password],
+      validator: (password) => checkPass(password ?? "") == false
+          ? 'Enter minimum 8 characters + 1 Uppercase + 1 Digit + 1 Special Character'
+          : null,
+      onChanged: (password) => {
+            if (widget.label == "Password")
+              pass = password
+            else
+              confirmPass = password
+          },
+      onSaved: (password) => {
+            if (widget.label == "Password")
+              password != null ? pass = password : null
+            else
+              password != null ? confirmPass = password : null
+          });
+
+  void togglePasswordVisibility() => setState(() => isHidden = !isHidden);
 }
