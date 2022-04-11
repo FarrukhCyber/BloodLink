@@ -31,7 +31,7 @@ class _OtpState extends State<Otp> {
       resizeToAvoidBottomInset: false,
       body: Container(
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: Color.fromARGB(255, 229, 229, 229),
         ),
         child: SafeArea(
           child: Padding(
@@ -56,7 +56,7 @@ class _OtpState extends State<Otp> {
                   width: 200,
                   height: 200,
                   decoration: BoxDecoration(
-                    color: Colors.deepPurple.shade50,
+                    color: Color.fromARGB(255, 229, 229, 229),
                     shape: BoxShape.circle,
                   ),
                   child: Image.asset(
@@ -91,7 +91,7 @@ class _OtpState extends State<Otp> {
                 Container(
                   padding: EdgeInsets.all(28),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 229, 229, 229),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Column(

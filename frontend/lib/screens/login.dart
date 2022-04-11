@@ -46,10 +46,10 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    var red = Color(0xffde2c2c);
+    var red = Color.fromARGB(255, 193, 0, 0);
     var backgroundColor = Color.fromARGB(255, 229, 229, 229);
     var opacity = 0.3;
-    var darkred = Color(0xffc10110);
+    var darkred = Color.fromARGB(255, 193, 0, 0);
     final passwordField = TextFormField(
         autofocus: false,
         obscureText: true,
@@ -150,9 +150,9 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
           minWidth: MediaQuery.of(context).size.width,
           onPressed: () {
             Navigator.of(context)
-                // .push(MaterialPageRoute(builder: (context) => LoginWithPhone()));
-                .push(MaterialPageRoute(
-                    builder: (context) => signup(phoneNo: "")));
+                 .push(MaterialPageRoute(builder: (context) => LoginWithPhone()));
+               // .push(MaterialPageRoute(
+               //     builder: (context) => signup(phoneNo: "")));
           },
           child: Text(
             "Create a new Account",
