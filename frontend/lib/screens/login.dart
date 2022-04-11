@@ -23,11 +23,13 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   final _formkey = GlobalKey<FormState>();
   final userNameEditingController = new TextEditingController();
+  final phoneNumberEditingController = new TextEditingController();
   final passwordEditingController = new TextEditingController();
   bool isAPIcallProcess = false;
   bool hidePassword = true;
   var name = "";
   var pass = "";
+  var phone = "";
   var message = "";
 
   @override
@@ -42,6 +44,7 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
     _controller.dispose();
     userNameEditingController.dispose();
     passwordEditingController.dispose();
+    phoneNumberEditingController.dispose();
   }
 
   @override
@@ -54,32 +57,44 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
         autofocus: false,
         obscureText: true,
         controller: passwordEditingController, //check this
-        // onSaved: (value) {
-        //   passwordEditingController.text = value!;
-        //   pass = value;
-        // },
+        onSaved: (value) {
+          value != null ? pass = value : null;
+        },
         onChanged: (value) {
           pass = value;
         },
+        validator: (password) => checkPass(password ?? "") == false
+            ? 'Enter minimum 8 characters + 1 Uppercase + 1 Digit + 1 Special Character'
+            : null,
         textInputAction: TextInputAction.next,
         decoration: decoration("Password", "Required", red, opacity));
     final userNameField = TextFormField(
         autofocus: false,
         keyboardType: TextInputType.emailAddress,
         controller: userNameEditingController, //check this
-        // onSaved: (value) {
-        //   print(value);
-        //   userNameEditingController.text = value!;
-        //   name = value;
-        // },
-        // validator: (value) => value != null && !EmailValidator.validate(value)
-        //     ? 'Enter a valid email'
-        //     : null,
+        onSaved: (value) {
+          value != null ? name = value : null;
+        },
         onChanged: (value) {
           name = value;
         },
         textInputAction: TextInputAction.next,
         decoration: decoration("Username", "Required", red, opacity));
+    final phoneNumberField = TextFormField(
+        autofocus: false,
+        keyboardType: TextInputType.text,
+        controller: phoneNumberEditingController, //check this
+        onSaved: (value) {
+          value != null ? phone = value : null;
+        },
+        onChanged: (value) {
+          phone = value;
+        },
+        validator: (value) => isValidPhoneNumber(value ?? "") == false
+            ? "Please enter a number of lenght 14 and type +92 ..."
+            : null,
+        textInputAction: TextInputAction.next,
+        decoration: decoration("Phonenumber", "Required", red, opacity));
     final loginButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(6),
@@ -93,12 +108,15 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
               // check this
               // checks if there is any validation issue
               print("Hello");
-              await login_func(name, pass);
+              await login_func(name, pass, phone);
               SharedPreferences prefs = await SharedPreferences.getInstance();
               String? msg = prefs.getString("msg");
               print("message is:");
               print(msg);
-              if (msg != "null") {
+              if (msg == "ERROR") {
+                errorGenerator(context, "There was an error in server",
+                    "Please try again in some time");
+              } else if (msg != "null" && msg != null) {
                 UserSimplePreferences.setUsername(
                     prefs.getString("userName") ?? "ERROR"); // CHECK --
                 UserSimplePreferences.setEmail(
@@ -184,7 +202,7 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
                         color: red,
                       ),
                       SizedBox(height: 35),
-                      userNameField,
+                      phoneNumberField,
                       SizedBox(height: 35),
                       passwordField,
                       SizedBox(height: 45),
@@ -199,7 +217,7 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
   }
 }
 
-login_func(name, pass) async {
+login_func(name, pass, phone) async {
   var url = "http://localhost:8080/auth/login";
   print("In login");
   try {
@@ -211,6 +229,7 @@ login_func(name, pass) async {
       body: jsonEncode(<String, String>{
         'userName': name,
         'password': pass,
+        'phoneNumber': phone.toString(),
       }),
     );
     print("this one");
@@ -272,3 +291,54 @@ decoration(String label, String hint, red, opacity) => InputDecoration(
         borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
       ),
     );
+
+bool checkPass(String password) {
+  print("in pass");
+  print(password);
+  if (password == null || password.isEmpty) {
+    return false;
+  }
+  var minLength = 8;
+
+  bool hasUppercase = password.contains(new RegExp(r'[A-Z]'));
+  bool hasDigits = password.contains(new RegExp(r'[0-9]'));
+  bool hasSpecialCharacters =
+      password.contains(new RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+  bool hasMinLength = password.length > minLength;
+
+  print("Returning");
+  print(hasDigits & hasUppercase & hasSpecialCharacters & hasMinLength);
+  return hasDigits & hasUppercase & hasSpecialCharacters & hasMinLength;
+}
+
+errorGenerator(context, title, message) {
+  showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'Ok'),
+                child: const Text('Ok'),
+              ),
+            ],
+          ));
+}
+
+bool isValidPhoneNumber(String string) {
+  // Null or empty string is invalid phone number
+  if (string == null || string.isEmpty) {
+    return false;
+  }
+//^[+]*[(][0-9][)][0-9]
+  // You may need to change this pattern to fit your requirement.
+  // I just copied the pattern from here: https://regexr.com/3c53v
+  const pattern = r'^[+][9][2][0-9]*';
+  final regExp = RegExp(pattern);
+
+  if (!regExp.hasMatch(string) || string.length != 13) {
+    return false;
+  }
+  return true;
+}

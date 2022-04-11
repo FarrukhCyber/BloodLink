@@ -138,8 +138,8 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
               } else {
                 DateTime dateonly = DateTime(
                     dateSelection.year, dateSelection.month, dateSelection.day);
-                await signup_func(
-                    name, pass, email, "12345", blood, gender, dateonly);
+                await signup_func(name, pass, email, "+921234567890", blood,
+                    gender, dateonly);
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 String? msg = prefs.getString("signup");
                 print("message is:");
