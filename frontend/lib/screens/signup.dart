@@ -167,18 +167,21 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
                           )));
                 } else {
                   print("THERE WAS AN ERROR");
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                            title: const Text('There was an error'),
-                            content: const Text('Checking'),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, 'Ok'),
-                                child: const Text('Ok'),
-                              ),
-                            ],
-                          ));
+                  errorGenerator(context, 'There was an error in server',
+                      'Please try again in some time');
+                  // showDialog(
+                  //     context: context,
+                  //     builder: (BuildContext context) => AlertDialog(
+                  //           title: const Text('There was an error in server'),
+                  //           content:
+                  //               const Text('Please try again in some time'),
+                  //           actions: <Widget>[
+                  //             TextButton(
+                  //               onPressed: () => Navigator.pop(context, 'Ok'),
+                  //               child: const Text('Ok'),
+                  //             ),
+                  //           ],
+                  //         ));
                 }
               }
             }

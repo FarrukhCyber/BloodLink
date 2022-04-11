@@ -1,3 +1,4 @@
+import 'package:bloodlink/screens/login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bloodlink/widgets/navbar.dart';
@@ -58,18 +59,28 @@ class _homepageState extends State<homepage>
                         width: width * 0.85, // determines the size of the card
                         height: 100,
                         child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Padding(padding: EdgeInsets.fromLTRB(10, 0, 20, 0)),
-                            Text(
-                              'Initiate a new request',
-                              style: TextStyle(
-                                  color: Color(0xff24A979),
-                                  fontWeight: FontWeight.bold),
+                            Container(
+                              alignment: AlignmentDirectional(-1, 0),
+                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: Text(
+                                'Initiate a new request',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    color: Color(0xff24A979),
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
-                            Icon(
-                              MdiIcons.plusCircle,
-                              color: Color(0xff24A979),
-                              size: 30,
+                            Container(
+                              alignment: AlignmentDirectional(1, 0),
+                              padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              child: Icon(
+                                MdiIcons.plusCircle,
+                                color: Color(0xff24A979),
+                                size: 30,
+                              ),
                             ),
                             //
                           ],
@@ -84,28 +95,34 @@ class _homepageState extends State<homepage>
                   child: InkWell(
                     splashColor: Colors.blue.withAlpha(30),
                     onTap: () {
-                      print('View Card tapped.');
+                      print('Card tapped.');
                     },
                     child: SizedBox(
                         width: width * 0.85, // determines the size of the card
                         height: 100,
                         child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Padding(padding: EdgeInsets.fromLTRB(10, 0, 20, 0)),
-                            Text(
-                              'View my request',
-                              style: TextStyle(
-                                  color: Color(0xffA96424),
-                                  fontWeight: FontWeight.bold),
+                            Container(
+                              alignment: AlignmentDirectional(-1, 0),
+                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: Text(
+                                'View Active Requests',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 113, 98, 13),
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
-                            SizedBox(
-                              width: 50,
-                            ),
-                            // Icon(Icons.), //
-                            Icon(
-                              MdiIcons.clock,
-                              color: Color(0xffA96424),
-                              size: 30,
+                            Container(
+                              alignment: AlignmentDirectional(1, 0),
+                              padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              child: Icon(
+                                MdiIcons.clock,
+                                color: Color.fromARGB(255, 113, 98, 13),
+                                size: 30,
+                              ),
                             ),
                             //
                           ],
@@ -120,28 +137,33 @@ class _homepageState extends State<homepage>
                   child: InkWell(
                     splashColor: Colors.blue.withAlpha(30),
                     onTap: () {
-                      print('Register Card tapped.');
+                      print('Card tapped.');
                     },
                     child: SizedBox(
                         width: width * 0.85, // determines the size of the card
                         height: 100,
                         child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Padding(padding: EdgeInsets.fromLTRB(10, 0, 20, 0)),
-                            Text(
-                              'Register as a donor',
-                              style: TextStyle(
-                                  color: Color(0xffC10100),
-                                  fontWeight: FontWeight.bold),
+                            Container(
+                              alignment: AlignmentDirectional(-1, 0),
+                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: Text(
+                                'Register as a donor',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    color: red, fontWeight: FontWeight.bold),
+                              ),
                             ),
-                            SizedBox(
-                              width: 50,
-                            ),
-                            // Icon(Icons.), //
-                            Icon(
-                              MdiIcons.heart,
-                              color: Color(0xffC10100),
-                              size: 30,
+                            Container(
+                              alignment: AlignmentDirectional(1, 0),
+                              padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              child: Icon(
+                                MdiIcons.heart,
+                                color: red,
+                                size: 30,
+                              ),
                             ),
                             //
                           ],
