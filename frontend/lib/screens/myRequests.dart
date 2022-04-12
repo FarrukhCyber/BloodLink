@@ -1,173 +1,113 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:material_design_icons_flutter/icon_map.dart';
-import 'package:bloodlink/screens/networkHandler.dart';
+import 'dart:async';
 import 'dart:convert';
-var data = [];
-class myRequests extends StatefulWidget {
-  const myRequests({Key? key}) : super(key: key);
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:bloodlink/screens/networkHandler.dart';
+import 'package:material_design_icons_flutter/icon_map.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+NetworkHandler networkHandler = NetworkHandler();
 
-  @override
-  State<myRequests> createState() => _myRequestsState();
+Future<List<Data>> fetchData() async {
+  final response = await networkHandler.get('/my_requests', "336");
+  if (response.statusCode == 200) {
+    List jsonResponse = jsonDecode(response.body)["data"];
+    return jsonResponse.map((data) => new Data.fromJson(data)).toList();
+  } else {
+    throw Exception('Unexpected error occured!');
+  }
 }
 
-class _myRequestsState extends State<myRequests> {
-  Map cardList = {};
-  int index = 0;
-  
-  NetworkHandler networkHandler = NetworkHandler();
-
-  @override
-  void initState() {
-    _getRequests();
-    super.initState();
-  }
-
-  _getRequests() async {
-    final responseRegister = await networkHandler.get('/my_requests', "334");
-    print(responseRegister);
-    //var httpClinet = createHttpClient();
-    /*var response = await httpClinet.get(
-      url,
-    );*/
-    data = jsonDecode(responseRegister.body)['data'];
-    print(data);
-    print(data.length);
-    print(cardList);
-    print(cardList["attendant_name"]);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton:
-          new FloatingActionButton(onPressed: () => _getRequests()),
-      backgroundColor: Color.fromARGB(255, 229, 229, 229),
-      body: Column(
-        children: <Widget>[
-          AppBarFb2(),
-          TopBarFb3(
-              title: "Pending Requests",
-              upperTitle:
-                  "\nBelow are requests by \n the people who need Blood"),
-          ListView.builder(
-            itemCount: data.length,
-            itemBuilder: (BuildContext context, int index) {
-              return RequestCard(
-                  name: data[index]["attendant_name"] ?? "",
-                  symbol: MdiIcons.plusCircle,
-                  date: data[index]["deadline"] ?? "",
-                  time: data[index]["deadline"] ?? "",
-                  location: data[index]["hospital"] ?? "",
-                  bloodgroup: data[index]["blood_group"] ?? "");
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  _CardBuilder(data, length) {
-    for (var i = 0; i < length; i++) {
-      const RequestCard(
-        name: "Muhammad Hassnain",
+class Data {
+  final String name;
+  final String bloodgroup;
+  final String date;
+  final String time;
+  final String location;
+  /*name: "Muhammad Hassnain",
         bloodgroup: "O+",
         symbol: MdiIcons.plusCircle,
         date: "21 March",
         time: "3:00 pm",
         location: "National Hospital",
-      );
-      const SizedBox(
-        height: 5,
-      );
-    }
-  }
-}
-
-class TopBarFb3 extends StatelessWidget {
-  final String title;
-  final String upperTitle;
-  TopBarFb3({required this.title, required this.upperTitle, Key? key})
-      : super(key: key);
-  final primaryColor = Color.fromARGB(255, 222, 44, 44);
-  final secondaryColor = const Color(0xff6D28D9);
-  final accentColor = const Color(0xffffffff);
-  final backgroundColor = const Color(0xffffffff);
-  final errorColor = const Color(0xffEF4444);
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.15,
-      decoration: BoxDecoration(
-          color: primaryColor,
-          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60))),
-      // gradient: LinearGradient(colors: [primaryColor, secondaryColor])),
-      // child: Padding(
-      //   padding: const EdgeInsets.all(25.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Text(title,
-          //     textAlign: TextAlign.center,
-          //     style: const TextStyle(
-          //         color: Colors.white70,
-          //         fontSize: 20,
-          //         fontWeight: FontWeight.bold)),
-          Center(
-              child: Text(upperTitle,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.normal)))
-        ],
-      ),
-      // ),
+  */
+  Data(
+      {required this.name,
+      required this.bloodgroup,
+      required this.date,
+      required this.time,
+      required this.location});
+  factory Data.fromJson(Map<String, dynamic> json) {
+    return Data(
+      name: json['attendant_name'],
+      bloodgroup: json['blood_group'],
+      date: json['deadline'],
+      time: json['deadline'],
+      location: json['hospital'],
     );
   }
 }
 
-class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
-  @override
-  final Size preferredSize;
+class myRequests extends StatefulWidget {
+  var futureData;
+  myRequests({Key? key}) : super(key: key);
 
-  AppBarFb2({Key? key})
-      : preferredSize = const Size.fromHeight(56.0),
-        super(key: key);
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<myRequests> {
+  @override
+  void initState() {
+    super.initState();
+    widget.futureData = fetchData();
+  }
+
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xffde2c2c);
-    const secondaryColor = Color(0xff6D28D9);
-    const accentColor = Color(0xffffffff);
-    const backgroundColor = Color(0xffffffff);
-    const errorColor = Color(0xffEF4444);
-
-    return AppBar(
-      centerTitle: true,
-      title:
-          const Text("Pending Requests", style: TextStyle(color: Colors.white)),
-      backgroundColor: primaryColor,
-      actions: [
-        // IconButton(
-        // icon: Icon(
-        // Icons.share,
-        // color: accentColor,
-        // ),
-        // onPressed: () {},
-        // )
-      ],
-      leading: IconButton(
-        icon: Icon(
-          Icons.keyboard_arrow_left,
-          color: accentColor,
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: Color.fromARGB(255, 229, 229, 229),
+        body: Column(
+          mainAxisAlignment : MainAxisAlignment.start,
+          mainAxisSize : MainAxisSize.max,
+          crossAxisAlignment : CrossAxisAlignment.center,
+          children: <Widget>[
+            AppBarFb2(),
+            TopBarFb3(
+                title: "Pending Requests",
+                upperTitle:
+                    "\nBelow are requests by \n the people who need Blood"),
+          Center(
+            child: SingleChildScrollView(
+              child: FutureBuilder<List<Data>>(
+                future: widget.futureData,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<Data> data = snapshot.data!;
+                    return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                        itemCount: data.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return RequestCard(
+                              name: data[index].name,
+                              symbol: MdiIcons.plusCircle,
+                              date: data[index].date,
+                              time: data[index].time,
+                              location: data[index].location,
+                              bloodgroup: data[index].bloodgroup);
+                        });
+                  } else if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
+                  // By default show a loading spinner.
+                  return CircularProgressIndicator();
+                },
+              ),
+            ),
+          ),]
         ),
-        onPressed: () {},
       ),
     );
   }
@@ -479,23 +419,88 @@ class RequestCard extends StatelessWidget {
   }
 }
 
-class FloatingActionButtonFb3 extends StatelessWidget {
-  final Function() onPressed;
-  final Widget icon;
-  final Color color;
-  const FloatingActionButtonFb3(
-      {required this.onPressed,
-      required this.icon,
-      this.color = Colors.blue,
-      Key? key})
-      : super(key: key);
 
+class TopBarFb3 extends StatelessWidget {
+  final String title;
+  final String upperTitle;
+  TopBarFb3({required this.title, required this.upperTitle, Key? key})
+      : super(key: key);
+  final primaryColor = Color.fromARGB(255, 222, 44, 44);
+  final secondaryColor = const Color(0xff6D28D9);
+  final accentColor = const Color(0xffffffff);
+  final backgroundColor = const Color(0xffffffff);
+  final errorColor = const Color(0xffEF4444);
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-      backgroundColor: color,
-      onPressed: onPressed,
-      child: icon,
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.15,
+      decoration: BoxDecoration(
+          color: primaryColor,
+          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60))),
+      // gradient: LinearGradient(colors: [primaryColor, secondaryColor])),
+      // child: Padding(
+      //   padding: const EdgeInsets.all(25.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Text(title,
+          //     textAlign: TextAlign.center,
+          //     style: const TextStyle(
+          //         color: Colors.white70,
+          //         fontSize: 20,
+          //         fontWeight: FontWeight.bold)),
+          Center(
+              child: Text(upperTitle,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal)))
+        ],
+      ),
+      // ),
+    );
+  }
+}
+
+class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
+  @override
+  final Size preferredSize;
+
+  AppBarFb2({Key? key})
+      : preferredSize = const Size.fromHeight(56.0),
+        super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    const primaryColor = Color(0xffde2c2c);
+    const secondaryColor = Color(0xff6D28D9);
+    const accentColor = Color(0xffffffff);
+    const backgroundColor = Color(0xffffffff);
+    const errorColor = Color(0xffEF4444);
+
+    return AppBar(
+      centerTitle: true,
+      title:
+          const Text("Pending Requests", style: TextStyle(color: Colors.white)),
+      backgroundColor: primaryColor,
+      actions: [
+        // IconButton(
+        // icon: Icon(
+        // Icons.share,
+        // color: accentColor,
+        // ),
+        // onPressed: () {},
+        // )
+      ],
+      leading: IconButton(
+        icon: Icon(
+          Icons.keyboard_arrow_left,
+          color: accentColor,
+        ),
+        onPressed: () {},
+      ),
     );
   }
 }
