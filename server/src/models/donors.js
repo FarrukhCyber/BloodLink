@@ -12,5 +12,5 @@ const donorsSchema = new mongoose.Schema({
     plasma: Boolean,
 });
 
-const DonorsModel = mongoose.model("DONORS", donorsSchema);
+const DonorsModel = mongoose.model("donors", donorsSchema);
 module.exports = DonorsModel;
