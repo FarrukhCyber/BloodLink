@@ -6,6 +6,7 @@ import 'package:bloodlink/widgets/navbar.dart';
 import 'package:bloodlink/widgets/optionCard.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:material_design_icons_flutter/icon_map.dart';
+import 'package:bloodlink/screens/myRequests.dart';
 
 class homepage extends StatefulWidget {
   final String userName;
@@ -165,6 +166,50 @@ class _homepageState extends State<homepage>
                               child: Icon(
                                 MdiIcons.heart,
                                 color: red,
+                                size: 30,
+                              ),
+                            ),
+                            //
+                          ],
+                        )),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Card(
+                  elevation: 10,
+                  child: InkWell(
+                    splashColor: Colors.blue.withAlpha(30),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => myRequests()));
+                      print('Card tapped.');
+                    },
+                    child: SizedBox(
+                        width: width * 0.85, // determines the size of the card
+                        height: 100,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              alignment: AlignmentDirectional(-1, 0),
+                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: Text(
+                                'View My Requests',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 113, 98, 13),
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Container(
+                              alignment: AlignmentDirectional(1, 0),
+                              padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                              child: Icon(
+                                MdiIcons.clock,
+                                color: Color.fromARGB(255, 113, 98, 13),
                                 size: 30,
                               ),
                             ),
