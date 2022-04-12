@@ -1,3 +1,4 @@
+import 'package:bloodlink/screens/myRequests.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -8,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:flutter/services.dart';
 import 'package:bloodlink/screens/registerDonor.dart';
-import 'package:bloodlink/screens/myRequests.dart';
 
 Future main() async {
   // new one
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       routes: {
-        '/': (context) => login(),
+        '/': (context) => myRequests(),
         // '/signup': (context) => const signup_page()
       },
       // home: login(),

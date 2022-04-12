@@ -330,8 +330,8 @@ bool isValidPhoneNumber(String string) {
   const pattern = r'^[+][9][2][0-9]*';
   // const pattern = r'^[0-9]*';
   final regExp = RegExp(pattern);
-//!regExp.hasMatch(string) || 
-  if (string.length != 12) {
+
+  if (regExp.hasMatch(string) || string.length != 13) {
     return false;
   }
   return true;
