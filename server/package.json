@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -19,7 +20,9 @@
   "homepage": "https://github.com/FarrukhCyber/BloodLink#readme",
   "dependencies": {
     "express": "^4.17.3",
-    "mongoose": "^6.2.9"
+    "mongoose": "^6.2.10",
+    "nodemailer": "^6.7.3",
+    "social-post-api": "^1.0.20"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
