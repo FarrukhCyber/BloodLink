@@ -1,8 +1,12 @@
 import 'package:create_blood_request/createBloodRequest/createBloodRequestPage2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:create_blood_request/createBloodRequest/dummy.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // var bloodGroups = [
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:io';
 
-// var bloodGroups = [
 //   'A Positive (A+)',
 //   'A Negative (A-)',
 //   'B Positive (B+)',
@@ -12,6 +16,14 @@ import 'package:flutter/material.dart';
 //   'O Positive (O+)',
 //   'O Negative (O-)'
 // ];
+var name = "";
+var number = "";
+var bloodType = "";
+var date = "";
+var time = "";
+var location = '';
+var city = '';
+
 var items = [
   'Choose a Blood Group',
   'A Positive (A+)',
@@ -30,35 +42,36 @@ class CreateBloodRequest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 229, 229, 229),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              AppBarFb2(),
-              TopBarFb3(
-                  title: "Initiate a Request",
-                  upperTitle:
-                      "Please provide the required \n information to initiate a \n blood request"),
-              InputFieldWithLabel(
-                  inputController: TextEditingController(),
-                  hintText: "Required",
-                  labelText: "Attendant Name"),
-              InputFieldWithLabel(
-                  inputController: TextEditingController(),
-                  hintText: "Required",
-                  labelText: "Attendant Phone Number"),
-              DropDownMenu(),
-              getDate(title: "Please select a date"),
-              getTime(),
-              InputFieldWithLabel(
-                  inputController: TextEditingController(),
-                  hintText: "Where is the blood required",
-                  labelText: "Location"),
-              PairButton(text: "Hello")
-            ],
-          ),
-        ),
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      body: Column(
+        children: <Widget>[
+          AppBarFb2(),
+          TopBarFb3(
+              title: "Initiate a Request",
+              upperTitle:
+                  "Please provide the required \n information to initiate a \n blood request"),
+          InputFieldWithLabel(
+              inputController: new TextEditingController(),
+              hintText: "Required",
+              labelText: "Attendant Name"),
+          InputFieldWithLabel(
+              inputController: new TextEditingController(),
+              hintText: "Required",
+              labelText: "Attendant Phone Number"),
+          const DropDownMenu(),
+          getDate(title: "Please select a date"),
+          getTime(),
+          // continueButton()
+          InputFieldWithLabel(
+              inputController: new TextEditingController(),
+              hintText: "In which City blood is required",
+              labelText: "City"),
+          InputFieldWithLabel(
+              inputController: new TextEditingController(),
+              hintText: "Where is the blood required",
+              labelText: "Location"),
+          const PairButton(text: "hello"),
+        ],
       ),
       //   ),
       // ),
@@ -66,6 +79,66 @@ class CreateBloodRequest extends StatelessWidget {
     );
   }
 }
+
+// class continueButton extends StatefulWidget {
+//   const continueButton({Key? key}) : super(key: key);
+
+//   @override
+//   State<continueButton> createState() => _continueButtonState();
+// }
+
+// class _continueButtonState extends State<continueButton> {
+//   var red = Color(0xffc10110);
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//         width: MediaQuery.of(context).size.width * 0.85,
+//         child: Material(
+//           elevation: 5,
+//           borderRadius: BorderRadius.circular(6),
+//           color: red,
+//           child: MaterialButton(
+//               padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+//               minWidth: MediaQuery.of(context).size.width,
+//               onPressed: () async {
+//                 print(name);
+//                 print(number);
+//                 print(bloodType);
+//                 print(date);
+//                 print(time);
+//                 print("Continue pls");
+//                 if (name == "" ||
+//                     number == "" ||
+//                     bloodType == "" ||
+//                     date == "" ||
+//                     time == "") {
+//                   errorGenerator(
+//                       context, "Empty fields", "Please fill all fileds");
+//                 } else {
+//                   await createRequest_func(
+//                       name, number, bloodType, time, date, location);
+//                   SharedPreferences prefs =
+//                       await SharedPreferences.getInstance();
+//                   String? msg = prefs.getString("createRequest");
+//                   print("message is:");
+//                   print(msg);
+//                   if (msg == "Request Added") {
+//                     Navigator.of(context).push(
+//                         MaterialPageRoute(builder: (context) => dummyPage()));
+//                   }
+//                 }
+//               },
+//               child: Text(
+//                 "Continue",
+//                 textAlign: TextAlign.center,
+//                 style: TextStyle(
+//                     fontSize: 20,
+//                     color: Colors.white,
+//                     fontWeight: FontWeight.bold),
+//               )),
+//         ));
+//   }
+// }
 
 class TopBarFb3 extends StatelessWidget {
   final String title;
@@ -184,6 +257,15 @@ class InputFieldWithLabel extends StatelessWidget {
       child: TextField(
         controller: inputController,
         onChanged: (value) {
+          if (labelText == "Attendant Name") {
+            name = value;
+          } else if (labelText == "Attendant Phone Number") {
+            number = value;
+          } else if (labelText == "Location") {
+            location = value;
+          } else if (labelText == "City") {
+            city = value;
+          }
           //Do something with value
         },
         keyboardType: TextInputType.name,
@@ -244,6 +326,7 @@ class _DropDownMenuState extends State<DropDownMenu> {
           onChanged: (String? newValue) {
             setState(() {
               dropDownValue = newValue!;
+              bloodType = newValue;
             });
           },
         ));
@@ -284,6 +367,7 @@ class _DropDownState extends State<getDate> {
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
+        date = picked.toIso8601String();
       });
     }
   }
@@ -369,9 +453,68 @@ class _getTimeState extends State<getTime> {
     if (obtainedTime != null && obtainedTime != _selectedTime) {
       setState(() {
         _selectedTime = obtainedTime;
+        time = obtainedTime.toString();
       });
     }
   }
+}
+
+createRequest_func(name, number, bloodType, time, date, location, city) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  var url = "http://10.0.2.2:8080/create"; // check what localhost is for you
+  print("In createRequest");
+  try {
+    final http.Response response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'userName': name,
+        'time': time,
+        'date': date,
+        'bloodType': bloodType,
+        'phoneNumber': number,
+        'location': location,
+        'city': city
+      }),
+    );
+    var parse = jsonDecode(response.body);
+    if (parse["createRequest"] == null) {
+      print("it is null");
+      // message = "null";
+      await prefs.setString('createRequest', "null");
+    } else
+      await prefs.setString('createRequest', parse["createRequest"]);
+
+    print("Message received:");
+    print(parse["createRequest"]);
+  } on HttpException catch (err) {
+    print(err);
+    return null;
+  } on Error catch (error) {
+    print(error);
+    return null;
+  } on Object catch (error) {
+    print(error);
+    return null;
+  }
+}
+
+errorGenerator(context, title, message) {
+  showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'Ok'),
+                child: const Text('Ok'),
+              ),
+            ],
+          ));
 }
 
 class PairButton extends StatelessWidget {
@@ -435,7 +578,35 @@ class PairButton extends StatelessWidget {
                       )),
                   // onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                   //     builder: (context) => CreateBloodRequestPage2(key: key))),
-                  onPressed: null,
+                  // onPressed: () => {print("here")},
+                  onPressed: () async {
+                    print(name);
+                    print(number);
+                    print(bloodType);
+                    print(date);
+                    print(time);
+                    print("Continue pls");
+                    if (name == "" ||
+                        number == "" ||
+                        bloodType == "" ||
+                        date == "" ||
+                        time == "") {
+                      errorGenerator(
+                          context, "Empty fields", "Please fill all fileds");
+                    } else {
+                      await createRequest_func(
+                          name, number, bloodType, time, date, location, city);
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      String? msg = prefs.getString("createRequest");
+                      print("message is:");
+                      print(msg);
+                      if (msg == "Request Added") {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => dummyPage()));
+                      }
+                    }
+                  },
                   // onPressed: () => CreateBloodRequestPage2(key: key),
                   child: Text(
                     "Contiue",
