@@ -249,7 +249,7 @@ class _OtpState extends State<Otp> {
             fontSize: 16.0);
         Navigator.of(context).push(MaterialPageRoute(
             // builder: (context) => signup(phoneNo: widget.phoneNo))); // UNCOMMENT
-            builder: (context) => signup(phoneNo: "123")));
+            builder: (context) => signup(phoneNo: widget.phoneNo)));
       });
     } catch (error) {
       Fluttertoast.showToast(
