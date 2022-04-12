@@ -31,27 +31,38 @@ class CreateBloodRequest extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 229, 229, 229),
-      body: Column(
-        children: <Widget>[
-          AppBarFb2(),
-          TopBarFb3(
-              title: "Initiate a Request",
-              upperTitle:
-                  "Please provide the required \n information to initiate a \n blood request"),
-          InputFieldWithLabel(
-              inputController: TextEditingController(),
-              hintText: "Required",
-              labelText: "Attendant Name"),
-          InputFieldWithLabel(
-              inputController: TextEditingController(),
-              hintText: "Required",
-              labelText: "Attendant Phone Number"),
-          DropDownMenu(),
-          getDate(title: "Please select a date"),
-          getTime(),
-          PairButton(text: "Hello")
-        ],
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              AppBarFb2(),
+              TopBarFb3(
+                  title: "Initiate a Request",
+                  upperTitle:
+                      "Please provide the required \n information to initiate a \n blood request"),
+              InputFieldWithLabel(
+                  inputController: TextEditingController(),
+                  hintText: "Required",
+                  labelText: "Attendant Name"),
+              InputFieldWithLabel(
+                  inputController: TextEditingController(),
+                  hintText: "Required",
+                  labelText: "Attendant Phone Number"),
+              DropDownMenu(),
+              getDate(title: "Please select a date"),
+              getTime(),
+              InputFieldWithLabel(
+                  inputController: TextEditingController(),
+                  hintText: "Where is the blood required",
+                  labelText: "Location"),
+              PairButton(text: "Hello")
+            ],
+          ),
+        ),
       ),
+      //   ),
+      // ),
+      // ),
     );
   }
 }
@@ -422,8 +433,9 @@ class PairButton extends StatelessWidget {
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(borderRadius)),
                       )),
-                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => CreateBloodRequestPage2(key: key))),
+                  // onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  //     builder: (context) => CreateBloodRequestPage2(key: key))),
+                  onPressed: null,
                   // onPressed: () => CreateBloodRequestPage2(key: key),
                   child: Text(
                     "Contiue",
