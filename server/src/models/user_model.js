@@ -5,12 +5,13 @@ const newSchema = new Schema({
     userName:String,
     password:String,
     email:String,
-    phoneNumber:Number,
+    phoneNumber:String,
     bloodType:String,
     gender:String, 
     age: Date,
-    donor:Boolean
+    donor:Boolean,
+    deviceID: String
 })
 
-module.exports = mongoose.model('User', newSchema)
+module.exports = mongoose.model('user', newSchema)
 

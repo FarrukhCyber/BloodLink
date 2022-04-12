@@ -212,7 +212,7 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
 }
 
 login_func(name, pass, phone) async {
-  var url = "http://localhost:8080/auth/login";
+  var url = "http://10.0.2.2:8080/auth/login";
   print("In login");
   try {
     final http.Response response = await http.post(
