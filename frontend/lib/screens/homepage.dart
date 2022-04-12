@@ -1,4 +1,5 @@
 import 'package:bloodlink/screens/login.dart';
+import 'package:bloodlink/screens/registerDonor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bloodlink/widgets/navbar.dart';
@@ -137,6 +138,8 @@ class _homepageState extends State<homepage>
                   child: InkWell(
                     splashColor: Colors.blue.withAlpha(30),
                     onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => registerDonor()));
                       print('Card tapped.');
                     },
                     child: SizedBox(

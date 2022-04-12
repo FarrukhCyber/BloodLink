@@ -330,8 +330,8 @@ bool isValidPhoneNumber(String string) {
   const pattern = r'^[+][9][2][0-9]*';
   // const pattern = r'^[0-9]*';
   final regExp = RegExp(pattern);
-
-  if (!regExp.hasMatch(string) || string.length != 13) {
+//!regExp.hasMatch(string) || 
+  if (string.length != 12) {
     return false;
   }
   return true;
@@ -344,7 +344,7 @@ class SigupButton extends StatelessWidget {
     return TextButton(
         onPressed: () => {
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => signup(phoneNo: "")))
+                  MaterialPageRoute(builder: (context) => LoginWithPhone()))
             },
         child: const Text(
           "Don't have an Account? Sign up",

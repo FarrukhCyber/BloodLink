@@ -7,7 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bloodlink/utils/user_info.dart';
 
 class editProfile extends StatefulWidget {
-  const editProfile({Key? key}) : super(key: key);
+  String phoneNo;
+  editProfile({Key? key, required this.phoneNo}) : super(key: key);
 
   @override
   State<editProfile> createState() => _editProfileState();

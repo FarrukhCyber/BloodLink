@@ -7,11 +7,13 @@ import 'package:bloodlink/screens/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:flutter/services.dart';
+import 'package:bloodlink/screens/registerDonor.dart';
+import 'package:bloodlink/screens/myRequests.dart';
 
 Future main() async {
   // new one
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+  await Firebase.initializeApp();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -34,7 +36,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       routes: {
-        '/': (context) => const login(),
+        '/': (context) => login(),
         // '/signup': (context) => const signup_page()
       },
       // home: login(),

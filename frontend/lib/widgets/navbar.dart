@@ -10,7 +10,7 @@ import 'package:bloodlink/utils/user_info.dart';
 class navBar extends StatelessWidget {
   final String userName;
   final String userEmail;
-  const navBar({Key? key, required this.userName, required this.userEmail})
+  navBar({Key? key, required this.userName, required this.userEmail})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class navBar extends StatelessWidget {
             onTap: () => {
               print("User profile clicked"),
               Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => userProfile()))
+                  .push(MaterialPageRoute(builder: (context) => userProfile(phoneNum: phoneNo,)))
             },
           ),
           ListTile(

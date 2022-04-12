@@ -138,7 +138,7 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
               } else {
                 DateTime dateonly = DateTime(
                     dateSelection.year, dateSelection.month, dateSelection.day);
-                await signup_func(name, pass, email, "+921234567890", blood,
+                await signup_func(name, pass, email, widget.phoneNo, blood,
                     gender, dateonly);
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 String? msg = prefs.getString("signup");
@@ -257,7 +257,7 @@ signup_func(name, pass, email, phone, blood, gender, age) async {
     return;
   }
 
-  var url = "http://localhost:8080/auth/signup";
+  var url = "http://10.0.2.2:8080/auth/signup";
   print("In signup");
   try {
     final http.Response response = await http.post(

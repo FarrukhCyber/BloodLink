@@ -8,14 +8,18 @@ import 'package:bloodlink/screens/login.dart';
 import 'package:bloodlink/screens/user_profile.dart';
 import 'package:bloodlink/utils/user_info.dart';
 
+String phoneNo = "";
+
 class userProfile extends StatefulWidget {
-  const userProfile({Key? key}) : super(key: key);
+  String phoneNum;
+  userProfile({Key? key, required this.phoneNum}) : super(key: key);
 
   @override
   State<userProfile> createState() => _userProfileState();
 }
 
 class _userProfileState extends State<userProfile> {
+  
   @override
   Widget build(BuildContext context) {
     var userName = UserSimplePreferences.getUsername();
@@ -23,7 +27,7 @@ class _userProfileState extends State<userProfile> {
     var userPassword = UserSimplePreferences.getPassword();
     var userGender = UserSimplePreferences.getGender();
     var userAge = UserSimplePreferences.getAge();
-    var userPhoneNumber = UserSimplePreferences.getPhoneNumber();
+    var userPhoneNumber = widget.phoneNum;
     var userBloodType = UserSimplePreferences.getBloodType();
     return Scaffold(
         backgroundColor: Colors.white,
@@ -32,7 +36,7 @@ class _userProfileState extends State<userProfile> {
           children: [
             AppBarFb2(),
             TopBarFb3(title: "BloodLink", upperTitle: "\nProfile Information"),
-            Heading(title: "\n  Personal Information"),
+            Heading(title: "\n  Personal Information", phoneNum: widget.phoneNum),
             Divider(
               height: 5,
               color: Color(0xffc10110),
@@ -43,7 +47,7 @@ class _userProfileState extends State<userProfile> {
             DisplayInfo(label: "Name", data: userName ?? "Error"),
             DisplayInfo(label: "Email", data: userEmail ?? "Error"),
             DisplayInfo(label: "Password", data: userPassword ?? "Error"),
-            DisplayInfo(label: "Phonenumber", data: userPhoneNumber ?? "Error"),
+            DisplayInfo(label: "Phonenumber", data: userPhoneNumber ),
             DisplayInfo(label: "Bloodtype", data: userBloodType ?? "Error"),
             DisplayInfo(label: "Gender", data: userGender ?? "Error"),
             DisplayInfo(label: "Age", data: userAge ?? "Error")
@@ -118,7 +122,8 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
 //contains "personal information" and edit button
 class Heading extends StatelessWidget {
   final String title;
-  Heading({required this.title, Key? key}) : super(key: key);
+  final String phoneNum;
+  Heading({required this.title, required this.phoneNum, Key? key}) : super(key: key);
   final primaryColor = const Color.fromARGB(255, 222, 44, 44);
   final secondaryColor = const Color(0xff6D28D9);
   final accentColor = const Color(0xffffffff);
@@ -160,8 +165,10 @@ class Heading extends StatelessWidget {
                             borderRadius: BorderRadius.circular(borderRadius)),
                       )),
                   onPressed: () => {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => editProfile()))
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => editProfile(
+                              phoneNo: phoneNum,
+                            )))
                   },
                   child: Text(
                     "Edit",
