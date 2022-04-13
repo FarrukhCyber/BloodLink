@@ -10,10 +10,11 @@ const bloodRequestSchema = new mongoose.Schema({
     user_contact_num: String,
     admin_id: Number,
     moderator_id: Number,
-    deadline: Date,
+    date: Date,
+    time: Date,    
     hospital : String,
     city: String
 });
 
-const RequestModel = mongoose.model("BLOOD_REQUEST", bloodRequestSchema);
+const RequestModel = mongoose.model("blood_request", bloodRequestSchema);
 module.exports = RequestModel;

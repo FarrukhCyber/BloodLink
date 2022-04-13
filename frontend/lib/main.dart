@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/landingScreen/landingScreen.dart';
-import 'package:frontend/push_notifications.dart';
+import 'package:frontend/screens/createBloodRequest.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: PushNotifications(
+      home: CreateBloodRequest(
         key: key,
       ),
     );

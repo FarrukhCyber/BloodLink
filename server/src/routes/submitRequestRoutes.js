@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const RequestModel = require('../models/bloodRequest')
-const RegUserModel = require("../models/registeredUsers")
+const RegUserModel = require("../models/user_model")
 const DonorsModel = require("../models/donors")
 
 const {ONE_SIGNAL_CONFIG} = require("../config/notifications_config")
@@ -44,32 +44,40 @@ function sendEmails() {
 
 const getPostData = (result) => {
     return {
-        post: `Blood Type: ${result.blood_group} \n Hospital: ${result.hospital} \nContact: ${result.attendant_num}` ,
+        post: `Blood Type: ${result.blood_group} \nHospital: ${result.hospital} \nContact: ${result.attendant_num}` ,
         platforms: ["facebook"]
     }
 }
 
 
 function saveToDb(result) {
+    //handling time data
+    let temp = result.time
+    result.time = temp.substr(10,5)
+    //2022-04-21T00:00:00.000+05:30
+    let newDate = result.date
+    result.time = newDate.replace("00:00", result.time)
+    console.log(result)
+    //-------------------------
+
     //Storing the data in db
     const blood_req = new RequestModel({
-        req_id: result.req_id ,
+        req_id: 4 ,
         attendant_name: result.attendant_name,
         attendant_num: result.attendant_num ,
         blood_group: result.blood_group ,
-        status: result.status,
-        quantity: result.quantity,
-        user_contact_num: result.user_contact_num,
-        admin_id: result.admin_id ,
-        moderator_id: result.moderator_id ,
-        deadline: result.deadline,
+        status: false,
+        quantity: ('quantity' in result ? result.quantity : "500ml"),
+        user_contact_num: ('user_contact_num' in result ? result.user_contact_num : "923364984545"),
+        admin_id: ('admin_id' in result ? result.admin_id : null),
+        moderator_id: ('moderator_id' in result ? result.moderator_id : null) ,
+        date: result.date,
+        time: result.time,
         hospital : result.hospital,
         city: result.city
     })
 
     blood_req.save().then( ()=> console.log("Request added successfully")).catch((err)=>console.log(`${err} occurred while saving request to db`))
-    res.json({key: "success"})
-
 }
 
 const socialMediaPosting = async (result) => {
@@ -105,6 +113,7 @@ const sendNotificationToDevice = (devices, res, next, msg) => {
 
 router.post("/" , (req, res, next) => {
     const result = req.body
+    console.log(result)
 
     // saveToDb(result)
     // socialMediaPosting(result)
@@ -112,13 +121,12 @@ router.post("/" , (req, res, next) => {
     handleNotifications(req, res, next, result)
 })
 
-module.exports = router
 
 const handleNotifications =  async (req, res, next, result) => {
     //get those donors who are from required city and required blood_group
     let docs
     try {
-        docs = await DonorsModel.find({city: result.city, blood_group: result.blood_group})
+        docs = await DonorsModel.find({region: result.city, blood_group: result.blood_group})
         console.log(docs)
     }
     catch(err) {
@@ -128,7 +136,7 @@ const handleNotifications =  async (req, res, next, result) => {
     let devices = []
     for (const object of docs) {
         try {
-            const id = await RegUserModel.findOne({user_contact_num: object.user_contact_num})
+            const id = await RegUserModel.findOne({phoneNumber: object.user_contact_num})
             console.log(id)
             devices.push(id.notification_id)
         }
@@ -143,6 +151,7 @@ const handleNotifications =  async (req, res, next, result) => {
 
 }
 
+module.exports = router
 /*
 {
     "req_id": 1,
