@@ -1,0 +1,11 @@
+ToDo:
+- When you signup and again without restarting the app... blood and gender retain values
+
+
+Fixed:
+
+
+
+
+HelpfulLinks:
+- https://regexr.com/3c53v
