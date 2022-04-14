@@ -8,35 +8,50 @@ import 'package:bloodlink/screens/login.dart';
 import 'package:bloodlink/screens/user_profile.dart';
 import 'package:bloodlink/utils/user_info.dart';
 
-String phoneNo = "";
-
-class userProfile extends StatefulWidget {
-  String phoneNum;
-  userProfile({Key? key, required this.phoneNum}) : super(key: key);
+class myDetails extends StatefulWidget {
+  String attendantName;
+  String attendantNum;
+  String bloodGroup;
+  String status;
+  String userContact;
+  String date;
+  String time;
+  String quantity;
+  String hospital;
+  String id;
+  //String city;
+  myDetails({
+    Key? key,
+    required this.attendantName,
+    required this.attendantNum,
+    required this.bloodGroup,
+    required this.status,
+    required this.userContact,
+    required this.date,
+    required this.time,
+    required this.hospital,
+    required this.quantity,
+    required this.id,
+  })
+  //required this.city
+  //})
+  : super(key: key);
 
   @override
-  State<userProfile> createState() => _userProfileState();
+  State<myDetails> createState() => _myDetailsState();
 }
 
-class _userProfileState extends State<userProfile> {
-  
-  @override
+class _myDetailsState extends State<myDetails> {
   Widget build(BuildContext context) {
-    var userName = UserSimplePreferences.getUsername();
-    var userEmail = UserSimplePreferences.getEmail();
-    var userPassword = UserSimplePreferences.getPassword();
-    var userGender = UserSimplePreferences.getGender();
-    var userAge = UserSimplePreferences.getAge();
-    var userPhoneNumber = UserSimplePreferences.getPhoneNumber();
-    var userBloodType = UserSimplePreferences.getBloodType();
     return Scaffold(
         backgroundColor: Colors.white,
         // appBar: AppBar(title: Text("Bloodlink")),
         body: Column(
           children: [
             AppBarFb2(),
-            TopBarFb3(title: "BloodLink", upperTitle: "\nProfile Information"),
-            Heading(title: "\n  Personal Information", phoneNum: widget.phoneNum),
+            TopBarFb3(title: "BloodLink", upperTitle: "\nRequest Information"),
+            Heading(
+                title: "\n  Request Information", phoneNum: widget.userContact),
             Divider(
               height: 5,
               color: Color(0xffc10110),
@@ -44,13 +59,16 @@ class _userProfileState extends State<userProfile> {
               endIndent: MediaQuery.of(context).size.width * 0.05,
             ),
             Padding(padding: EdgeInsets.fromLTRB(0, 5, 0, 10)),
-            DisplayInfo(label: "Name", data: userName ?? "Error"),
-            DisplayInfo(label: "Email", data: userEmail ?? "Error"),
-            DisplayInfo(label: "Password", data: userPassword ?? "Error"),
-            DisplayInfo(label: "Phonenumber", data: userPhoneNumber?? "Error" ),
-            DisplayInfo(label: "Bloodtype", data: userBloodType ?? "Error"),
-            DisplayInfo(label: "Gender", data: userGender ?? "Error"),
-            DisplayInfo(label: "Age", data: userAge ?? "Error")
+            DisplayInfo(label: "Attendent Name", data: widget.attendantName),
+            DisplayInfo(label: "Attendent Number", data: widget.attendantNum),
+            DisplayInfo(label: "Blood Group", data: widget.bloodGroup),
+            DisplayInfo(label: "Quantity", data: widget.quantity),
+            DisplayInfo(label: "Date", data: widget.date),
+            DisplayInfo(label: "Time", data: widget.time),
+            DisplayInfo(label: "Status", data: widget.status),
+            DisplayInfo(
+                label: "Hospital",
+                data: "${widget.hospital} "), //, ${widget.city}"),
           ],
         ));
   }
@@ -123,7 +141,8 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
 class Heading extends StatelessWidget {
   final String title;
   final String phoneNum;
-  Heading({required this.title, required this.phoneNum, Key? key}) : super(key: key);
+  Heading({required this.title, required this.phoneNum, Key? key})
+      : super(key: key);
   final primaryColor = const Color.fromARGB(255, 222, 44, 44);
   final secondaryColor = const Color(0xff6D28D9);
   final accentColor = const Color(0xffffffff);

@@ -113,6 +113,7 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
             final form = _formkey.currentState;
             if (form != null && form.validate()) {
               print("Hello");
+              print(phone);
               await login_func(name, pass, phone);
               SharedPreferences prefs = await SharedPreferences.getInstance();
               String? msg = prefs.getString("msg");
@@ -212,7 +213,7 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
 }
 
 login_func(name, pass, phone) async {
-  var url = "http://localhost:8080/auth/login";
+  var url = "http://10.0.2.2:8080/auth/login";
   print("In login");
   try {
     final http.Response response = await http.post(
@@ -223,7 +224,7 @@ login_func(name, pass, phone) async {
       body: jsonEncode(<String, String>{
         'userName': name,
         'password': pass,
-        'phoneNumber': phone.toString(),
+        'phoneNumber': phone,
       }),
     );
     print("this one");

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
-
 class NetworkHandler {
   String baseurl = "http://10.0.2.2:8080";
 
@@ -25,8 +24,21 @@ class NetworkHandler {
     print("--------------------------------------------...................");
     var response = await http.get(Uri.parse(url1), headers: {
       "Content-type": "application/json",
-      "attendant_num": body
+      "user_contact_num": body
     });
+    print(response);
+    return response;
+  }
+
+  Future<http.Response> replace(String url1, dynamic res) async {
+    url1 = formater(url1);
+    print(url1);
+    print("--------------------------------------------...................");
+    var response = await http.post(Uri.parse(url1),
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: json.encode(res));
     print(response);
     return response;
   }

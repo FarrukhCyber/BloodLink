@@ -4,13 +4,14 @@ const Request = require('../models/bloodRequest')
 
 
 
-router.route("/").get((req, res) => {
-  console.log("hi")
-    Request.find({ user_contact_num : req.headers.user_contact_num}, (err, result) => {
+router.route("/").post((req, res) => {
+  console.log(req.body.status)
+    Request.findOneAndUpdate({ _id : req.body._id}, {status:req.body.status},null,(err, result) => {
       if (err) return res.json({ err: err });
       if (result == null) return res.json({ data: [] });
       else {
-        console.log(result)
+        //console.log(result.body.status)
+        console.log("updated");
         return res.json({ data: result });}
     });
   });
