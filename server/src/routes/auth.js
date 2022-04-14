@@ -12,7 +12,7 @@ router.post('/login', (req, res) => {
     const {userName, password, phoneNumber} = req.body
     console.log(userName, password, phoneNumber)
     // res.json({msg:"success"})
-    User.findOne({phoneNumber: Number(req.body.phoneNumber), password:req.body.password}, (err, user)=>{
+    User.findOne({phoneNumber: req.body.phoneNumber, password:req.body.password}, (err, user)=>{
         if(err){
             console.log("Sendnig", err)
             res.json({msg: "ERROR"})

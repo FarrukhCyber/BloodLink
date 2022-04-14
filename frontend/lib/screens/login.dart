@@ -88,20 +88,50 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
         textInputAction: TextInputAction.next,
         decoration: decoration("Username", "Required", red, opacity));
     final phoneNumberField = TextFormField(
-        autofocus: false,
-        keyboardType: TextInputType.text,
-        controller: phoneNumberEditingController, //check this
-        onSaved: (value) {
-          value != null ? phone = value : null;
-        },
-        onChanged: (value) {
-          phone = value;
-        },
-        validator: (value) => isValidPhoneNumber(value ?? "") == false
-            ? "Please enter a number of lenght 13 and type +92___"
+      validator: (value) => isValidPhoneNumber(value ?? "") == false
+            ? "Please enter a number of lenght 10"
             : null,
         textInputAction: TextInputAction.next,
-        decoration: decoration("Phonenumber", "Required", red, opacity));
+      autofocus: false,
+      controller: phoneNumberEditingController, //check this
+      onSaved: (value) {
+        value != null ? phone = value : null;
+      },
+      onChanged: (value) {
+        phone = value;
+      },
+      keyboardType: TextInputType.number,
+      style: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
+      decoration: InputDecoration(
+          enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.black12),
+              borderRadius: BorderRadius.circular(10)),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.black12),
+              borderRadius: BorderRadius.circular(10)),
+          prefix: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            child: Text(
+              '(+92)',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          suffixIcon: Visibility(
+            visible: userNameEditingController.text.length == 10,
+            child: Icon(
+              Icons.check_circle,
+              color: Colors.green,
+              size: 32,
+            ),
+          )),
+    );
+
     final loginButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(6),
@@ -113,7 +143,7 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
             final form = _formkey.currentState;
             if (form != null && form.validate()) {
               print("Hello");
-              await login_func(name, pass, phone);
+              await login_func(name, pass, "+92"+phone.toString());
               SharedPreferences prefs = await SharedPreferences.getInstance();
               String? msg = prefs.getString("msg");
               print("message is:");
@@ -212,7 +242,7 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
 }
 
 login_func(name, pass, phone) async {
-  var url = "http://localhost:8080/auth/login";
+  var url = "http://10.0.2.2:8080/auth/login";
   print("In login");
   try {
     final http.Response response = await http.post(
@@ -331,7 +361,7 @@ bool isValidPhoneNumber(String string) {
   // const pattern = r'^[0-9]*';
   final regExp = RegExp(pattern);
 
-  if (!regExp.hasMatch(string) || string.length != 13) {
+  if (string.length != 10) {
     return false;
   }
   return true;

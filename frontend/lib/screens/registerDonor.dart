@@ -472,7 +472,7 @@ class _registerDonorState extends State<registerDonor> {
           labelText: labelText,
           floatingLabelBehavior: FloatingLabelBehavior.always,
           filled: true,
-          hintText: "  +" + UserSimplePreferences.getPhoneNumber()!,
+          hintText: "    "+UserSimplePreferences.getPhoneNumber()!,
           //hintText: UserSimplePreferences.getPhoneNumber(),
           hintStyle: TextStyle(color: Colors.grey.withOpacity(.75)),
           prefix: const Padding(
