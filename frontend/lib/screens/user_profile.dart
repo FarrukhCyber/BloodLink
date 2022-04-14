@@ -27,7 +27,7 @@ class _userProfileState extends State<userProfile> {
     var userPassword = UserSimplePreferences.getPassword();
     var userGender = UserSimplePreferences.getGender();
     var userAge = UserSimplePreferences.getAge();
-    var userPhoneNumber = widget.phoneNum;
+    var userPhoneNumber = UserSimplePreferences.getPhoneNumber();
     var userBloodType = UserSimplePreferences.getBloodType();
     return Scaffold(
         backgroundColor: Colors.white,
@@ -47,7 +47,7 @@ class _userProfileState extends State<userProfile> {
             DisplayInfo(label: "Name", data: userName ?? "Error"),
             DisplayInfo(label: "Email", data: userEmail ?? "Error"),
             DisplayInfo(label: "Password", data: userPassword ?? "Error"),
-            DisplayInfo(label: "Phonenumber", data: userPhoneNumber ),
+            DisplayInfo(label: "Phonenumber", data: userPhoneNumber ??"Error"),
             DisplayInfo(label: "Bloodtype", data: userBloodType ?? "Error"),
             DisplayInfo(label: "Gender", data: userGender ?? "Error"),
             DisplayInfo(label: "Age", data: userAge ?? "Error")
