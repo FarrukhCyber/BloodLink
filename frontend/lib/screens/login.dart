@@ -298,6 +298,7 @@ login_func(name, pass, phone) async {
 
 decoration(String label, String hint, red, opacity) => InputDecoration(
       labelText: label,
+      errorMaxLines: 4,
       floatingLabelBehavior: FloatingLabelBehavior.always,
       filled: true,
       contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
@@ -373,8 +374,10 @@ class SigupButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
         onPressed: () => {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => LoginWithPhone()))
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => signup(
+                        phoneNo: "",
+                      )))
             },
         child: const Text(
           "Don't have an Account? Sign up",
@@ -405,6 +408,7 @@ class _passwordBuilderState extends State<passwordBuilder> {
       controller: widget.controller,
       obscureText: isHidden,
       decoration: InputDecoration(
+        errorMaxLines: 4,
         labelText: widget.label,
         floatingLabelBehavior: FloatingLabelBehavior.always,
         filled: true,
