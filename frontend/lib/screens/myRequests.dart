@@ -12,7 +12,7 @@ bool error = false;
 NetworkHandler networkHandler = NetworkHandler();
 String userPhoneNum = UserSimplePreferences.getPhoneNumber() ?? "Error";
 Future<List<Data>> fetchData() async {
-  final response = await networkHandler.get('/my_requests', "03364984545");
+  final response = await networkHandler.get('/my_requests', "923364984545");
   if (response.statusCode == 200) {
     List jsonResponse = jsonDecode(response.body)["data"];
     return jsonResponse.map((data) => new Data.fromJson(data)).toList();
@@ -44,7 +44,7 @@ class Data {
   final String time;
   final String location;
   final String status;
-  //final String city;
+  final String city;
   final String quantity;
   final String attendantNum;
   var id;
@@ -54,7 +54,7 @@ class Data {
     required this.date,
     required this.time,
     required this.location,
-    //required this.city,
+    required this.city,
     required this.quantity,
     required this.status,
     required this.attendantNum,
@@ -64,11 +64,11 @@ class Data {
     return Data(
       name: json['attendant_name'],
       bloodgroup: json['blood_group'],
-      date: json['deadline'],
-      time: json['deadline'],
+      date: json['date'],
+      time: json['time'],
       location: json['hospital'],
       status: json['status'] == true ? "Active" : "Resolved",
-      //city: json["city"],
+      city: json["city"],
       quantity: json["quantity"],
       attendantNum: json["attendant_num"],
       id: json["_id"],
@@ -119,14 +119,13 @@ class _MyAppState extends State<myRequests> {
                       itemBuilder: (BuildContext context, int index) {
                         return RequestCard(
                           name: data[index].name,
-                          symbol: MdiIcons.plusCircle,
                           date: data[index].date,
                           time: data[index].time,
                           location: data[index].location,
                           bloodgroup: data[index].bloodgroup,
                           status: data[index].status,
                           attendantNum: data[index].attendantNum,
-                          //city:data[index].city,
+                          city:data[index].city,
                           quantity: data[index].quantity,
                           id: data[index].id,
                           visible:
@@ -154,11 +153,10 @@ class RequestCard extends StatefulWidget {
   final String date;
   final String time;
   final String location;
-  final IconData symbol;
   final String id;
   final String bloodgroup;
   final String attendantNum;
-  //final String city;
+  final String city;
   final String status;
   final String quantity;
   bool visible;
@@ -167,13 +165,12 @@ class RequestCard extends StatefulWidget {
   // final Size preferredSize;
   RequestCard(
       {required this.name,
-      required this.symbol,
       required this.date,
       required this.time,
       required this.location,
       required this.bloodgroup,
       required this.attendantNum,
-      //required this.city,
+      required this.city,
       required this.quantity,
       required this.status,
       required this.id,
@@ -230,7 +227,7 @@ class _RequestCardState extends State<RequestCard> {
                                     ),
                                 onPressed: null,
                                 child: Text(
-                                  widget.bloodgroup,
+                                  widget.bloodgroup.split('(')[1].split(')')[0],
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
@@ -449,12 +446,12 @@ class _RequestCardState extends State<RequestCard> {
                                           bloodGroup: widget.bloodgroup,
                                           status: widget.status,
                                           userContact: userPhoneNum,
-                                          date: widget.date,
-                                          time: widget.time,
+                                          date: widget.date.split('T')[0],
+                                          time: widget.time.split('T')[1],
                                           quantity: widget.quantity,
                                           hospital: widget.location,
                                           id: widget.id,
-                                          //city:widget.city,
+                                          city:widget.city,
                                         )));
                               },
                               style: ButtonStyle(

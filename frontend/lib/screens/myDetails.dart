@@ -19,23 +19,21 @@ class myDetails extends StatefulWidget {
   String quantity;
   String hospital;
   String id;
-  //String city;
-  myDetails({
-    Key? key,
-    required this.attendantName,
-    required this.attendantNum,
-    required this.bloodGroup,
-    required this.status,
-    required this.userContact,
-    required this.date,
-    required this.time,
-    required this.hospital,
-    required this.quantity,
-    required this.id,
-  })
-  //required this.city
-  //})
-  : super(key: key);
+  String city;
+  myDetails(
+      {Key? key,
+      required this.attendantName,
+      required this.attendantNum,
+      required this.bloodGroup,
+      required this.status,
+      required this.userContact,
+      required this.date,
+      required this.time,
+      required this.hospital,
+      required this.quantity,
+      required this.id,
+      required this.city})
+      : super(key: key);
 
   @override
   State<myDetails> createState() => _myDetailsState();
@@ -67,8 +65,7 @@ class _myDetailsState extends State<myDetails> {
             DisplayInfo(label: "Time", data: widget.time),
             DisplayInfo(label: "Status", data: widget.status),
             DisplayInfo(
-                label: "Hospital",
-                data: "${widget.hospital} "), //, ${widget.city}"),
+                label: "Hospital", data: "${widget.hospital} , ${widget.city}"),
           ],
         ));
   }
