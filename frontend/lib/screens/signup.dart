@@ -138,8 +138,8 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
               } else {
                 DateTime dateonly = DateTime(
                     dateSelection.year, dateSelection.month, dateSelection.day);
-                await signup_func(name, pass, email, widget.phoneNo, blood,
-                    gender, dateonly);
+                await signup_func(
+                    name, pass, email, widget.phoneNo, blood, gender, dateonly);
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 String? msg = prefs.getString("signup");
                 print("message is:");
@@ -382,6 +382,7 @@ class _DropDownState extends State<getDate> {
 
 decoration(String label, String hint, red, opacity) => InputDecoration(
       labelText: label,
+      errorMaxLines: 4,
       floatingLabelBehavior: FloatingLabelBehavior.always,
       filled: true,
       contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
@@ -423,6 +424,7 @@ class _passwordBuilderState extends State<passwordBuilder> {
       controller: widget.controller,
       obscureText: isHidden,
       decoration: InputDecoration(
+        errorMaxLines: 4,
         labelText: widget.label,
         floatingLabelBehavior: FloatingLabelBehavior.always,
         filled: true,
