@@ -7,6 +7,7 @@ const registerAsDonor = require('./src/routes/registerAsDonor')
 const myRequests = require('./src/routes/myRequests')
 const User = require('./src/models/user_model')
 const auth = require('./src/routes/auth.js')
+const checkDb = require('./src/routes/checkDb')
 
 app.use(express.json({extended:false}))
 
@@ -25,7 +26,7 @@ dbConnect = async () => {
     }
 }
 
-// dbConnect()
+dbConnect()
 //-------------------------
 
 
@@ -33,6 +34,9 @@ app.get('/', (req, res) => {
     res.send("Hello World")
     console.log("Touch")
 })
+
+//just for checking DB connection
+app.use("/checkDb", checkDb)
 
 app.use('/auth', auth)
 app.use("/register_donor", registerAsDonor)
