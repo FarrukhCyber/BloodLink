@@ -16,6 +16,7 @@ class _LoginWithPhoneState extends State<LoginWithPhone> {
   FirebaseAuth auth = FirebaseAuth.instance;
 
   bool otpVisibility = false;
+  var phone = "";
 
   String verificationID = "";
 
@@ -91,38 +92,53 @@ class _LoginWithPhoneState extends State<LoginWithPhone> {
                   child: Column(
                     children: [
                       TextFormField(
-                        keyboardType: TextInputType.number,
-                        controller: phoneController,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black12),
-                              borderRadius: BorderRadius.circular(10)),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black12),
-                              borderRadius: BorderRadius.circular(10)),
-                          prefix: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Text(
-                              '(+92)',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          suffixIcon:
-                          Visibility(
-                           visible:phoneController.text.length==10,
-                            child:Icon(Icons.check_circle,
-                            color: Colors.green,
-                            size: 32,
-                          ),)
-                        ),
-                      ),
+      validator: (value) => isValidPhoneNumber(value ?? "") == false
+            ? "Please enter a number of lenght 10"
+            : null,
+        textInputAction: TextInputAction.next,
+      autofocus: false,
+      controller: phoneController, //check this
+      onSaved: (value) {
+        value != null ? phone = value : null;
+      },
+      onChanged: (value) {
+        phone = value;
+      },
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(
+      labelText: "Phone Number",
+      errorMaxLines: 4,
+      floatingLabelBehavior: FloatingLabelBehavior.always,
+      filled: true,
+      contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+      hintText: "3xxxxxxxxx",
+      border: UnderlineInputBorder(
+        borderSide: BorderSide(color: Color(0xffde2c2c).withOpacity(0.3), width: 2.0),
+      ),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Color(0xffde2c2c), width: 2.0),
+      ),
+      errorBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Color(0xffde2c2c), width: 2.0),
+      ),
+      enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Color(0xffde2c2c).withOpacity(0.3), width: 2.0),
+      ),
+      prefix: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5),
+              child: Text(
+                '(+92)',
+              ),
+            ),
+            suffixIcon:
+            Visibility(
+              visible:phoneController.text.length==10,
+              child:const Icon(Icons.check_circle,
+              color: Colors.green,
+              size: 32,
+            ),)
+    )
+    ),
                       SizedBox(
                         height: 22,
                       ),
@@ -194,4 +210,16 @@ class _LoginWithPhoneState extends State<LoginWithPhone> {
       codeAutoRetrievalTimeout: (String verificationId) {},
     );
   }
+}
+
+bool isValidPhoneNumber(String string) {
+  // Null or empty string is invalid phone number
+  if (string == null || string.isEmpty) {
+    return false;
+  }
+
+  if (string.length != 10) {
+    return false;
+  }
+  return true;
 }

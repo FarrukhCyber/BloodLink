@@ -19,13 +19,26 @@ class NetworkHandler {
     return response;
   }
 
-  Future<http.Response> get(String url1, dynamic body) async {
+  Future<http.Response> replace(String url1, dynamic res) async {
+    url1 = formater(url1);
+    print(url1);
+    print("--------------------------------------------...................");
+    var response = await http.post(Uri.parse(url1),
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: json.encode(res));
+    print(response);
+    return response;
+  }
+
+  Future<http.Response> get(String url1, dynamic body, String title) async {
     url1 = formater(url1);
     print(url1);
     print("--------------------------------------------...................");
     var response = await http.get(Uri.parse(url1), headers: {
       "Content-type": "application/json",
-      "attendant_num": body
+      title: body
     });
     print(response);
     return response;

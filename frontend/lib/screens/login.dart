@@ -86,7 +86,7 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
           name = value;
         },
         textInputAction: TextInputAction.next,
-        decoration: decoration("Username", "Required", red, opacity));
+        decoration: decoration("Phone Number", "Required", red, opacity));
     final phoneNumberField = TextFormField(
       validator: (value) => isValidPhoneNumber(value ?? "") == false
             ? "Please enter a number of lenght 10"
@@ -101,35 +101,39 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
         phone = value;
       },
       keyboardType: TextInputType.number,
-      style: TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
       decoration: InputDecoration(
-          enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.black12),
-              borderRadius: BorderRadius.circular(10)),
-          focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.black12),
-              borderRadius: BorderRadius.circular(10)),
-          prefix: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            child: Text(
-              '(+92)',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+      labelText: "Phone Number",
+      errorMaxLines: 4,
+      floatingLabelBehavior: FloatingLabelBehavior.always,
+      filled: true,
+      contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+      hintText: "3xxxxxxxxx",
+      border: UnderlineInputBorder(
+        borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
+      ),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: red, width: 2.0),
+      ),
+      errorBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: red, width: 2.0),
+      ),
+      enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
+      ),
+      prefix: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5),
+              child: Text(
+                '(+92)',
               ),
             ),
-          ),
-          suffixIcon: Visibility(
-            visible: userNameEditingController.text.length == 10,
-            child: Icon(
-              Icons.check_circle,
+            suffixIcon:
+            Visibility(
+              visible:phoneNumberEditingController.text.length==10,
+              child:const Icon(Icons.check_circle,
               color: Colors.green,
               size: 32,
-            ),
-          )),
+            ),)
+    )
     );
 
     final loginButton = Material(
@@ -372,17 +376,24 @@ class SigupButton extends StatelessWidget {
   const SigupButton({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-        onPressed: () => {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => signup(
-                        phoneNo: "",
-                      )))
-            },
-        child: const Text(
-          "Don't have an Account? Sign up",
-          style: TextStyle(fontSize: 15, color: red),
-        ));
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(width:MediaQuery.of(context).size.width*0.06),
+        Text("Don't have an Account? "),
+        TextButton(
+            onPressed: () => {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => LoginWithPhone()))
+                },
+            child: const Text(
+              "Sign up",
+              style: TextStyle(fontSize: 15, color: red, decoration: TextDecoration.underline),
+            )),
+      ],
+    );
   }
 }
 

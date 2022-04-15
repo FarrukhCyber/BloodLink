@@ -1,7 +1,9 @@
+import 'dart:convert';
+
+import 'package:bloodlink/screens/myRequests.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:csc_picker/csc_picker.dart';
-import 'package:bloodlink/screens/registerDonorContinued.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:bloodlink/screens/networkHandler.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -27,6 +29,22 @@ class _registerDonorState extends State<registerDonor> {
   final listDropdown = <String>['Choose', 'Yes', 'No'];
   NetworkHandler networkHandler = NetworkHandler();
   TextEditingController phoneController = TextEditingController();
+
+  errorGenerator(context, title, message) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              title: Text(title),
+              content: Text(message),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'Ok'),
+                  child: const Text('Ok'),
+                ),
+              ],
+            ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,7 +143,7 @@ class _registerDonorState extends State<registerDonor> {
                   getDate(title: "Please select a date"),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.015),
 
-                  NextButton("Register", 50)
+                  NextButton(context, "Register", 50)
                 ],
               ),
             ),
@@ -135,7 +153,7 @@ class _registerDonorState extends State<registerDonor> {
     );
   }
 
-  Widget NextButton(label, double pad) {
+  Widget NextButton(context, label, double pad) {
     return Container(
       //margin: EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 5.0),
       child: ElevatedButton(
@@ -161,45 +179,56 @@ class _registerDonorState extends State<registerDonor> {
           print(plasmaSelection);
           print(diabetesSelection);
           print(dateSelection);
-          Map<String, dynamic> res = {
-            'user_contact_num': UserSimplePreferences.getPhoneNumber(),
-            "blood_group": bloodGroupSelection,
-            "diabetes": diseaseSelect,
-            "blood_disease": diseaseSelect,
-            "vaccinated": vaccinatedSelect,
-            "last_donated": dateSelection.toString(),
-            "region": city,
-            "gender": genderSelection,
-            "plasma": plasmaSelection
-          };
-          var res1 = "03364984545";
-          var url1 = "http://localhost:8080/my_requests/";
-          /*final responseRegister =
-                await networkHandler.get('/my_requests', res);
-            print(responseRegister);
-            final http.Response response = await http.get(Uri.parse(url1), headers: {
-              "Content-type": "application/json",
-              "user_contact_num": res1
-            });
-            print(response.body);*/
-          var responseRegister =
-              await networkHandler.post('/register_donor', res);
-          if (responseRegister.statusCode == 200 ||
-              responseRegister.statusCode == 201) {
-            print('successful');
-            Fluttertoast.showToast(
-                msg: "Registeration successful",
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Color.fromARGB(255, 193, 0, 0),
-                textColor: Colors.white,
-                fontSize: 16.0);
-            Navigator.pop(context, 'Ok');
-          } else {
+          var res = await networkHandler.get(
+              '/donor_auth', userPhoneNum, "user_contact_num");
+          var message = json.decode(res.body);
+          var msg = message["msg"];
+          print("msg: ${msg}");
+          if (bloodGroupSelection == "Choose" ||
+              diseaseSelect == "Choose" ||
+              diseaseSelect == "Choose" ||
+              vaccinatedSelect == "Choose" ||
+              city == "" ||
+              plasmaSelection == "Choose") {
+            errorGenerator(context, "Empty Fields", "Please fill all fields");
+          } //else if (msg == "exists") {
+          //errorGenerator(
+          //    context, "Donor Exists", "Already Registered as Donor");
+          // }
+          else if (msg == "unique") {
+            Map<String, dynamic> res = {
+              'user_contact_num': UserSimplePreferences.getPhoneNumber(),
+              "blood_group": UserSimplePreferences.getBloodType(),
+              "diabetes": diseaseSelect,
+              "blood_disease": diseaseSelect,
+              "vaccinated": vaccinatedSelect,
+              "last_donated": dateSelection.toString(),
+              "region": city,
+              "gender": UserSimplePreferences.getGender(),
+              "plasma": plasmaSelection
+            };
+            var responseRegister =
+                await networkHandler.post('/register_donor', res);
+            if (responseRegister.statusCode == 200 ||
+                responseRegister.statusCode == 201) {
+              print('successful');
+              Fluttertoast.showToast(
+                  msg: "Registeration successful",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Color.fromARGB(255, 193, 0, 0),
+                  textColor: Colors.white,
+                  fontSize: 16.0);
+              Navigator.pop(context, 'Ok');
+            } else {
+              errorGenerator(context, 'There was an error in server',
+                  'Please try again in some time');
+              print('unsucessful');
+            }
+          } else if (msg == "error") {
             errorGenerator(context, 'There was an error in server',
-                      'Please try again in some time');
-            print('unsucessful');
+                'Please try again in some time');
           }
         },
         child: Text(
@@ -210,20 +239,6 @@ class _registerDonorState extends State<registerDonor> {
     );
   }
 
-  errorGenerator(context, title, message) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) => AlertDialog(
-              title: Text(title),
-              content: Text(message),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.pop(context, 'Ok'),
-                  child: const Text('Ok'),
-                ),
-              ],
-            ));
-  }
   Widget TopBarFb3(BuildContext context, upperTitle) {
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -472,13 +487,13 @@ class _registerDonorState extends State<registerDonor> {
           labelText: labelText,
           floatingLabelBehavior: FloatingLabelBehavior.always,
           filled: true,
-          hintText: "    "+UserSimplePreferences.getPhoneNumber()!,
+          hintText: "    " + UserSimplePreferences.getPhoneNumber()!,
           //hintText: UserSimplePreferences.getPhoneNumber(),
           hintStyle: TextStyle(color: Colors.grey.withOpacity(.75)),
           prefix: const Padding(
             padding: EdgeInsets.symmetric(horizontal: 8),
             child: Visibility(
-              visible:true,
+              visible: true,
               child: Text(
                 '(+92)',
                 style: TextStyle(
