@@ -191,10 +191,10 @@ class _registerDonorState extends State<registerDonor> {
               city == "" ||
               plasmaSelection == "Choose") {
             errorGenerator(context, "Empty Fields", "Please fill all fields");
-          } //else if (msg == "exists") {
-          //errorGenerator(
-          //    context, "Donor Exists", "Already Registered as Donor");
-          // }
+          } else if (msg == "exists") {
+          errorGenerator(
+              context, "Donor Exists", "Already Registered as Donor");
+           }
           else if (msg == "unique") {
             Map<String, dynamic> res = {
               'user_contact_num': UserSimplePreferences.getPhoneNumber(),

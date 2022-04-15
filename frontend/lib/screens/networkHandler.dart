@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 
 class NetworkHandler {
-  String baseurl = "http://10.0.2.2:8080";
+  String baseurl = "https://bloodlink-api-server.herokuapp.com";
 
   Future<http.Response> post(String url1, Map<String, dynamic> body) async {
     url1 = formater(url1);

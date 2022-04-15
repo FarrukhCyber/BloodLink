@@ -1,3 +1,8 @@
+import 'dart:convert';
+
+import 'package:bloodlink/screens/login.dart';
+import 'package:bloodlink/screens/myRequests.dart';
+import 'package:bloodlink/screens/networkHandler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bloodlink/screens/otp.dart';
@@ -12,13 +17,28 @@ class LoginWithPhone extends StatefulWidget {
 class _LoginWithPhoneState extends State<LoginWithPhone> {
   bool correctformat = false;
   TextEditingController phoneController = TextEditingController();
-
+  NetworkHandler networkHandler = NetworkHandler();
   FirebaseAuth auth = FirebaseAuth.instance;
 
   bool otpVisibility = false;
   var phone = "";
 
   String verificationID = "";
+
+  errorGenerator(context, title, message) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              title: Text(title),
+              content: Text(message),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'Ok'),
+                  child: const Text('Ok'),
+                ),
+              ],
+            ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,60 +112,68 @@ class _LoginWithPhoneState extends State<LoginWithPhone> {
                   child: Column(
                     children: [
                       TextFormField(
-      validator: (value) => isValidPhoneNumber(value ?? "") == false
-            ? "Please enter a number of lenght 10"
-            : null,
-        textInputAction: TextInputAction.next,
-      autofocus: false,
-      controller: phoneController, //check this
-      onSaved: (value) {
-        value != null ? phone = value : null;
-      },
-      onChanged: (value) {
-        phone = value;
-      },
-      keyboardType: TextInputType.number,
-      decoration: InputDecoration(
-      labelText: "Phone Number",
-      errorMaxLines: 4,
-      floatingLabelBehavior: FloatingLabelBehavior.always,
-      filled: true,
-      contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-      hintText: "3xxxxxxxxx",
-      border: UnderlineInputBorder(
-        borderSide: BorderSide(color: Color(0xffde2c2c).withOpacity(0.3), width: 2.0),
-      ),
-      focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: Color(0xffde2c2c), width: 2.0),
-      ),
-      errorBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: Color(0xffde2c2c), width: 2.0),
-      ),
-      enabledBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: Color(0xffde2c2c).withOpacity(0.3), width: 2.0),
-      ),
-      prefix: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5),
-              child: Text(
-                '(+92)',
-              ),
-            ),
-            suffixIcon:
-            Visibility(
-              visible:phoneController.text.length==10,
-              child:const Icon(Icons.check_circle,
-              color: Colors.green,
-              size: 32,
-            ),)
-    )
-    ),
+                          validator: (value) =>
+                              isValidPhoneNumber(value ?? "") == false
+                                  ? "Please enter a number of lenght 10"
+                                  : null,
+                          textInputAction: TextInputAction.next,
+                          autofocus: false,
+                          controller: phoneController, //check this
+                          onSaved: (value) {
+                            value != null ? phone = value : null;
+                          },
+                          onChanged: (value) {
+                            phone = value;
+                          },
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                              labelText: "Phone Number",
+                              errorMaxLines: 4,
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                              filled: true,
+                              contentPadding:
+                                  EdgeInsets.fromLTRB(20, 15, 20, 15),
+                              hintText: "3xxxxxxxxx",
+                              border: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color(0xffde2c2c).withOpacity(0.3),
+                                    width: 2.0),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color(0xffde2c2c), width: 2.0),
+                              ),
+                              errorBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color(0xffde2c2c), width: 2.0),
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Color(0xffde2c2c).withOpacity(0.3),
+                                    width: 2.0),
+                              ),
+                              prefix: const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 5),
+                                child: Text(
+                                  '(+92)',
+                                ),
+                              ),
+                              suffixIcon: Visibility(
+                                visible: phoneController.text.length == 10,
+                                child: const Icon(
+                                  Icons.check_circle,
+                                  color: Colors.green,
+                                  size: 32,
+                                ),
+                              ))),
                       SizedBox(
                         height: 22,
                       ),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (otpVisibility) {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
@@ -156,7 +184,33 @@ class _LoginWithPhoneState extends State<LoginWithPhone> {
                               );
                               //verifyOTP();
                             } else {
-                              loginWithPhone();
+                              if (!isValidPhoneNumber(phoneController.text)) {
+                                errorGenerator(context, "Invalid Phone Number",
+                                    "Please Enter correct 10 digit number 3xxxxxxxxxx");
+                                    phoneController.clear();
+                              } else {
+                                var msg = await networkHandler.get(
+                                    '/auth/phone',
+                                    "+92" + phoneController.text,
+                                    "user_contact_num");
+                                var mess = (json.decode(msg.body));
+                                var message = mess["msg"];
+                                if (message == "ERROR") {
+                                  errorGenerator(
+                                      context,
+                                      "There was an error in server",
+                                      "Please try again in some time");
+                                  phoneController.clear();
+                                } else if (message == "exists") {
+                                  errorGenerator(
+                                      context,
+                                      "Number already registered",
+                                      "Please use some other Phone Number or LogIn");
+                                  phoneController.clear();
+                                } else if (message == "null") {
+                                  loginWithPhone();
+                                }
+                              }
                             }
                           },
                           style: ButtonStyle(

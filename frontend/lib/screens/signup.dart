@@ -257,7 +257,7 @@ signup_func(name, pass, email, phone, blood, gender, age) async {
     return;
   }
 
-  var url = "http://10.0.2.2:8080/auth/signup";
+  var url = "https://bloodlink-api-server.herokuapp.com/auth/signup";
   print("In signup");
   try {
     final http.Response response = await http.post(

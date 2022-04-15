@@ -7,6 +7,17 @@ router.get('/login', (req,res)=>{
     res.send("In login auth")
 })
 
+router.route("/phone").get((req, res) => {
+    console.log("hi")
+      Donor.findOne({ phoneNumber : req.headers.user_contact_num}, (err, result) => {
+        if (err) return res.json({ msg: "ERROR" });
+        if (result == null) return res.json({msg:"null"});
+        else {
+          console.log(result)
+          return res.json({ msg:"exists" });}
+      });
+    });
+
 router.post('/login', (req, res) => {
     console.log("IN LOGIN -- AUTH")
     const {userName, password, phoneNumber} = req.body
@@ -97,6 +108,7 @@ router.post('/signup', (req, res) => {
     // return res.send("In Login")
     console.log("Signup")
 })
+
 
 module.exports = router;
 
