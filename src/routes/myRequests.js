@@ -6,7 +6,7 @@ const Request = require('../models/bloodRequest')
 
 router.route("/").get((req, res) => {
   console.log("hi")
-    Request.find({ attendant_num : req.headers.attendant_num}, (err, result) => {
+    Request.find({ user_contact_num : req.headers.user_contact_num}, (err, result) => {
       if (err) return res.json({ err: err });
       if (result == null) return res.json({ data: [] });
       else {
