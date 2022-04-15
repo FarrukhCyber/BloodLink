@@ -9,7 +9,7 @@ router.get('/login', (req,res)=>{
 
 router.route("/phone").get((req, res) => {
     console.log("hi")
-      User.findOne({ user_contact_num : req.headers.user_contact_num}, (err, result) => {
+      User.findOne({ phoneNumber : req.headers.user_contact_num}, (err, result) => {
         if (err) return res.json({ msg: "ERROR" });
         if (result == null) return res.json({msg:"null"});
         else {
