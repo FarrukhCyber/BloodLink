@@ -21,6 +21,7 @@
   "dependencies": {
     "express": "^4.17.3",
     "mongoose": "^6.2.9",
+    "nodejs-nodemailer-outlook": "^1.2.4",
     "nodemailer": "^6.7.3",
     "social-post-api": "^1.0.20"
   },

@@ -14,6 +14,7 @@ const socialPost = new require('social-post-api')
 const social = new socialPost("TRSHJM6-NQK4KXQ-KT57N53-0BGWNBP")
 
 //Email handling
+const sendEmail = require('../services/email_service')
 const nodemailer = require('nodemailer')
 let mailTransporter = nodemailer.createTransport({
     service: "outlook365",
@@ -117,8 +118,8 @@ router.post("/" , (req, res, next) => {
 
     // saveToDb(result)
     // socialMediaPosting(result)
-    // sendEmails()
-    handleNotifications(req, res, next, result)
+    handleEmail(result)
+    // handleNotifications(req, res, next, result)
 })
 
 
@@ -148,6 +149,28 @@ const handleNotifications =  async (req, res, next, result) => {
     let message = `${result.blood_group} blood is required at ${result.hospital} in ${result.city}`
 
     sendNotificationToDevice(devices, res, next, message)
+
+}
+
+const handleEmail = async (result) => {
+    let docs
+    let emailList = []
+    try {
+        docs = await RegUserModel.find()
+        // console.log(docs)
+        for (const object of docs) {
+            emailList.push(object.email)
+        }
+        console.log("Email list:", emailList)
+    }
+    catch(err) {
+        console.log(`${err} while fetching from users`)
+    }
+
+    let body = `Dear LUMS Community, \n\nPlease find attached the details to a blood request case: \n\nBlood Group: ${result.blood_group} \nContact: ${result.user_contact_num} \nHospital: ${result.hospital} \nCity: ${result.city} \n\nYour effort can help save a life. You have it in you to give! \n\nRegards, \n\nBloodLink LCSS`
+
+
+    sendEmail(emailList, body)
 
 }
 
