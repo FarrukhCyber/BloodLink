@@ -4,7 +4,7 @@ const Request = require('../models/bloodRequest')
 
 
 
-router.route("").get((req, res) => {
+router.route("/").get((req, res) => {
   console.log("hi")
     Request.find({ user_contact_num : req.headers.user_contact_num}, (err, result) => {
       if (err) return res.json({ err: err });
