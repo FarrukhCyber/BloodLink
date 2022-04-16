@@ -7,7 +7,7 @@ const Request = require('../models/bloodRequest')
 router.route("/").get((req, res) => {
   console.log("hii")
   console.log("hi")
-    Request.find({ status : false}, (err, result) => {
+    Request.find({ status : true}, (err, result) => {
       if (err) return res.json({ err: err });
       if (result == null) return res.json({ data: [] });
       else {
