@@ -22,6 +22,7 @@ dbConnect = async () => {
         await mongoose.connect("mongodb+srv://dbAdmin:9GRY24WWlW6lRwjS@cluster0.t0zsi.mongodb.net/BloodLink?retryWrites=true&w=majority",
         {useNewUrlParser:true, useUnifiedTopology:true})
         console.log("DB connected")
+        console.log("----")
     }
     catch(err) {
         console.log(`${err} Ocurred while connecting to DB`)
