@@ -10,7 +10,7 @@ const auth = require('./src/routes/auth')
 const checkDb = require('./src/routes/checkDb')
 const status = require('./src/routes/statusChange')
 const donorAuth = require('./src/routes/donorAuth')
-const activeRequest = require('./src/routes/activeRequest')
+//const activeRequest = require('./src/routes/activeRequest')
 app.use(express.json({extended:false}))
 
 app.listen(port, () => console.log("Listening on Port:", port))
@@ -46,7 +46,7 @@ app.use("/register_donor", registerAsDonor)
 app.use("/my_requests", myRequests)
 app.use('/status',status)
 app.use("/donor_auth",donorAuth)
-app.use("/active_request",activeRequest)
+//app.use("/active_request",activeRequest)
 // 404 page
 app.use((req, res) => {
     res.status(404).render('404', { title: '404' });
