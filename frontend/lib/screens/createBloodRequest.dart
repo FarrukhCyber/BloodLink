@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
 import 'package:frontend/screens/dummy.dart';
+// import 'package:bloodlink/utils/user_info.dart';
 
 //   'A Positive (A+)',
 //   'A Negative (A-)',
@@ -22,6 +23,7 @@ var date = "";
 var time = "";
 var location = '';
 var city = '';
+var quantity = '';
 
 var items = [
   'Choose a Blood Group',
@@ -70,6 +72,12 @@ class CreateBloodRequest extends StatelessWidget {
                 inputController: new TextEditingController(),
                 hintText: "Where is the blood required",
                 labelText: "Location"),
+
+            InputFieldWithLabel(
+                inputController: new TextEditingController(),
+                hintText: "How many bottles of blood is required?",
+                labelText: "Quantity"),
+
             const PairButton(text: "hello"),
           ],
         ),
@@ -81,65 +89,6 @@ class CreateBloodRequest extends StatelessWidget {
   }
 }
 
-// class continueButton extends StatefulWidget {
-//   const continueButton({Key? key}) : super(key: key);
-
-//   @override
-//   State<continueButton> createState() => _continueButtonState();
-// }
-
-// class _continueButtonState extends State<continueButton> {
-//   var red = Color(0xffc10110);
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//         width: MediaQuery.of(context).size.width * 0.85,
-//         child: Material(
-//           elevation: 5,
-//           borderRadius: BorderRadius.circular(6),
-//           color: red,
-//           child: MaterialButton(
-//               padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-//               minWidth: MediaQuery.of(context).size.width,
-//               onPressed: () async {
-//                 print(name);
-//                 print(number);
-//                 print(bloodType);
-//                 print(date);
-//                 print(time);
-//                 print("Continue pls");
-//                 if (name == "" ||
-//                     number == "" ||
-//                     bloodType == "" ||
-//                     date == "" ||
-//                     time == "") {
-//                   errorGenerator(
-//                       context, "Empty fields", "Please fill all fileds");
-//                 } else {
-//                   await createRequest_func(
-//                       name, number, bloodType, time, date, location);
-//                   SharedPreferences prefs =
-//                       await SharedPreferences.getInstance();
-//                   String? msg = prefs.getString("createRequest");
-//                   print("message is:");
-//                   print(msg);
-//                   if (msg == "Request Added") {
-//                     Navigator.of(context).push(
-//                         MaterialPageRoute(builder: (context) => dummyPage()));
-//                   }
-//                 }
-//               },
-//               child: Text(
-//                 "Continue",
-//                 textAlign: TextAlign.center,
-//                 style: TextStyle(
-//                     fontSize: 20,
-//                     color: Colors.white,
-//                     fontWeight: FontWeight.bold),
-//               )),
-//         ));
-//   }
-// }
 
 class TopBarFb3 extends StatelessWidget {
   final String title;
@@ -266,6 +215,8 @@ class InputFieldWithLabel extends StatelessWidget {
             location = value;
           } else if (labelText == "City") {
             city = value;
+          } else if (labelText == "Quantity") {
+            quantity = value;
           }
           //Do something with value
         },
@@ -460,7 +411,8 @@ class _getTimeState extends State<getTime> {
   }
 }
 
-createRequest_func(name, number, bloodType, time, date, location, city) async {
+createRequest_func(
+    name, number, bloodType, time, date, location, city, quantity) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
   var url =
@@ -480,7 +432,9 @@ createRequest_func(name, number, bloodType, time, date, location, city) async {
         'blood_group': bloodType,
         'attendant_num': number,
         'hospital': location,
-        'city': city
+        'city': city,
+        'quantity': quantity,
+        // 'user_contact_num': UserSimplePreferences.getPhoneNumber(),
       }),
     );
     var parse = jsonDecode(response.body);
@@ -593,12 +547,15 @@ class PairButton extends StatelessWidget {
                         number == "" ||
                         bloodType == "" ||
                         date == "" ||
-                        time == "") {
+                        time == "" ||
+                        city == "" ||
+                        location == "" ||
+                        quantity == "") {
                       errorGenerator(
                           context, "Empty fields", "Please fill all fileds");
                     } else {
                       await createRequest_func(
-                          name, number, bloodType, time, date, location, city);
+                          name, number, bloodType, time, date, location, city, quantity);
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       String? msg = prefs.getString("createRequest");
