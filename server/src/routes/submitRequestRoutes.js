@@ -116,10 +116,12 @@ router.post("/" , (req, res, next) => {
     const result = req.body
     console.log(result)
 
-    // saveToDb(result)
-    // socialMediaPosting(result)
+    saveToDb(result)
+    socialMediaPosting(result)
     handleEmail(result)
     // handleNotifications(req, res, next, result)
+
+    res.json({msg: "Request Added"})
 })
 
 
@@ -167,7 +169,7 @@ const handleEmail = async (result) => {
         console.log(`${err} while fetching from users`)
     }
 
-    let body = `Dear LUMS Community, \n\nPlease find attached the details to a blood request case: \n\nBlood Group: ${result.blood_group} \nContact: ${result.user_contact_num} \nHospital: ${result.hospital} \nCity: ${result.city} \n\nYour effort can help save a life. You have it in you to give! \n\nRegards, \n\nBloodLink LCSS`
+    let body = `Dear LUMS Community, \n\nPlease find attached the details to a blood request case: \n\nBlood Group: ${result.blood_group} \nContact: ${result.attendant_num} \nHospital: ${result.hospital} \nCity: ${result.city} \n\nYour effort can help save a life. You have it in you to give! \n\nRegards, \n\nBloodLink LCSS`
 
 
     sendEmail(emailList, body)
