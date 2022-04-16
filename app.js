@@ -10,7 +10,7 @@ const auth = require('./src/routes/auth')
 const checkDb = require('./src/routes/checkDb')
 const status = require('./src/routes/statusChange')
 const donorAuth = require('./src/routes/donorAuth')
-const donorAuth = require('./src/routes/activeRequest')
+const activeRequest = require('./src/routes/activeRequest')
 app.use(express.json({extended:false}))
 
 app.listen(port, () => console.log("Listening on Port:", port))
