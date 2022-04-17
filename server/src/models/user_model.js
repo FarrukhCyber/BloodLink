@@ -15,6 +15,7 @@ const newSchema = new Schema({
 
 module.exports = mongoose.model('user', newSchema)
 
+<<<<<<< HEAD
 
 // const mongoose = require("mongoose");
 
@@ -31,3 +32,5 @@ module.exports = mongoose.model('user', newSchema)
 
 // const RegisteredUsersModel = mongoose.model("REGISTERED_USER", regUsersSchema);
 // module.exports = RegisteredUsersModel;
+=======
+>>>>>>> main

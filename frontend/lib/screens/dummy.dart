@@ -12,9 +12,7 @@ class _dummyPageState extends State<dummyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Center(
-        child: Column(children: <Widget>[Image.asset("tick.jpeg")]),
-      ),
+      body: Text("This is a dummy page"),
     );
   }
 }

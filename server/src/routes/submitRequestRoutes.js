@@ -5,10 +5,8 @@ const RequestModel = require('../models/bloodRequest')
 const RegUserModel = require("../models/user_model")
 const DonorsModel = require("../models/donors")
 
-const {ONE_SIGNAL_CONFIG} = require("../config/notifications_config")
+const {ONE_SIGNAL_CONFIG} = require("../config/notifications_config.js")
 const pushNotificationService = require("../services/push_notification_service")
-
-
 //Social post handling
 const socialPost = new require('social-post-api')
 const social = new socialPost("TRSHJM6-NQK4KXQ-KT57N53-0BGWNBP")
