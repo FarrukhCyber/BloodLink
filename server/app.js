@@ -12,6 +12,7 @@ const donorAuth = require('./src/routes/donorAuth.js')
 const activeRequest = require('./src/routes/activeRequest.js')
 const changePassword = require('./src/routes/changePassword.js')
 const plasmaDonorRegister = require('./src/routes/plasmaDonorRegister.js')
+const pendingRequest = require('../server/src/routes/pendingRequest')
 
 app.use(express.json({extended:false}))
 
@@ -47,6 +48,7 @@ app.use("/active_request",activeRequest)
 app.use("/password_change",changePassword)
 app.use("/plasma_donor_register",plasmaDonorRegister)
 app.use("/submit_request", submitRequestRoutes)
+app.use("/pending_request", pendingRequest)
 // 404 page
 app.use((req, res) => {
     res.json({ title: '404' });

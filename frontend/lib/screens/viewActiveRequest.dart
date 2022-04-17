@@ -93,6 +93,7 @@ class _activeRequestsState extends State<activeRequests> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     //errorGenerator(context, "There was an error in server",
     //    "Please try again in some time");
@@ -103,8 +104,8 @@ class _activeRequestsState extends State<activeRequests> {
         children: <Widget>[
           AppBarFb2(),
           TopBarFb3(
-              title: "My Requests",
-              upperTitle: "\nFollowing are active blood requests."),
+              title: "Active Requests",
+              upperTitle: "\nFollowing are your blood requests."),
           Container(
             height: MediaQuery.of(context).size.height * 0.7,
             margin: EdgeInsets.only(top: 20),
@@ -126,7 +127,7 @@ class _activeRequestsState extends State<activeRequests> {
                           bloodgroup: data[index].bloodgroup,
                           status: data[index].status,
                           attendantNum: data[index].attendantNum,
-                          city: data[index].city,
+                          city:data[index].city,
                           quantity: data[index].quantity,
                           id: data[index].id,
                           visible:
@@ -452,7 +453,7 @@ class _RequestCardState extends State<RequestCard> {
                                           quantity: widget.quantity,
                                           hospital: widget.location,
                                           id: widget.id,
-                                          city: widget.city,
+                                          city:widget.city,
                                         )));
                               },
                               style: ButtonStyle(
@@ -480,7 +481,7 @@ class _RequestCardState extends State<RequestCard> {
                                   widget.visible = !widget.visible;
                                   Map<String, dynamic> res = {
                                     "_id": widget.id,
-                                    "status": widget.visible,
+                                    "status": !widget.visible,
                                   };
                                   networkHandler.replace('/status', res);
                                 });
@@ -574,7 +575,7 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
 
     return AppBar(
       centerTitle: true,
-      title: const Text("My Requests", style: TextStyle(color: Colors.white)),
+      title: const Text("Active Requests", style: TextStyle(color: Colors.white)),
       backgroundColor: primaryColor,
       actions: [
         // IconButton(

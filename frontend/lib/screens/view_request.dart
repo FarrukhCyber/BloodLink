@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:bloodlink/screens/activeDetails.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -12,8 +13,7 @@ bool error = false;
 NetworkHandler networkHandler = NetworkHandler();
 String userPhoneNum = UserSimplePreferences.getPhoneNumber() ?? "Error";
 Future<List<Data>> fetchData() async {
-  final response = await networkHandler.get(
-      '/my_requests', userPhoneNum, "user_contact_num");
+  final response = await networkHandler.active('/active_request');
   if (response.statusCode == 200) {
     List jsonResponse = jsonDecode(response.body)["data"];
     return jsonResponse.map((data) => new Data.fromJson(data)).toList();
@@ -77,15 +77,15 @@ class Data {
   }
 }
 
-class myRequests extends StatefulWidget {
+class activeAdminRequest extends StatefulWidget {
   var futureData;
-  myRequests({Key? key}) : super(key: key);
+  activeAdminRequest({Key? key}) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<activeAdminRequest> createState() => _activeAdminRequestState();
 }
 
-class _MyAppState extends State<myRequests> {
+class _activeAdminRequestState extends State<activeAdminRequest> {
   @override
   void initState() {
     super.initState();
@@ -103,10 +103,10 @@ class _MyAppState extends State<myRequests> {
         children: <Widget>[
           AppBarFb2(),
           TopBarFb3(
-              title: "My Requests",
+              title: "Blood Requests",
               upperTitle: "\nFollowing are your blood requests."),
           Container(
-            height: MediaQuery.of(context).size.height * 0.8,
+            height: MediaQuery.of(context).size.height * 0.7,
             margin: EdgeInsets.only(top: 20),
             child: FutureBuilder<List<Data>>(
               future: widget.futureData,
@@ -126,7 +126,7 @@ class _MyAppState extends State<myRequests> {
                           bloodgroup: data[index].bloodgroup,
                           status: data[index].status,
                           attendantNum: data[index].attendantNum,
-                          city: data[index].city,
+                          city:data[index].city,
                           quantity: data[index].quantity,
                           id: data[index].id,
                           visible:
@@ -203,7 +203,7 @@ class _RequestCardState extends State<RequestCard> {
                     },
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.85,
-                  height: MediaQuery.of(context).size.height * 0.20,
+                  height: MediaQuery.of(context).size.height * 0.21,
                   child: Column(
                     children: [
                       Container(
@@ -452,7 +452,7 @@ class _RequestCardState extends State<RequestCard> {
                                           quantity: widget.quantity,
                                           hospital: widget.location,
                                           id: widget.id,
-                                          city: widget.city,
+                                          city:widget.city,
                                         )));
                               },
                               style: ButtonStyle(
@@ -480,7 +480,7 @@ class _RequestCardState extends State<RequestCard> {
                                   widget.visible = !widget.visible;
                                   Map<String, dynamic> res = {
                                     "_id": widget.id,
-                                    "status": widget.visible,
+                                    "status": !widget.visible,
                                   };
                                   networkHandler.replace('/status', res);
                                 });
@@ -574,7 +574,7 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
 
     return AppBar(
       centerTitle: true,
-      title: const Text("My Requests", style: TextStyle(color: Colors.white)),
+      title: const Text("Blood Requests", style: TextStyle(color: Colors.white)),
       backgroundColor: primaryColor,
       actions: [
         // IconButton(

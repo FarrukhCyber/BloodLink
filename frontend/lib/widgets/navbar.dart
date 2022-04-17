@@ -1,3 +1,4 @@
+import 'package:bloodlink/screens/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:bloodlink/screens/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,7 +37,10 @@ class navBar extends StatelessWidget {
               // logout
               leading: Icon(Icons.settings),
               title: Text("Settings"),
-              onTap: () => print("Settings clicked")),
+              onTap: () => {
+                Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => Settings()))
+              }),
           ListTile(
             // logout
             leading: Icon(Icons.person),

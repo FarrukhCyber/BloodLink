@@ -12,8 +12,7 @@ bool error = false;
 NetworkHandler networkHandler = NetworkHandler();
 String userPhoneNum = UserSimplePreferences.getPhoneNumber() ?? "Error";
 Future<List<Data>> fetchData() async {
-  final response = await networkHandler.get(
-      '/my_requests', userPhoneNum, "user_contact_num");
+  final response = await networkHandler.get('/my_requests', userPhoneNum,"user_contact_num");
   if (response.statusCode == 200) {
     List jsonResponse = jsonDecode(response.body)["data"];
     return jsonResponse.map((data) => new Data.fromJson(data)).toList();
@@ -126,7 +125,7 @@ class _MyAppState extends State<myRequests> {
                           bloodgroup: data[index].bloodgroup,
                           status: data[index].status,
                           attendantNum: data[index].attendantNum,
-                          city: data[index].city,
+                          city:data[index].city,
                           quantity: data[index].quantity,
                           id: data[index].id,
                           visible:
@@ -452,7 +451,7 @@ class _RequestCardState extends State<RequestCard> {
                                           quantity: widget.quantity,
                                           hospital: widget.location,
                                           id: widget.id,
-                                          city: widget.city,
+                                          city:widget.city,
                                         )));
                               },
                               style: ButtonStyle(
@@ -480,7 +479,7 @@ class _RequestCardState extends State<RequestCard> {
                                   widget.visible = !widget.visible;
                                   Map<String, dynamic> res = {
                                     "_id": widget.id,
-                                    "status": widget.visible,
+                                    "status": !widget.visible,
                                   };
                                   networkHandler.replace('/status', res);
                                 });

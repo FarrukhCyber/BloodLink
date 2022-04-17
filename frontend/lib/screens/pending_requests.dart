@@ -103,8 +103,8 @@ class _pendingRequestsState extends State<pendingRequests> {
         children: <Widget>[
           AppBarFb2(),
           TopBarFb3(
-              title: "My Requests",
-              upperTitle: "\nFollowing are active blood requests."),
+              title: "Resolved Requests",
+              upperTitle: "\nFollowing are your blood requests."),
           Container(
             height: MediaQuery.of(context).size.height * 0.7,
             margin: EdgeInsets.only(top: 20),
@@ -126,7 +126,7 @@ class _pendingRequestsState extends State<pendingRequests> {
                           bloodgroup: data[index].bloodgroup,
                           status: data[index].status,
                           attendantNum: data[index].attendantNum,
-                          city: data[index].city,
+                          city:data[index].city,
                           quantity: data[index].quantity,
                           id: data[index].id,
                           visible:
@@ -452,7 +452,7 @@ class _RequestCardState extends State<RequestCard> {
                                           quantity: widget.quantity,
                                           hospital: widget.location,
                                           id: widget.id,
-                                          city: widget.city,
+                                          city:widget.city,
                                         )));
                               },
                               style: ButtonStyle(
@@ -480,7 +480,7 @@ class _RequestCardState extends State<RequestCard> {
                                   widget.visible = !widget.visible;
                                   Map<String, dynamic> res = {
                                     "_id": widget.id,
-                                    "status": widget.visible,
+                                    "status": !widget.visible,
                                   };
                                   networkHandler.replace('/status', res);
                                 });
