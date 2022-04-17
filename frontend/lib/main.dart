@@ -1,5 +1,6 @@
 import 'package:bloodlink/screens/viewActiveRequest.dart';
 import 'package:flutter/material.dart';
+import 'package:bloodlink/screens/push_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:bloodlink/screens/phone_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,8 @@ import 'package:bloodlink/screens/editRequest.dart';
 Future main() async {
   // new one
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  //TODO: On OTP Auth
+  // await Firebase.initializeApp();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -37,6 +39,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       routes: {
+        // '/': (context) => PushNotifications(),
         '/': (context) => login(),
         // '/signup': (context) => const signup_page()
       },

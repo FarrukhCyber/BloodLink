@@ -1,5 +1,7 @@
 import 'package:bloodlink/base_url.dart';
+import 'package:bloodlink/screens/homepage.dart';
 import 'package:bloodlink/screens/request_success_msg.dart';
+import 'package:bloodlink/utils/user_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // var bloodGroups = [
@@ -43,7 +45,7 @@ class CreateBloodRequest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Colors.white,
       body: ListView(children: <Widget>[
         Column(
           children: <Widget>[
@@ -89,13 +91,12 @@ class CreateBloodRequest extends StatelessWidget {
   }
 }
 
-
 class TopBarFb3 extends StatelessWidget {
   final String title;
   final String upperTitle;
   TopBarFb3({required this.title, required this.upperTitle, Key? key})
       : super(key: key);
-  final primaryColor = Color.fromARGB(255, 222, 44, 44);
+  final primaryColor = Color(0xffc10110);
   final secondaryColor = const Color(0xff6D28D9);
   final accentColor = const Color(0xffffffff);
   final backgroundColor = const Color(0xffffffff);
@@ -144,7 +145,7 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
         super(key: key);
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xffde2c2c);
+    const primaryColor = Color(0xffc10110);
     const secondaryColor = Color(0xff6D28D9);
     const accentColor = Color(0xffffffff);
     const backgroundColor = Color(0xffffffff);
@@ -168,7 +169,11 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
           Icons.keyboard_arrow_left,
           color: accentColor,
         ),
-        onPressed: () {},
+        onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => homepage(
+                  key: key,
+                  userName: "user",
+                ))),
       ),
     );
   }
@@ -242,7 +247,7 @@ class InputFieldWithLabel extends StatelessWidget {
             borderSide: BorderSide(color: primaryColor, width: 2.0),
           ),
           errorBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.red, width: 2.0),
+            borderSide: BorderSide(color: Color(0xffc10110), width: 2.0),
           ),
           enabledBorder: UnderlineInputBorder(
             borderSide:
@@ -301,14 +306,14 @@ class _DropDownState extends State<getDate> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime(2015, 8),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2101),
       builder: (context, child) => Theme(
         data: ThemeData().copyWith(
           colorScheme: ColorScheme.dark(
-            primary: Color.fromARGB(255, 222, 44, 44),
+            primary: Color(0xffc10110),
             onPrimary: Colors.white,
-            surface: Color.fromARGB(255, 222, 44, 44),
+            surface: Color(0xffc10110),
             onSurface: Colors.black,
           ),
           dialogBackgroundColor: Colors.white,
@@ -337,7 +342,7 @@ class _DropDownState extends State<getDate> {
             height: 0,
           ),
           RaisedButton(
-            color: Color.fromARGB(255, 222, 44, 44),
+            color: Color(0xffc10110),
             onPressed: () => _selectDate(context),
             child: Text('Please select date on which blood is required',
                 style: TextStyle(color: Color(0xffffffff))),
@@ -369,8 +374,8 @@ class _getTimeState extends State<getTime> {
           children: <Widget>[
             ElevatedButton(
               style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                      Color.fromARGB(255, 222, 44, 44))),
+                  backgroundColor:
+                      MaterialStateProperty.all(Color(0xffc10110))),
               onPressed: () {
                 _selectTime(context);
               },
@@ -392,10 +397,10 @@ class _getTimeState extends State<getTime> {
       builder: (context, child) => Theme(
         data: ThemeData().copyWith(
           colorScheme: ColorScheme.dark(
-            primary: Color.fromARGB(255, 222, 44, 44),
+            primary: Color(0xffc10110),
             onPrimary: Colors.white,
             surface: Colors.white,
-            onSurface: Color.fromARGB(255, 222, 44, 44),
+            onSurface: Color(0xffc10110),
           ),
           // dialogBackgroundColor: Color.fromARGB(255, 17, 70, 168),
         ),
@@ -415,7 +420,7 @@ createRequest_func(
     name, number, bloodType, time, date, location, city, quantity) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  var url = base_url+ "/create"; // check what localhost is for you
+  var url = base_url + "/create"; // check what localhost is for you
   print("In createRequest");
   try {
     final http.Response response = await http.post(
@@ -433,7 +438,7 @@ createRequest_func(
         'hospital': location,
         'city': city,
         'quantity': quantity,
-        // 'user_contact_num': UserSimplePreferences.getPhoneNumber(),
+        'user_contact_num': UserSimplePreferences.getPhoneNumber(),
       }),
     );
     var parse = jsonDecode(response.body);
@@ -480,7 +485,7 @@ class PairButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color.fromARGB(255, 222, 44, 44);
+    const primaryColor = Color(0xffc10110);
     // const secondaryColor = Color(0xff6D28D9);
     const accentColor = Color(0xffffffff);
 
@@ -500,18 +505,27 @@ class PairButton extends StatelessWidget {
               Container(
                 margin: EdgeInsets.fromLTRB(
                     MediaQuery.of(context).size.height * 0.1, 0, 0, 0),
-                child: ElevatedButton(
+                child: OutlinedButton(
                   style: ButtonStyle(
                       elevation: MaterialStateProperty.all(0),
                       alignment: Alignment.center,
                       padding: MaterialStateProperty.all(const EdgeInsets.only(
                           right: 30, left: 30, top: 10, bottom: 10)),
                       backgroundColor: MaterialStateProperty.all(Colors.white),
+                      side: MaterialStateProperty.all(BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                          style: BorderStyle.solid)),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(borderRadius)),
+                          borderRadius: BorderRadius.circular(borderRadius),
+                        ),
                       )),
-                  onPressed: null,
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => homepage(
+                            key: key,
+                            userName: "user",
+                          ))),
                   child: Text(
                     "Cancel",
                     style: const TextStyle(color: primaryColor, fontSize: 16),
@@ -553,8 +567,8 @@ class PairButton extends StatelessWidget {
                       errorGenerator(
                           context, "Empty fields", "Please fill all fileds");
                     } else {
-                      await createRequest_func(
-                          name, number, bloodType, time, date, location, city, quantity);
+                      await createRequest_func(name, number, bloodType, time,
+                          date, location, city, quantity);
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       String? msg = prefs.getString("createRequest");
@@ -568,7 +582,7 @@ class PairButton extends StatelessWidget {
                   },
                   // onPressed: () => CreateBloodRequestPage2(key: key),
                   child: Text(
-                    "Contiue",
+                    "Submit",
                     style: const TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),

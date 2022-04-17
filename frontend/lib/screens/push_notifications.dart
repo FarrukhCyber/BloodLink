@@ -31,6 +31,6 @@ class _PushNotificationsState extends State<PushNotifications> {
 
     //gives the device unique id. TODO: need to store it in Registeredusers collection
     await OneSignal.shared.getDeviceState().then(
-        (value) => {print("here is the device ID:"), print(value!.userId)});
+        (value) => {print("here is the device ID:" + value!.userId.toString() ), print(value!.userId)});
   }
 }

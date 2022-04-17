@@ -386,8 +386,13 @@ class SigupButton extends StatelessWidget {
         Text("Don't have an Account? "),
         TextButton(
             onPressed: () => {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => LoginWithPhone()))
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => signup(
+                            phoneNo: "3212456789",
+                          )))
+                  //TODO: Turn it on
+                  // Navigator.of(context).push(
+                  //     MaterialPageRoute(builder: (context) => LoginWithPhone()))
                 },
             child: const Text(
               "Sign up",

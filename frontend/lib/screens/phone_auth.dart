@@ -187,14 +187,14 @@ class _LoginWithPhoneState extends State<LoginWithPhone> {
                               if (!isValidPhoneNumber(phoneController.text)) {
                                 errorGenerator(context, "Invalid Phone Number",
                                     "Please Enter correct 10 digit number 3xxxxxxxxxx");
-                                    phoneController.clear();
+                                phoneController.clear();
                               } else {
                                 var msg = await networkHandler.get(
                                     '/auth/phone',
                                     "+92" + phoneController.text,
                                     "user_contact_num");
-                                var mess = (json.decode(msg.body));
-                                var message = mess["msg"];
+                                //var mess = (json.decode(msg.body));
+                                var message = ""; //mess["msg"];
                                 if (message == "ERROR") {
                                   errorGenerator(
                                       context,
@@ -210,6 +210,7 @@ class _LoginWithPhoneState extends State<LoginWithPhone> {
                                 } else if (message == "null") {
                                   loginWithPhone();
                                 }
+                                loginWithPhone();
                               }
                             }
                           },

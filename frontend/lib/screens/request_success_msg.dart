@@ -1,8 +1,7 @@
 import 'package:bloodlink/screens/homepage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:create_blood_request/createBloodRequest/dummy.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // var bloodGroups = [
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';

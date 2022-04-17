@@ -7,6 +7,7 @@ import 'package:bloodlink/screens/homepage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bloodlink/utils/user_info.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 DateTime dateSelection = DateTime.now();
 var red = Color(0xffde2c2c);
@@ -28,6 +29,8 @@ var bloodItems = [
   'O Positive (O+)',
   'O Negative (O-)'
 ];
+var device_id = "";
+
 var genderItems = ['Choose a gender', 'Male', 'Female', 'Other'];
 String bloodValue = 'Choose a blood group';
 String genderValue = 'Choose a gender';
@@ -139,6 +142,7 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
               } else {
                 DateTime dateonly = DateTime(
                     dateSelection.year, dateSelection.month, dateSelection.day);
+                await initPlatform();
                 await signup_func(
                     name, pass, email, widget.phoneNo, blood, gender, dateonly);
                 SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -162,6 +166,7 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
                   UserSimplePreferences.setBloodType(blood); // CHECK --
                   UserSimplePreferences.setAge(age); // CHECK --
                   UserSimplePreferences.setPassword(pass); // CHECK --
+                  UserSimplePreferences.setDeviceId(device_id); // CHECK --
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => homepage(
                             userName: name,
@@ -244,6 +249,17 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
   }
 }
 
+initPlatform() async {
+  await OneSignal.shared.setAppId("0a075bcf-6425-4c41-9834-6fa9304050e0");
+
+  //gives the device unique id. TODO: need to store it in Registeredusers collection
+  await OneSignal.shared.getDeviceState().then((value) => {
+        print("here is the device ID:"+ value!.userId.toString()),
+        device_id = value!.userId.toString()
+      });
+}
+
+
 signup_func(name, pass, email, phone, blood, gender, age) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   print("TESTING");
@@ -273,7 +289,8 @@ signup_func(name, pass, email, phone, blood, gender, age) async {
         'bloodType': blood,
         'email': email,
         'age': age.toString(),
-        'gender': gender
+        'gender': gender,
+        'device_id': device_id
       }),
     );
     var parse = jsonDecode(response.body);

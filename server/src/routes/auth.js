@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user_model')
-const Donor = require('../models/donors')
 
 
 router.get('/login', (req,res)=>{
@@ -10,7 +9,7 @@ router.get('/login', (req,res)=>{
 
 router.route("/phone").get((req, res) => {
     console.log("hi")
-      Donor.findOne({ phoneNumber : req.headers.user_contact_num}, (err, result) => {
+      User.findOne({ phoneNumber : req.headers.user_contact_num}, (err, result) => {
         if (err) return res.json({ msg: "ERROR" });
         if (result == null) return res.json({msg:"null"});
         else {

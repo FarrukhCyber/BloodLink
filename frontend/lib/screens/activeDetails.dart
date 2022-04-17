@@ -1,4 +1,6 @@
+import 'package:bloodlink/screens/createBloodRequest.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -65,6 +67,7 @@ class _activeDetailsState extends State<activeDetails> {
             DisplayInfo(label: "Status", data: widget.status),
             DisplayInfo(
                 label: "Hospital", data: "${widget.hospital} , ${widget.city}"),
+            const PairButton(text: "hello")
           ],
         ));
   }
@@ -119,7 +122,7 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
         super(key: key);
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xffde2c2c);
+    const primaryColor = Color(0xffc10110);
     const secondaryColor = Color(0xff6D28D9);
     const accentColor = Color(0xffffffff);
     const backgroundColor = Color(0xffffffff);
@@ -133,14 +136,13 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
   }
 }
 
-
 //the second bar
 class TopBarFb3 extends StatelessWidget {
   final String title;
   final String upperTitle;
   TopBarFb3({required this.title, required this.upperTitle, Key? key})
       : super(key: key);
-  final primaryColor = Color.fromARGB(255, 222, 44, 44);
+  final primaryColor = Color(0xffc10110);
   final secondaryColor = const Color(0xff6D28D9);
   final accentColor = const Color(0xffffffff);
   final backgroundColor = const Color(0xffffffff);
@@ -167,5 +169,99 @@ class TopBarFb3 extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class PairButton extends StatelessWidget {
+  final String text;
+  // final Function() onPressed;
+  const PairButton({required this.text, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    const primaryColor = Color(0xffc10110);
+    // const secondaryColor = Color(0xff6D28D9);
+    const accentColor = Color(0xffffffff);
+
+    const double borderRadius = 15;
+
+    return DecoratedBox(
+        decoration:
+            BoxDecoration(borderRadius: BorderRadius.circular(borderRadius)
+                // gradient:
+                // const LinearGradient(colors: [primaryColor, secondaryColor])
+                ),
+        child: Container(
+          margin: EdgeInsets.fromLTRB(
+              0, MediaQuery.of(context).size.height * 0.03, 0, 0),
+          child: Row(
+            children: [
+              Container(
+                margin: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.height * 0.08, 0, 0, 0),
+                child: OutlinedButton(
+                  style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(0),
+                      alignment: Alignment.center,
+                      padding: MaterialStateProperty.all(const EdgeInsets.only(
+                          right: 30, left: 30, top: 10, bottom: 10)),
+                      backgroundColor: MaterialStateProperty.all(Colors.white),
+                      side: MaterialStateProperty.all(BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                          style: BorderStyle.solid)),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(borderRadius)),
+                      )),
+                  onPressed: null,
+                  child: Row(
+                    children: [
+                      Text(
+                        "Notify ",
+                        style: TextStyle(color: Color(0xffc10110)),
+                      ),
+                      Icon(
+                        MdiIcons.bell,
+                        color: Color(0xffc10110),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.height * 0.02, 0, 0, 0),
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(0),
+                      alignment: Alignment.center,
+                      padding: MaterialStateProperty.all(const EdgeInsets.only(
+                          right: 30, left: 30, top: 10, bottom: 10)),
+                      backgroundColor: MaterialStateProperty.all(primaryColor),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(borderRadius)),
+                      )),
+                  // onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  //     builder: (context) => CreateBloodRequestPage2(key: key))),
+                  // onPressed: () => {print("here")},
+                  onPressed: () {},
+                  // onPressed: () => CreateBloodRequestPage2(key: key),
+                  child: Row(
+                    children: [
+                      Text(
+                        "Contact",
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 16),
+                      ),
+                      Icon(Icons.phone, color: Colors.white)
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ));
   }
 }

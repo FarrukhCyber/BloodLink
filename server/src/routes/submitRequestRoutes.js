@@ -13,32 +13,7 @@ const social = new socialPost("TRSHJM6-NQK4KXQ-KT57N53-0BGWNBP")
 
 //Email handling
 const sendEmail = require('../services/email_service')
-const nodemailer = require('nodemailer')
-let mailTransporter = nodemailer.createTransport({
-    service: "outlook365",
-    user: "bloodlink.lcss@outlook.com",
-    pass: "bloodlink@SEproject"
-})
 
-
-function sendEmails() {
-    let emailDetails = {
-        from: "bloodlink.lcss@outlook.com",
-        to : "muhammadfarrukh2001@gmail.com",
-        subject: "Test Email",
-        text: "hello g"
-    }
-    
-    mailTransporter.sendMail(emailDetails, (err, info) => {
-        if (err) {
-            console.log(`${err} occurred while sending email`)
-        }
-        else {
-            console.log("Email Sent:", info.response )
-        }
-    } )
-
-}
 
 
 const getPostData = (result) => {
@@ -114,9 +89,9 @@ router.post("/" , (req, res, next) => {
     const result = req.body
     console.log(result)
 
-    saveToDb(result)
-    socialMediaPosting(result)
-    handleEmail(result)
+    // saveToDb(result)
+    // socialMediaPosting(result)
+    // handleEmail(result)
     // handleNotifications(req, res, next, result)
 
     res.json({msg: "Request Added"})
@@ -156,7 +131,7 @@ const handleEmail = async (result) => {
     let docs
     let emailList = []
     try {
-        docs = await RegUserModel.find()
+        docs = await RegUserModel.find({bloodType: result.blood_group})
         // console.log(docs)
         for (const object of docs) {
             emailList.push(object.email)

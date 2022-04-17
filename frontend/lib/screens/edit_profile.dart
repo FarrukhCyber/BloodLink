@@ -130,7 +130,7 @@ class _editProfileState extends State<editProfile> {
     final signupButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(30),
-      color: Colors.redAccent,
+      color: Color(0xffc10110),
       child: MaterialButton(
           padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           minWidth: MediaQuery.of(context).size.width,
@@ -229,7 +229,7 @@ class _editProfileState extends State<editProfile> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Bloodlink"),
-        backgroundColor: Colors.red,
+        backgroundColor: Color(0xffc10110),
         centerTitle: true,
       ),
       backgroundColor: Colors.white,

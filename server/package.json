@@ -20,8 +20,8 @@
   "homepage": "https://github.com/FarrukhCyber/BloodLink#readme",
   "dependencies": {
     "express": "^4.17.3",
-    "nodejs-nodemailer-outlook": "^1.2.4",
     "mongoose": "^6.2.11",
+    "nodejs-nodemailer-outlook": "^1.2.4",
     "nodemailer": "^6.7.3",
     "social-post-api": "^1.0.20"
   },
