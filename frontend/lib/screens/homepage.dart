@@ -1,3 +1,4 @@
+import 'package:bloodlink/screens/createBloodRequest.dart';
 import 'package:bloodlink/screens/login.dart';
 import 'package:bloodlink/screens/registerDonor.dart';
 import 'package:bloodlink/screens/viewActiveRequest.dart';
@@ -57,6 +58,8 @@ class _homepageState extends State<homepage>
                     splashColor: Colors.blue.withAlpha(30),
                     onTap: () {
                       print('Card tapped.');
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => CreateBloodRequest()));
                     },
                     child: SizedBox(
                         width: width * 0.85, // determines the size of the card
