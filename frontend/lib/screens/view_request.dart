@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:bloodlink/screens/activeDetails.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -13,7 +12,8 @@ bool error = false;
 NetworkHandler networkHandler = NetworkHandler();
 String userPhoneNum = UserSimplePreferences.getPhoneNumber() ?? "Error";
 Future<List<Data>> fetchData() async {
-  final response = await networkHandler.active('/active_request');
+  final response = await networkHandler.get(
+      '/my_requests', userPhoneNum, "user_contact_num");
   if (response.statusCode == 200) {
     List jsonResponse = jsonDecode(response.body)["data"];
     return jsonResponse.map((data) => new Data.fromJson(data)).toList();
@@ -77,15 +77,15 @@ class Data {
   }
 }
 
-class activeRequests extends StatefulWidget {
+class myRequests extends StatefulWidget {
   var futureData;
-  activeRequests({Key? key}) : super(key: key);
+  myRequests({Key? key}) : super(key: key);
 
   @override
-  State<activeRequests> createState() => _activeRequestsState();
+  _MyAppState createState() => _MyAppState();
 }
 
-class _activeRequestsState extends State<activeRequests> {
+class _MyAppState extends State<myRequests> {
   @override
   void initState() {
     super.initState();
@@ -104,9 +104,9 @@ class _activeRequestsState extends State<activeRequests> {
           AppBarFb2(),
           TopBarFb3(
               title: "My Requests",
-              upperTitle: "\nFollowing are active blood requests."),
+              upperTitle: "\nFollowing are your blood requests."),
           Container(
-            height: MediaQuery.of(context).size.height * 0.7,
+            height: MediaQuery.of(context).size.height * 0.8,
             margin: EdgeInsets.only(top: 20),
             child: FutureBuilder<List<Data>>(
               future: widget.futureData,
@@ -203,7 +203,7 @@ class _RequestCardState extends State<RequestCard> {
                     },
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.85,
-                  height: MediaQuery.of(context).size.height * 0.21,
+                  height: MediaQuery.of(context).size.height * 0.20,
                   child: Column(
                     children: [
                       Container(

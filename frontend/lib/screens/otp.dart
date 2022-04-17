@@ -1,3 +1,6 @@
+import 'package:bloodlink/screens/changePassword.dart';
+import 'package:bloodlink/screens/user_profile.dart';
+import 'package:bloodlink/utils/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -7,11 +10,13 @@ class Otp extends StatefulWidget {
   FirebaseAuth authen;
   String verify;
   String phoneNo;
+  bool forget;
   Otp(
       {Key? key,
       required this.authen,
       required this.verify,
-      required this.phoneNo})
+      required this.phoneNo,
+      required this.forget})
       : super(key: key);
 
   @override
@@ -25,6 +30,7 @@ class _OtpState extends State<Otp> {
   TextEditingController otpDigit4 = TextEditingController();
   TextEditingController otpDigit5 = TextEditingController();
   TextEditingController otpDigit6 = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -239,6 +245,7 @@ class _OtpState extends State<Otp> {
     try {
       await widget.authen.signInWithCredential(credential).then((value) {
         print("Phone Number Verified");
+        UserSimplePreferences.setPhoneNumber(widget.phoneNo.substring(1));
         Fluttertoast.showToast(
             msg: "Verification Sucessful",
             toastLength: Toast.LENGTH_SHORT,
@@ -247,9 +254,16 @@ class _OtpState extends State<Otp> {
             backgroundColor: Color.fromARGB(255, 193, 0, 0),
             textColor: Colors.white,
             fontSize: 16.0);
-        Navigator.of(context).push(MaterialPageRoute(
-            // builder: (context) => signup(phoneNo: widget.phoneNo))); // UNCOMMENT
-            builder: (context) => signup(phoneNo: widget.phoneNo)));
+        if (widget.forget) {
+          Navigator.of(context).push(MaterialPageRoute(
+              // builder: (context) => signup(phoneNo: widget.phoneNo))); // UNCOMMENT
+              builder: (context) => changePassword(phoneNo: widget.phoneNo)));
+        } else {
+          print(phoneNo);
+          Navigator.of(context).push(MaterialPageRoute(
+              // builder: (context) => signup(phoneNo: widget.phoneNo))); // UNCOMMENT
+              builder: (context) => signup(phoneNo: widget.phoneNo)));
+        }
       });
     } catch (error) {
       Fluttertoast.showToast(

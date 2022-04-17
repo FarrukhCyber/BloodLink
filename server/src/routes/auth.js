@@ -37,6 +37,13 @@ router.post('/login', (req, res) => {
             else
             {
                 console.log("exists", user)
+                if(user.userName=="ADMIN" && user.phoneNumber=="923187007636")
+                {
+                res.json({msg:"ADMIN MODE", 
+                    userName: user.userName,
+                    phoneNumber:String(user.phoneNumber)})
+                }
+                else{
                 res.json({msg:"Login Successful", 
                     userName: user.userName,
                     email:user.email,
@@ -45,6 +52,7 @@ router.post('/login', (req, res) => {
                     bloodType:user.bloodType,
                     age:String(user.age),
                     phoneNumber:String(user.phoneNumber)})
+                }
             }
         }
     })
@@ -122,4 +130,3 @@ module.exports = router;
 //     age:age,
 //     phoneNumber:phoneNumber
 // }
-

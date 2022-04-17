@@ -7,6 +7,7 @@ import 'package:csc_picker/csc_picker.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:bloodlink/screens/networkHandler.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:bloodlink/screens/homepage.dart';
 
 String bloodGroupSelection = "";
 String genderSelection = "";
@@ -49,7 +50,7 @@ class _registerDonorState extends State<registerDonor> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Color.fromARGB(255, 229, 229, 229),
       body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -156,84 +157,86 @@ class _registerDonorState extends State<registerDonor> {
   Widget NextButton(context, label, double pad) {
     return Container(
       //margin: EdgeInsets.fromLTRB(30.0, 5.0, 30.0, 5.0),
-      child: ElevatedButton(
-        //padding: EdgeInsets.all(1.0),
-        //olor: Color.fromARGB(255, 193, 0, 0),
-        style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(Colors.white),
-            backgroundColor:
-                MaterialStateProperty.all(Color.fromARGB(255, 193, 0, 0)),
-            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                EdgeInsets.symmetric(vertical: 10, horizontal: pad)),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ))),
-        onPressed: () async {
-          print(bloodGroupSelection);
-          print(genderSelection);
-          print(UserSimplePreferences.getPhoneNumber());
-          print(city);
-          print(vaccinatedSelect);
-          print(diseaseSelect);
-          print(plasmaSelection);
-          print(diabetesSelection);
-          print(dateSelection);
-          var res = await networkHandler.get(
-              '/donor_auth', userPhoneNum, "user_contact_num");
-          var message = json.decode(res.body);
-          var msg = message["msg"];
-          print("msg: ${msg}");
-          if (bloodGroupSelection == "Choose" ||
-              diseaseSelect == "Choose" ||
-              diseaseSelect == "Choose" ||
-              vaccinatedSelect == "Choose" ||
-              city == "" ||
-              plasmaSelection == "Choose") {
-            errorGenerator(context, "Empty Fields", "Please fill all fields");
-          } else if (msg == "exists") {
-          errorGenerator(
-              context, "Donor Exists", "Already Registered as Donor");
-           }
-          else if (msg == "unique") {
-            Map<String, dynamic> res = {
-              'user_contact_num': UserSimplePreferences.getPhoneNumber(),
-              "blood_group": UserSimplePreferences.getBloodType(),
-              "diabetes": diseaseSelect,
-              "blood_disease": diseaseSelect,
-              "vaccinated": vaccinatedSelect,
-              "last_donated": dateSelection.toString(),
-              "region": city,
-              "gender": UserSimplePreferences.getGender(),
-              "plasma": plasmaSelection
-            };
-            var responseRegister =
-                await networkHandler.post('/register_donor', res);
-            if (responseRegister.statusCode == 200 ||
-                responseRegister.statusCode == 201) {
-              print('successful');
-              Fluttertoast.showToast(
-                  msg: "Registeration successful",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.CENTER,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Color.fromARGB(255, 193, 0, 0),
-                  textColor: Colors.white,
-                  fontSize: 16.0);
-              Navigator.pop(context, 'Ok');
-            } else {
+      child: SizedBox(
+        // height: MediaQuery.of(context).size.width * 0.1,
+        // width: MediaQuery.of(context).size.width * 0.1,
+        child: ElevatedButton(
+          //padding: EdgeInsets.all(1.0),
+          //olor: Color(0xffc10110),
+          style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all(Colors.white),
+              backgroundColor: MaterialStateProperty.all(Color(0xffc10110)),
+              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                  EdgeInsets.symmetric(vertical: 10, horizontal: pad)),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ))),
+          onPressed: () async {
+            print(bloodGroupSelection);
+            print(genderSelection);
+            print(UserSimplePreferences.getPhoneNumber());
+            print(city);
+            print(vaccinatedSelect);
+            print(diseaseSelect);
+            print(plasmaSelection);
+            print(diabetesSelection);
+            print(dateSelection);
+            var res = await networkHandler.get(
+                '/donor_auth', userPhoneNum, "user_contact_num");
+            var message = json.decode(res.body);
+            var msg = message["msg"];
+            print("msg: ${msg}");
+            if (bloodGroupSelection == "Choose" ||
+                diseaseSelect == "Choose" ||
+                diseaseSelect == "Choose" ||
+                vaccinatedSelect == "Choose" ||
+                city == "" ||
+                plasmaSelection == "Choose") {
+              errorGenerator(context, "Empty Fields", "Please fill all fields");
+            } else if (msg == "exists") {
+              errorGenerator(
+                  context, "Donor Exists", "Already Registered as Donor");
+            } else if (msg == "unique") {
+              Map<String, dynamic> res = {
+                'user_contact_num': UserSimplePreferences.getPhoneNumber(),
+                "blood_group": UserSimplePreferences.getBloodType(),
+                "diabetes": diseaseSelect,
+                "blood_disease": diseaseSelect,
+                "vaccinated": vaccinatedSelect,
+                "last_donated": dateSelection.toString(),
+                "region": city,
+                "gender": UserSimplePreferences.getGender(),
+                "plasma": plasmaSelection
+              };
+              var responseRegister =
+                  await networkHandler.post('/register_donor', res);
+              if (responseRegister.statusCode == 200 ||
+                  responseRegister.statusCode == 201) {
+                print('successful');
+                Fluttertoast.showToast(
+                    msg: "Registeration successful",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Color(0xffc10110),
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+                Navigator.pop(context, 'Ok');
+              } else {
+                errorGenerator(context, 'There was an error in server',
+                    'Please try again in some time');
+                print('unsucessful');
+              }
+            } else if (msg == "error") {
               errorGenerator(context, 'There was an error in server',
                   'Please try again in some time');
-              print('unsucessful');
             }
-          } else if (msg == "error") {
-            errorGenerator(context, 'There was an error in server',
-                'Please try again in some time');
-          }
-        },
-        child: Text(
-          label,
-          style: TextStyle(color: Colors.white, fontSize: 18.0),
+          },
+          child: Text(
+            label,
+            style: TextStyle(color: Colors.white, fontSize: 18.0),
+          ),
         ),
       ),
     );
@@ -244,7 +247,7 @@ class _registerDonorState extends State<registerDonor> {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.05,
       decoration: BoxDecoration(
-          color: Color.fromARGB(255, 222, 44, 44),
+          color: Color(0xffc10110),
           borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60))),
       // gradient: LinearGradient(colors: [primaryColor, secondaryColor])),
       // child: Padding(
@@ -276,10 +279,11 @@ class _registerDonorState extends State<registerDonor> {
   Widget AppBarFb2(BuildContext context) {
     const accentColor = Color(0xffffffff);
 
+    var key;
     return AppBar(
       centerTitle: true,
       title: const Text("BloodLink", style: TextStyle(color: Colors.white)),
-      backgroundColor: Color.fromARGB(255, 222, 44, 44),
+      backgroundColor: Color(0xffc10110),
       actions: [
         // IconButton(
         // icon: Icon(
@@ -294,7 +298,11 @@ class _registerDonorState extends State<registerDonor> {
           Icons.keyboard_arrow_left,
           color: accentColor,
         ),
-        onPressed: () {},
+        onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => homepage(
+                  key: key,
+                  userName: "user",
+                ))),
       ),
     );
   }
@@ -335,20 +343,17 @@ class _registerDonorState extends State<registerDonor> {
               const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
           border: UnderlineInputBorder(
             borderSide: BorderSide(
-                color: Color.fromARGB(255, 222, 44, 44).withOpacity(.1),
-                width: 2.0),
+                color: Color(0xffc10110).withOpacity(.1), width: 2.0),
           ),
           focusedBorder: UnderlineInputBorder(
-            borderSide:
-                BorderSide(color: Color.fromARGB(255, 222, 44, 44), width: 2.0),
+            borderSide: BorderSide(color: Color(0xffc10110), width: 2.0),
           ),
           errorBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.red, width: 2.0),
           ),
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(
-                color: Color.fromARGB(255, 222, 44, 44).withOpacity(.1),
-                width: 2.0),
+                color: Color(0xffc10110).withOpacity(.1), width: 2.0),
           ),
         ),
       ),
@@ -473,7 +478,7 @@ class _registerDonorState extends State<registerDonor> {
             offset: const Offset(12, 26),
             blurRadius: 50,
             spreadRadius: 0,
-            color: Colors.grey.withOpacity(.1)),
+            color: Colors.white),
       ]),
       // padding: const EdgeInsets.all(right: 20, left: 20, top: 10, bottom: 10),
       margin: EdgeInsets.fromLTRB(
@@ -489,7 +494,7 @@ class _registerDonorState extends State<registerDonor> {
           filled: true,
           hintText: "    " + UserSimplePreferences.getPhoneNumber()!,
           //hintText: UserSimplePreferences.getPhoneNumber(),
-          hintStyle: TextStyle(color: Colors.grey.withOpacity(.75)),
+          hintStyle: TextStyle(color: Colors.black),
           prefix: const Padding(
             padding: EdgeInsets.symmetric(horizontal: 8),
             child: Visibility(
@@ -512,20 +517,17 @@ class _registerDonorState extends State<registerDonor> {
               const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
           border: UnderlineInputBorder(
             borderSide: BorderSide(
-                color: Color.fromARGB(255, 222, 44, 44).withOpacity(.1),
-                width: 2.0),
+                color: Color(0xffc10110).withOpacity(.1), width: 2.0),
           ),
           focusedBorder: UnderlineInputBorder(
-            borderSide:
-                BorderSide(color: Color.fromARGB(255, 222, 44, 44), width: 2.0),
+            borderSide: BorderSide(color: Color(0xffc10110), width: 2.0),
           ),
           errorBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.red, width: 2.0),
           ),
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(
-                color: Color.fromARGB(255, 222, 44, 44).withOpacity(.1),
-                width: 2.0),
+                color: Color(0xffc10110).withOpacity(.1), width: 2.0),
           ),
         ),
       ),
@@ -600,9 +602,9 @@ class _DropDownState extends State<getDate> {
       builder: (context, child) => Theme(
         data: ThemeData().copyWith(
           colorScheme: ColorScheme.dark(
-            primary: Color.fromARGB(255, 222, 44, 44),
+            primary: Color(0xffc10110),
             onPrimary: Colors.white,
-            surface: Color.fromARGB(255, 222, 44, 44),
+            surface: Color(0xffc10110),
             onSurface: Colors.black,
           ),
           dialogBackgroundColor: Colors.white,
@@ -635,7 +637,7 @@ class _DropDownState extends State<getDate> {
             Text(
               "${selectedDate.toLocal()}".split(' ')[0],
               style: TextStyle(
-                color: Color.fromARGB(255, 193, 0, 0),
+                color: Color(0xffc10110),
                 decoration: TextDecoration.underline,
               ),
             ),
@@ -643,13 +645,14 @@ class _DropDownState extends State<getDate> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.015,
           ),
-          ElevatedButton(
+          OutlinedButton(
             //padding: EdgeInsets.all(1.0),
-            //olor: Color.fromARGB(255, 193, 0, 0),
+            //olor: Color(0xffc10110),
             style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all(Colors.white),
-                backgroundColor:
-                    MaterialStateProperty.all(Color.fromARGB(255, 193, 0, 0)),
+                // foregroundColor: MaterialStateProperty.all(Colors.white),
+                backgroundColor: MaterialStateProperty.all(Colors.white),
+                side: MaterialStateProperty.all(BorderSide(
+                    color: Colors.grey, width: 2.0, style: BorderStyle.solid)),
                 padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                     EdgeInsets.symmetric(vertical: 10, horizontal: 50)),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -659,7 +662,7 @@ class _DropDownState extends State<getDate> {
             onPressed: () => _selectDate(context),
             child: Text(
               "Select Date",
-              style: TextStyle(color: Colors.white, fontSize: 18.0),
+              style: TextStyle(color: Color(0xffc10110), fontSize: 18.0),
             ),
           ),
         ],

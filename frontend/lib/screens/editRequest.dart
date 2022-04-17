@@ -71,7 +71,7 @@ class _editRequestState extends State<editRequest> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: Colors.white,
       body: ListView(children: <Widget>[
         Column(
           children: <Widget>[
@@ -156,7 +156,7 @@ class TopBarFb3 extends StatelessWidget {
   final String upperTitle;
   TopBarFb3({required this.title, required this.upperTitle, Key? key})
       : super(key: key);
-  final primaryColor = Color.fromARGB(255, 222, 44, 44);
+  final primaryColor = Color(0xffc10110);
   final secondaryColor = const Color(0xff6D28D9);
   final accentColor = const Color(0xffffffff);
   final backgroundColor = const Color(0xffffffff);
@@ -205,7 +205,7 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
         super(key: key);
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xffde2c2c);
+    const primaryColor = Color(0xffc10110);
     const secondaryColor = Color(0xff6D28D9);
     const accentColor = Color(0xffffffff);
     const backgroundColor = Color(0xffffffff);
@@ -256,7 +256,7 @@ class InputFieldWithLabel extends StatefulWidget {
       required this.location,
       required this.city,
       required this.quantity,
-      this.primaryColor = const Color(0xffde2c2c)})
+      this.primaryColor = const Color(0xffc10110)})
       : super(key: key);
 
   @override
@@ -340,7 +340,7 @@ class _InputFieldWithLabelState extends State<InputFieldWithLabel> {
             borderSide: BorderSide(color: widget.primaryColor, width: 2.0),
           ),
           errorBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.red, width: 2.0),
+            borderSide: BorderSide(color: Color(0xffc10110), width: 2.0),
           ),
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(
@@ -419,9 +419,9 @@ class _DropDownState extends State<getDate> {
       builder: (context, child) => Theme(
         data: ThemeData().copyWith(
           colorScheme: ColorScheme.dark(
-            primary: Color.fromARGB(255, 222, 44, 44),
+            primary: Color(0xffc10110),
             onPrimary: Colors.white,
-            surface: Color.fromARGB(255, 222, 44, 44),
+            surface: Color(0xffc10110),
             onSurface: Colors.black,
           ),
           dialogBackgroundColor: Colors.white,
@@ -451,7 +451,7 @@ class _DropDownState extends State<getDate> {
             height: 0,
           ),
           RaisedButton(
-            color: Color.fromARGB(255, 222, 44, 44),
+            color: Color(0xffc10110),
             onPressed: () => _selectDate(context),
             child: Text('Please select date on which blood is required',
                 style: TextStyle(color: Color(0xffffffff))),
@@ -492,8 +492,8 @@ class _getTimeState extends State<getTime> {
           children: <Widget>[
             ElevatedButton(
               style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                      Color.fromARGB(255, 222, 44, 44))),
+                  backgroundColor:
+                      MaterialStateProperty.all(Color(0xffc10110))),
               onPressed: () {
                 _selectTime(context);
               },
@@ -515,10 +515,10 @@ class _getTimeState extends State<getTime> {
       builder: (context, child) => Theme(
         data: ThemeData().copyWith(
           colorScheme: ColorScheme.dark(
-            primary: Color.fromARGB(255, 222, 44, 44),
+            primary: Color(0xffc10110),
             onPrimary: Colors.white,
             surface: Colors.white,
-            onSurface: Color.fromARGB(255, 222, 44, 44),
+            onSurface: Color(0xffc10110),
           ),
           // dialogBackgroundColor: Color.fromARGB(255, 17, 70, 168),
         ),
@@ -631,7 +631,7 @@ class PairButton extends StatefulWidget {
 class _PairButtonState extends State<PairButton> {
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color.fromARGB(255, 222, 44, 44);
+    const primaryColor = Color(0xffc10110);
     // const secondaryColor = Color(0xff6D28D9);
     const accentColor = Color(0xffffffff);
 
@@ -651,13 +651,17 @@ class _PairButtonState extends State<PairButton> {
               Container(
                 margin: EdgeInsets.fromLTRB(
                     MediaQuery.of(context).size.height * 0.1, 0, 0, 0),
-                child: ElevatedButton(
+                child: OutlinedButton(
                   style: ButtonStyle(
                       elevation: MaterialStateProperty.all(0),
                       alignment: Alignment.center,
                       padding: MaterialStateProperty.all(const EdgeInsets.only(
                           right: 30, left: 30, top: 10, bottom: 10)),
                       backgroundColor: MaterialStateProperty.all(Colors.white),
+                      side: MaterialStateProperty.all(BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                          style: BorderStyle.solid)),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(borderRadius)),
@@ -737,15 +741,15 @@ class _PairButtonState extends State<PairButton> {
                       print("message is:");
                       print(msg);
                       Fluttertoast.showToast(
-                      msg: "Request Updated",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Color.fromARGB(255, 193, 0, 0),
-                      textColor: Colors.white,
-                      fontSize: 16.0);
+                          msg: "Request Updated",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Color.fromARGB(255, 193, 0, 0),
+                          textColor: Colors.white,
+                          fontSize: 16.0);
                       Navigator.pop(context, 'Ok');
-                      
+
                       if (msg == "Request Added") {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => dummyPage()));

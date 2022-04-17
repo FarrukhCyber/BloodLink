@@ -1,49 +1,33 @@
 import 'package:bloodlink/base_url.dart';
+import 'package:bloodlink/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:email_validator/email_validator.dart';
 import 'package:bloodlink/screens/homepage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bloodlink/utils/user_info.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 DateTime dateSelection = DateTime.now();
 var red = Color(0xffde2c2c);
-var backgroundColor = Colors.white;
+var backgroundColor = Color.fromARGB(255, 229, 229, 229);
 var darkred = Color(0xffc10110);
 var opacity = 0.3;
 var pass = "";
 var confirmPass = "";
-var gender = "";
-var blood = '';
-var bloodItems = [
-  'Choose a blood group',
-  'A Positive (A+)',
-  'A Negative (A-)',
-  'B Positive (B+)',
-  'B Negative (B-)',
-  'AB Positive (AB+)',
-  'AB Negative (AB-)',
-  'O Positive (O+)',
-  'O Negative (O-)'
-];
-var device_id = "";
 
-var genderItems = ['Choose a gender', 'Male', 'Female', 'Other'];
-String bloodValue = 'Choose a blood group';
-String genderValue = 'Choose a gender';
-
-class signup extends StatefulWidget {
+class changePassword extends StatefulWidget {
   String phoneNo;
-  signup({Key? key, required this.phoneNo}) : super(key: key);
+  changePassword({Key? key, required this.phoneNo}) : super(key: key);
 
   @override
-  State<signup> createState() => _signupState();
+  State<changePassword> createState() => _changePasswordState();
 }
 
-class _signupState extends State<signup> with SingleTickerProviderStateMixin {
+class _changePasswordState extends State<changePassword> {
   late AnimationController _controller;
   final _formkey = GlobalKey<FormState>();
   final userNameEditingController = new TextEditingController();
@@ -56,12 +40,6 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
   var phone = "";
   var email = "";
   var age = "";
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(vsync: this);
-  }
 
   @override
   void dispose() {
@@ -89,11 +67,11 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
       decoration: decoration("Email", "Required", red, opacity),
     );
     final passwordField = passwordBuilder(
-        label: "Password",
+        label: "New Password",
         hint: "Required",
         controller: passwordEditingController);
     final confirmPasswordField = passwordBuilder(
-        label: "Confirm Password",
+        label: "Confirm New Password",
         hint: "Required",
         controller: confirmPasswordEditingController);
     final userNameField = TextFormField(
@@ -121,10 +99,6 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
               print(pass);
               print(confirmPass);
               print(phone);
-              print(blood);
-              print(email);
-              print(age);
-              print(gender);
               print("Hello from signup on press");
               if (pass != confirmPass) {
                 showDialog(
@@ -140,37 +114,27 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
                           ],
                         ));
               } else {
-                DateTime dateonly = DateTime(
-                    dateSelection.year, dateSelection.month, dateSelection.day);
-                await initPlatform();
-                await signup_func(
-                    name, pass, email, widget.phoneNo, blood, gender, dateonly);
+                await signup_func(pass, widget.phoneNo);
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 String? msg = prefs.getString("signup");
                 print("message is:");
                 print(msg);
-                if (msg == "Email exists") {
-                  errorGenerator(context, "Email exists",
-                      "Please choose another email or login");
-                } else if (msg == "Username exists") {
-                  errorGenerator(context, "Username exists",
-                      "Please choose another username or login");
-                } else if (msg == "null values") {
+                if (msg == "null") {
                   errorGenerator(
                       context, "Empty fields", "Please fill all the fields");
-                } else if (msg == "Signup Successful") {
-                  print("IT WORKED");
-                  UserSimplePreferences.setUsername(name); // CHECK --
-                  UserSimplePreferences.setEmail(email); // CHECK --
-                  UserSimplePreferences.setGender(gender); // CHECK --
-                  UserSimplePreferences.setBloodType(blood); // CHECK --
-                  UserSimplePreferences.setAge(age); // CHECK --
+                } else if (msg == "updated") {
+                  print("IT WORKED"); // CHECK --/ CHECK --
+                  Fluttertoast.showToast(
+                      msg: "Password Changed",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Color.fromARGB(255, 193, 0, 0),
+                      textColor: Colors.white,
+                      fontSize: 16.0);
                   UserSimplePreferences.setPassword(pass); // CHECK --
-                  UserSimplePreferences.setDeviceId(device_id);
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => homepage(
-                            userName: name,
-                          )));
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) => login()));
                 } else {
                   print("THERE WAS AN ERROR");
                   errorGenerator(context, 'There was an error in server',
@@ -219,25 +183,10 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      userNameField,
-                      SizedBox(height: 35),
-                      emailField,
                       SizedBox(height: 35),
                       passwordField,
                       SizedBox(height: 35),
                       confirmPasswordField,
-                      SizedBox(height: 35),
-                      DropDownMenu(
-                          item: bloodItems,
-                          dropDownValue: bloodValue,
-                          selection: "blood"),
-                      SizedBox(height: 20),
-                      DropDownMenu(
-                          item: genderItems,
-                          dropDownValue: genderValue,
-                          selection: "gender"),
-                      SizedBox(height: 20),
-                      getDate(title: "Select Date"),
                       SizedBox(height: 20),
                       signupButton,
                       SizedBox(height: 15),
@@ -249,32 +198,11 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
   }
 }
 
-initPlatform() async {
-  await OneSignal.shared.setAppId("0a075bcf-6425-4c41-9834-6fa9304050e0");
-
-  //gives the device unique id. TODO: need to store it in Registeredusers collection
-  await OneSignal.shared.getDeviceState().then((value) => {
-        print("here is the device ID:"+ value!.userId.toString()),
-        device_id = value!.userId.toString()
-      });
-}
-
-signup_func(name, pass, email, phone, blood, gender, age) async {
+signup_func(pass, phone) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   print("TESTING");
-  print(blood);
-  print(gender);
-  if (blood == "Choose a blood group") {
-    await prefs.setString('signup', "null values");
-    return;
-  }
-  if (gender == "Choose a gender") {
-    await prefs.setString('signup', "null values");
-    return;
-  }
 
-  var url = base_url + "/auth/signup";
-  print("In signup");
+  var url = base_url + "/password_change";
   try {
     final http.Response response = await http.post(
       Uri.parse(url),
@@ -282,23 +210,17 @@ signup_func(name, pass, email, phone, blood, gender, age) async {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
-        'userName': name,
         'password': pass,
         'phoneNumber': phone,
-        'bloodType': blood,
-        'email': email,
-        'age': age.toString(),
-        'gender': gender,
-        'device_id': device_id
       }),
     );
     var parse = jsonDecode(response.body);
-    if (parse["signup"] == null) {
+    if (parse["msg"] == "null") {
       print("it is null");
       // message = "null";
       await prefs.setString('signup', "null");
     } else
-      await prefs.setString('signup', parse["signup"]);
+      await prefs.setString('signup', parse["msg"]);
 
     print("Message received:");
     print(parse["signup"]);
@@ -311,88 +233,6 @@ signup_func(name, pass, email, phone, blood, gender, age) async {
   } on Object catch (error) {
     print(error);
     return null;
-  }
-}
-
-class getDate extends StatefulWidget {
-  getDate({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _DropDownState createState() => _DropDownState();
-}
-
-class _DropDownState extends State<getDate> {
-  DateTime selectedDate = DateTime.now();
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2015, 8),
-      lastDate: DateTime(2101),
-      builder: (context, child) => Theme(
-        data: ThemeData().copyWith(
-          colorScheme: ColorScheme.dark(
-            primary: Color(0xffc10110),
-            onPrimary: Colors.white,
-            surface: Color(0xffc10110),
-            onSurface: Colors.black,
-          ),
-          dialogBackgroundColor: Colors.white,
-        ),
-        child: child!,
-      ),
-    );
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-        dateSelection = picked;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // throw UnimplementedError();
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.85,
-      margin: EdgeInsets.fromLTRB(
-          0, MediaQuery.of(context).size.height * 0.03, 0, 0),
-      child: Column(
-        children: [
-          Text(
-            "${selectedDate.toLocal()}".split(' ')[0],
-            style: TextStyle(
-              color: Color(0xffc10110),
-              decoration: TextDecoration.underline,
-            ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.015,
-          ),
-          ElevatedButton(
-            //padding: EdgeInsets.all(1.0),
-            //olor: Color(0xffc10110),
-            style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all(Colors.white),
-                backgroundColor: MaterialStateProperty.all(Color(0xffc10110)),
-                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                    EdgeInsets.symmetric(vertical: 10, horizontal: 50)),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ))),
-            onPressed: () => _selectDate(context),
-            child: Text(
-              "Select Date",
-              style: TextStyle(color: Colors.white, fontSize: 18.0),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }
 
@@ -499,48 +339,6 @@ errorGenerator(context, title, message) {
               ),
             ],
           ));
-}
-
-class DropDownMenu extends StatefulWidget {
-  var item;
-  String dropDownValue;
-  String selection;
-  DropDownMenu(
-      {Key? key,
-      required this.item,
-      required this.dropDownValue,
-      required this.selection})
-      : super(key: key);
-
-  @override
-  State<DropDownMenu> createState() => _DropDownMenuState();
-}
-
-class _DropDownMenuState extends State<DropDownMenu> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        width: MediaQuery.of(context).size.width * 0.85,
-        margin: EdgeInsets.fromLTRB(
-            0, MediaQuery.of(context).size.height * 0.01, 0, 0),
-        child: DropdownButton(
-          value: widget.dropDownValue,
-          icon: Icon(Icons.keyboard_arrow_down),
-          items: widget.item.map<DropdownMenuItem<String>>((String items) {
-            return DropdownMenuItem(value: items, child: Text(items));
-          }).toList(),
-          onChanged: (String? newValue) {
-            setState(() {
-              widget.dropDownValue = newValue!;
-              if (widget.selection == 'blood') {
-                blood = newValue;
-              } else {
-                gender = newValue;
-              }
-            });
-          },
-        ));
-  }
 }
 
 bool checkPass(String password) {

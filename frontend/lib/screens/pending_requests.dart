@@ -13,7 +13,7 @@ bool error = false;
 NetworkHandler networkHandler = NetworkHandler();
 String userPhoneNum = UserSimplePreferences.getPhoneNumber() ?? "Error";
 Future<List<Data>> fetchData() async {
-  final response = await networkHandler.active('/active_request');
+  final response = await networkHandler.active('/pending_request');
   if (response.statusCode == 200) {
     List jsonResponse = jsonDecode(response.body)["data"];
     return jsonResponse.map((data) => new Data.fromJson(data)).toList();
@@ -77,15 +77,15 @@ class Data {
   }
 }
 
-class activeRequests extends StatefulWidget {
+class pendingRequests extends StatefulWidget {
   var futureData;
-  activeRequests({Key? key}) : super(key: key);
+  pendingRequests({Key? key}) : super(key: key);
 
   @override
-  State<activeRequests> createState() => _activeRequestsState();
+  State<pendingRequests> createState() => _pendingRequestsState();
 }
 
-class _activeRequestsState extends State<activeRequests> {
+class _pendingRequestsState extends State<pendingRequests> {
   @override
   void initState() {
     super.initState();

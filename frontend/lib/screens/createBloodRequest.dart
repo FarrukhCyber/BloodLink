@@ -1,13 +1,14 @@
 import 'package:bloodlink/base_url.dart';
 import 'package:bloodlink/screens/homepage.dart';
 import 'package:bloodlink/screens/request_success_msg.dart';
-import 'package:bloodlink/utils/user_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // var bloodGroups = [
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
+
+import '../utils/user_info.dart';
 
 //   'A Positive (A+)',
 //   'A Negative (A-)',
@@ -190,7 +191,7 @@ class InputFieldWithLabel extends StatelessWidget {
       required this.inputController,
       required this.hintText,
       required this.labelText,
-      this.primaryColor = const Color(0xffde2c2c)})
+      this.primaryColor = const Color(0xffc10110)})
       : super(key: key);
 
   @override

@@ -19,7 +19,6 @@ class userProfile extends StatefulWidget {
 }
 
 class _userProfileState extends State<userProfile> {
-  
   @override
   Widget build(BuildContext context) {
     var userName = UserSimplePreferences.getUsername();
@@ -36,7 +35,8 @@ class _userProfileState extends State<userProfile> {
           children: [
             AppBarFb2(),
             TopBarFb3(title: "BloodLink", upperTitle: "\nProfile Information"),
-            Heading(title: "\n  Personal Information", phoneNum: widget.phoneNum),
+            Heading(
+                title: "\n  Personal Information", phoneNum: widget.phoneNum),
             Divider(
               height: 5,
               color: Color(0xffc10110),
@@ -47,7 +47,7 @@ class _userProfileState extends State<userProfile> {
             DisplayInfo(label: "Name", data: userName ?? "Error"),
             DisplayInfo(label: "Email", data: userEmail ?? "Error"),
             DisplayInfo(label: "Password", data: userPassword ?? "Error"),
-            DisplayInfo(label: "Phonenumber", data: userPhoneNumber ??"Error"),
+            DisplayInfo(label: "Phonenumber", data: userPhoneNumber ?? "Error"),
             DisplayInfo(label: "Bloodtype", data: userBloodType ?? "Error"),
             DisplayInfo(label: "Gender", data: userGender ?? "Error"),
             DisplayInfo(label: "Age", data: userAge ?? "Error")
@@ -105,7 +105,7 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
         super(key: key);
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xffde2c2c);
+    const primaryColor = Color(0xffc10110);
     const secondaryColor = Color(0xff6D28D9);
     const accentColor = Color(0xffffffff);
     const backgroundColor = Color(0xffffffff);
@@ -123,8 +123,9 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
 class Heading extends StatelessWidget {
   final String title;
   final String phoneNum;
-  Heading({required this.title, required this.phoneNum, Key? key}) : super(key: key);
-  final primaryColor = const Color.fromARGB(255, 222, 44, 44);
+  Heading({required this.title, required this.phoneNum, Key? key})
+      : super(key: key);
+  final primaryColor = Color(0xffc10110);
   final secondaryColor = const Color(0xff6D28D9);
   final accentColor = const Color(0xffffffff);
   final backgroundColor = const Color(0xffffffff);
@@ -143,7 +144,7 @@ class Heading extends StatelessWidget {
           Text(
             title, // this is personal information
             style: const TextStyle(
-                color: Color.fromARGB(255, 222, 44, 44),
+                color: Color(0xffc10110),
                 fontSize: 15,
                 fontWeight: FontWeight.bold),
             // textAlign: TextAlign.left,
@@ -188,7 +189,7 @@ class TopBarFb3 extends StatelessWidget {
   final String upperTitle;
   TopBarFb3({required this.title, required this.upperTitle, Key? key})
       : super(key: key);
-  final primaryColor = Color.fromARGB(255, 222, 44, 44);
+  final primaryColor = Color(0xffc10110);
   final secondaryColor = const Color(0xff6D28D9);
   final accentColor = const Color(0xffffffff);
   final backgroundColor = const Color(0xffffffff);
