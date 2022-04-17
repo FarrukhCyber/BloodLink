@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 const express = require('express')
-const port = 8080 || process.env.Port
+const port = process.env.PORT || 8080 
 const app = express()
 const submitRequestRoutes = require('./src/routes/submitRequestRoutes')
 const registerAsDonor = require('./src/routes/registerAsDonor')
