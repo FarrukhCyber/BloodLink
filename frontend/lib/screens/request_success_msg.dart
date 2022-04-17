@@ -1,14 +1,12 @@
-import 'package:create_blood_request/createBloodRequest/createBloodRequestPage2.dart';
+import 'package:bloodlink/screens/homepage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:create_blood_request/createBloodRequest/dummy.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // var bloodGroups = [
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
 import 'package:material_design_icons_flutter/icon_map.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
 
 class Confirmation extends StatelessWidget {
   const Confirmation({Key? key}) : super(key: key);
@@ -64,7 +62,7 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
         ),
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => homepage(userName: "farrukh", key:key))
+              builder: (context) => homepage(userName: "farrukh", key: key)));
         },
       ),
     );
