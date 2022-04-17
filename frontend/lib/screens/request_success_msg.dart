@@ -94,7 +94,7 @@ class PopUp extends StatelessWidget with PreferredSizeWidget {
               style: TextStyle(
                   color: Colors.red,
                   fontWeight: FontWeight.bold,
-                  fontSize: MediaQuery.of(context).size.width * 0.08),
+                  fontSize: MediaQuery.of(context).size.width * 0.06),
             ),
             Text(
               "\nPlease mark it resolved from main screen\n once a donor reaches you out.",

@@ -421,7 +421,7 @@ createRequest_func(
     name, number, bloodType, time, date, location, city, quantity) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  var url = base_url + "/create"; // check what localhost is for you
+  var url = base_url + "/submit_request"; // check what localhost is for you
   print("In createRequest");
   try {
     final http.Response response = await http.post(
@@ -430,7 +430,6 @@ createRequest_func(
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, dynamic>{
-        //TODO: Need to add requestor contact number
         'attendant_name': name,
         'time': time,
         'date': date,
@@ -575,10 +574,12 @@ class PairButton extends StatelessWidget {
                       String? msg = prefs.getString("createRequest");
                       print("message is:");
                       print(msg);
-                      if (msg == "Request Added") {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => Confirmation()));
-                      }
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => Confirmation()));
+                      // if (msg == "Request Added") {
+                      //   Navigator.of(context).push(MaterialPageRoute(
+                      //       builder: (context) => Confirmation()));
+                      // }
                     }
                   },
                   // onPressed: () => CreateBloodRequestPage2(key: key),

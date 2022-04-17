@@ -49,5 +49,5 @@ app.use("/plasma_donor_register",plasmaDonorRegister)
 app.use("/submit_request", submitRequestRoutes)
 // 404 page
 app.use((req, res) => {
-    res.status(404).render('404', { title: '404' });
+    res.json({ title: '404' });
   });

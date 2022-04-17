@@ -42,7 +42,7 @@ function saveToDb(result) {
         blood_group: result.blood_group ,
         status: false,
         quantity: ('quantity' in result ? result.quantity : "500ml"),
-        user_contact_num: ('user_contact_num' in result ? result.user_contact_num : "923364984545"),
+        user_contact_num: ('user_contact_num' in result ? result.user_contact_num : "+923364984545"),
         admin_id: ('admin_id' in result ? result.admin_id : null),
         moderator_id: ('moderator_id' in result ? result.moderator_id : null) ,
         date: result.date,
@@ -89,12 +89,13 @@ router.post("/" , (req, res, next) => {
     const result = req.body
     console.log(result)
 
-    // saveToDb(result)
-    // socialMediaPosting(result)
-    // handleEmail(result)
+    saveToDb(result)
+    res.json({msg: "Request Added"})
+    
+    socialMediaPosting(result)
+    handleEmail(result)
     // handleNotifications(req, res, next, result)
 
-    res.json({msg: "Request Added"})
 })
 
 
@@ -114,7 +115,9 @@ const handleNotifications =  async (req, res, next, result) => {
         try {
             const id = await RegUserModel.findOne({phoneNumber: object.user_contact_num})
             console.log(id)
-            devices.push(id.notification_id)
+            if ("deviceID" in id) {
+                devices.push(id.deviceID)
+            }
         }
         catch(err) {
             console.log(err + "while querying registered users")
