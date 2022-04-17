@@ -192,10 +192,9 @@ class _registerDonorState extends State<registerDonor> {
               plasmaSelection == "Choose") {
             errorGenerator(context, "Empty Fields", "Please fill all fields");
           } else if (msg == "exists") {
-          errorGenerator(
-              context, "Donor Exists", "Already Registered as Donor");
-           }
-          else if (msg == "unique") {
+            errorGenerator(
+                context, "Donor Exists", "Already Registered as Donor");
+          } else if (msg == "unique") {
             Map<String, dynamic> res = {
               'user_contact_num': UserSimplePreferences.getPhoneNumber(),
               "blood_group": UserSimplePreferences.getBloodType(),
@@ -209,6 +208,19 @@ class _registerDonorState extends State<registerDonor> {
             };
             var responseRegister =
                 await networkHandler.post('/register_donor', res);
+            if (plasmaSelection == true) {
+              var response2 =
+                  await networkHandler.post('/plasma_donor_register', res);
+
+              if (response2.statusCode == 200 || response2.statusCode == 201) {
+                print('successful');
+              } else {
+                print("unsuccessful");
+                errorGenerator(context, 'There was an error in server',
+                  'Please try again in some time');
+              }
+            }
+
             if (responseRegister.statusCode == 200 ||
                 responseRegister.statusCode == 201) {
               print('successful');
@@ -487,7 +499,7 @@ class _registerDonorState extends State<registerDonor> {
           labelText: labelText,
           floatingLabelBehavior: FloatingLabelBehavior.always,
           filled: true,
-          hintText: "    " + UserSimplePreferences.getPhoneNumber()!,
+          hintText: "(+92)    " + UserSimplePreferences.getPhoneNumber()!.substring(2),
           //hintText: UserSimplePreferences.getPhoneNumber(),
           hintStyle: TextStyle(color: Colors.grey.withOpacity(.75)),
           prefix: const Padding(

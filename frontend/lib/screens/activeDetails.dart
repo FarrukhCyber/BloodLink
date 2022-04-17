@@ -7,6 +7,13 @@ import 'package:bloodlink/screens/edit_profile.dart';
 import 'package:bloodlink/screens/login.dart';
 import 'package:bloodlink/screens/user_profile.dart';
 import 'package:bloodlink/utils/user_info.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+var primaryColor = const Color.fromARGB(255, 222, 44, 44);
+var secondaryColor = const Color(0xff6D28D9);
+var accentColor = const Color(0xffffffff);
+var backgroundColor = const Color(0xffffffff);
+var errorColor = const Color(0xffEF4444);
 
 class activeDetails extends StatefulWidget {
   String attendantName;
@@ -65,6 +72,64 @@ class _activeDetailsState extends State<activeDetails> {
             DisplayInfo(label: "Status", data: widget.status),
             DisplayInfo(
                 label: "Hospital", data: "${widget.hospital} , ${widget.city}"),
+            Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.fromLTRB(
+                      MediaQuery.of(context).size.height * 0.1, 0, 0, 0),
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                        elevation: MaterialStateProperty.all(0),
+                        alignment: Alignment.center,
+                        padding: MaterialStateProperty.all(
+                            const EdgeInsets.only(
+                                right: 30, left: 30, top: 10, bottom: 10)),
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.white),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(60)),
+                        )),
+                    onPressed: null,
+                    child: Text(
+                      "Notify",
+                      style: const TextStyle(
+                          color: Color.fromARGB(255, 222, 44, 44),
+                          fontSize: 16),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.fromLTRB(
+                      MediaQuery.of(context).size.height * 0.02, 0, 0, 0),
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                        elevation: MaterialStateProperty.all(0),
+                        alignment: Alignment.center,
+                        padding: MaterialStateProperty.all(
+                            const EdgeInsets.only(
+                                right: 30, left: 30, top: 10, bottom: 10)),
+                        backgroundColor:
+                            MaterialStateProperty.all(primaryColor),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(60)),
+                        )),
+                    // onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                    //     builder: (context) => CreateBloodRequestPage2(key: key))),
+                    // onPressed: () => {print("here")},
+                    onPressed: () async {
+                      launch('tel:03187007636');
+                    },
+                    // onPressed: () => CreateBloodRequestPage2(key: key),
+                    child: Text(
+                      "Contact",
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                  ),
+                )
+              ],
+            )
           ],
         ));
   }
@@ -132,7 +197,6 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
     );
   }
 }
-
 
 //the second bar
 class TopBarFb3 extends StatelessWidget {

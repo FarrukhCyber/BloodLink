@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui';
 import 'package:bloodlink/base_url.dart';
+import 'package:bloodlink/screens/changePassword.dart';
+import 'package:bloodlink/screens/otp.dart';
 import 'package:flutter/material.dart';
 import 'package:bloodlink/screens/homepage.dart';
 import 'package:bloodlink/screens/phone_auth.dart';
@@ -148,7 +151,7 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
             final form = _formkey.currentState;
             if (form != null && form.validate()) {
               print("Hello");
-              await login_func(name, pass, "+92" + phone.toString());
+              await login_func(name, pass, "92" + phone.toString());
               SharedPreferences prefs = await SharedPreferences.getInstance();
               String? msg = prefs.getString("msg");
               print("message is:");
@@ -238,6 +241,10 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
                       Align(
                           alignment: Alignment.bottomCenter,
                           child: SigupButton()),
+                      SizedBox(height: 15),
+                      Align(
+                          alignment: Alignment.bottomCenter,
+                          child: forgetButton())
                     ],
                   ),
                 ))),
@@ -386,8 +393,8 @@ class SigupButton extends StatelessWidget {
         Text("Don't have an Account? "),
         TextButton(
             onPressed: () => {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => LoginWithPhone()))
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => LoginWithPhone(forget: false)))
                 },
             child: const Text(
               "Sign up",
@@ -398,6 +405,23 @@ class SigupButton extends StatelessWidget {
             )),
       ],
     );
+  }
+}
+
+class forgetButton extends StatelessWidget {
+  const forgetButton({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        onPressed: () => {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => LoginWithPhone(forget: true)))
+            },
+        child: const Text(
+          "Forget Password?",
+          style: TextStyle(
+              fontSize: 15, color: red, decoration: TextDecoration.underline),
+        ));
   }
 }
 
@@ -453,18 +477,8 @@ class _passwordBuilderState extends State<passwordBuilder> {
       validator: (password) => checkPass(password ?? "") == false
           ? 'Enter minimum 8 characters + 1 Uppercase + 1 Digit + 1 Special Character'
           : null,
-      onChanged: (password) => {
-            if (widget.label == "Password")
-              pass = password
-            else
-              confirmPass = password
-          },
-      onSaved: (password) => {
-            if (widget.label == "Password")
-              password != null ? pass = password : null
-            else
-              password != null ? confirmPass = password : null
-          });
+      onChanged: (password) => {pass = password},
+      onSaved: (password) => {password != null ? pass = password : null});
 
   void togglePasswordVisibility() => setState(() => isHidden = !isHidden);
 }

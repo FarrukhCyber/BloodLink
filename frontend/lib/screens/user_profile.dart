@@ -47,7 +47,7 @@ class _userProfileState extends State<userProfile> {
             DisplayInfo(label: "Name", data: userName ?? "Error"),
             DisplayInfo(label: "Email", data: userEmail ?? "Error"),
             DisplayInfo(label: "Password", data: userPassword ?? "Error"),
-            DisplayInfo(label: "Phonenumber", data: userPhoneNumber ??"Error"),
+            DisplayInfo(label: "Phonenumber", data: '0'+UserSimplePreferences.getPhoneNumber()!.substring(2)),
             DisplayInfo(label: "Bloodtype", data: userBloodType ?? "Error"),
             DisplayInfo(label: "Gender", data: userGender ?? "Error"),
             DisplayInfo(label: "Age", data: userAge ?? "Error")

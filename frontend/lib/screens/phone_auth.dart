@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:bloodlink/screens/otp.dart';
 
 class LoginWithPhone extends StatefulWidget {
-  const LoginWithPhone({Key? key}) : super(key: key);
+  bool forget;
+  LoginWithPhone({Key? key, required this.forget}) : super(key: key);
 
   @override
   _LoginWithPhoneState createState() => _LoginWithPhoneState();
@@ -25,7 +26,7 @@ class _LoginWithPhoneState extends State<LoginWithPhone> {
 
   String verificationID = "";
 
-  errorGenerator(context, title, message) {
+  errorGenerator(context, title, message, flag) {
     showDialog(
         context: context,
         builder: (BuildContext context) => AlertDialog(
@@ -33,7 +34,14 @@ class _LoginWithPhoneState extends State<LoginWithPhone> {
               content: Text(message),
               actions: <Widget>[
                 TextButton(
-                  onPressed: () => Navigator.pop(context, 'Ok'),
+                  onPressed: () => {
+                    if (flag){Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                      builder: (context) => login(),
+                                    ))}
+                    else{
+                      Navigator.pop(context, 'Ok'),
+                    }},
                   child: const Text('Ok'),
                 ),
               ],
@@ -178,39 +186,69 @@ class _LoginWithPhoneState extends State<LoginWithPhone> {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                     builder: (context) => Otp(
-                                        authen: auth,
-                                        verify: verificationID,
-                                        phoneNo: "+92" + phoneController.text)),
+                                          authen: auth,
+                                          verify: verificationID,
+                                          phoneNo: "+92" + phone,
+                                          forget: widget.forget,
+                                        )),
                               );
                               //verifyOTP();
                             } else {
                               if (!isValidPhoneNumber(phoneController.text)) {
                                 errorGenerator(context, "Invalid Phone Number",
-                                    "Please Enter correct 10 digit number 3xxxxxxxxxx");
+                                    "Please Enter correct 10 digit number 3xxxxxxxxxx",false);
                                 phoneController.clear();
                               } else {
-                                var msg = await networkHandler.get(
-                                    '/auth/phone',
-                                    "+92" + phoneController.text,
-                                    "user_contact_num");
-                                //var mess = (json.decode(msg.body));
-                                var message = ""; //mess["msg"];
-                                if (message == "ERROR") {
-                                  errorGenerator(
-                                      context,
-                                      "There was an error in server",
-                                      "Please try again in some time");
-                                  phoneController.clear();
-                                } else if (message == "exists") {
-                                  errorGenerator(
-                                      context,
-                                      "Number already registered",
-                                      "Please use some other Phone Number or LogIn");
-                                  phoneController.clear();
-                                } else if (message == "null") {
-                                  loginWithPhone();
+                                if (widget.forget == false) {
+                                  var msg = await networkHandler.get(
+                                      '/auth/phone',
+                                      "92" + phoneController.text,
+                                      "user_contact_num");
+                                  var mess = (json.decode(msg.body));
+                                  var message = mess["msg"];
+                                  if (message == "ERROR") {
+                                    errorGenerator(
+                                        context,
+                                        "There was an error in server",
+                                        "Please try again in some time",true);
+                                    phoneController.clear();
+                                  } else if (message == "exists") {
+                                    errorGenerator(
+                                        context,
+                                        "Number already registered",
+                                        "Please use some other Phone Number or LogIn",true);
+                                    phoneController.clear();
+                                  } else if (message == "null") {
+                                    loginWithPhone();
+                                  }
+                                } else {
+                                  print(phoneController.text);
+                                  var msg = await networkHandler.get(
+                                      '/auth/phone',
+                                      "+92" + phoneController.text,
+                                      "user_contact_num");
+                                  var mess = (json.decode(msg.body));
+                                  var message = mess["msg"];
+                                  if (message == "ERROR") {
+                                    errorGenerator(
+                                        context,
+                                        "There was an error in server",
+                                        "Please try again in some time", true);
+                                    phoneController.clear();
+                                  } else if (message == "exists") {
+                                    loginWithPhone();
+                                  } else if (message == "null") {
+                                    await errorGenerator(
+                                        context,
+                                        "Number not registered",
+                                        "Please Create a New Account",true);
+                                    //Navigator.of(context)
+                                    //    .push(MaterialPageRoute(
+                                    //  builder: (context) => login(),
+                                    //));
+                                    phoneController.clear();
+                                  }
                                 }
-                                loginWithPhone();
                               }
                             }
                           },
