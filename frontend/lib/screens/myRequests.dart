@@ -12,7 +12,7 @@ bool error = false;
 NetworkHandler networkHandler = NetworkHandler();
 String userPhoneNum = UserSimplePreferences.getPhoneNumber() ?? "Error";
 Future<List<Data>> fetchData() async {
-  final response = await networkHandler.get('/my_requests', "+923187007636","user_contact_num");
+  final response = await networkHandler.get('/my_requests', userPhoneNum,"user_contact_num");
   if (response.statusCode == 200) {
     List jsonResponse = jsonDecode(response.body)["data"];
     return jsonResponse.map((data) => new Data.fromJson(data)).toList();
