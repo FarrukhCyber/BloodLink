@@ -1,3 +1,4 @@
+import 'package:bloodlink/base_url.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -257,7 +258,7 @@ signup_func(name, pass, email, phone, blood, gender, age) async {
     return;
   }
 
-  var url = "https://bloodlink-api-server.herokuapp.com/auth/signup";
+  var url = base_url + "/auth/signup";
   print("In signup");
   try {
     final http.Response response = await http.post(

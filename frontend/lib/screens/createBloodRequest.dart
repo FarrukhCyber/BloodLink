@@ -1,3 +1,4 @@
+import 'package:bloodlink/base_url.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -461,7 +462,7 @@ class _getTimeState extends State<getTime> {
 createRequest_func(name, number, bloodType, time, date, location, city) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  var url = "http://10.0.2.2:8080/create"; // check what localhost is for you
+  var url = base_url+ "/create"; // check what localhost is for you
   print("In createRequest");
   try {
     final http.Response response = await http.post(

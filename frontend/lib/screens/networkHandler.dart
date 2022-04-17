@@ -1,11 +1,12 @@
 import 'dart:convert';
 
+import 'package:bloodlink/base_url.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 
 class NetworkHandler {
-  String baseurl = "https://bloodlink-api-server.herokuapp.com";
+  String baseurl = base_url;
 
   Future<http.Response> post(String url1, Map<String, dynamic> body) async {
     url1 = formater(url1);

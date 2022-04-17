@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:bloodlink/base_url.dart';
 import 'package:flutter/material.dart';
 import 'package:bloodlink/screens/homepage.dart';
 import 'package:bloodlink/screens/phone_auth.dart';
@@ -88,53 +88,54 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
         textInputAction: TextInputAction.next,
         decoration: decoration("Phone Number", "Required", red, opacity));
     final phoneNumberField = TextFormField(
-      validator: (value) => isValidPhoneNumber(value ?? "") == false
+        validator: (value) => isValidPhoneNumber(value ?? "") == false
             ? "Please enter a number of lenght 10"
             : null,
         textInputAction: TextInputAction.next,
-      autofocus: false,
-      controller: phoneNumberEditingController, //check this
-      onSaved: (value) {
-        value != null ? phone = value : null;
-      },
-      onChanged: (value) {
-        phone = value;
-      },
-      keyboardType: TextInputType.number,
-      decoration: InputDecoration(
-      labelText: "Phone Number",
-      errorMaxLines: 4,
-      floatingLabelBehavior: FloatingLabelBehavior.always,
-      filled: true,
-      contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-      hintText: "3xxxxxxxxx",
-      border: UnderlineInputBorder(
-        borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
-      ),
-      focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: red, width: 2.0),
-      ),
-      errorBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: red, width: 2.0),
-      ),
-      enabledBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
-      ),
-      prefix: const Padding(
+        autofocus: false,
+        controller: phoneNumberEditingController, //check this
+        onSaved: (value) {
+          value != null ? phone = value : null;
+        },
+        onChanged: (value) {
+          phone = value;
+        },
+        keyboardType: TextInputType.number,
+        decoration: InputDecoration(
+            labelText: "Phone Number",
+            errorMaxLines: 4,
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            filled: true,
+            contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+            hintText: "3xxxxxxxxx",
+            border: UnderlineInputBorder(
+              borderSide:
+                  BorderSide(color: red.withOpacity(opacity), width: 2.0),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: red, width: 2.0),
+            ),
+            errorBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: red, width: 2.0),
+            ),
+            enabledBorder: UnderlineInputBorder(
+              borderSide:
+                  BorderSide(color: red.withOpacity(opacity), width: 2.0),
+            ),
+            prefix: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 5),
               child: Text(
                 '(+92)',
               ),
             ),
-            suffixIcon:
-            Visibility(
-              visible:phoneNumberEditingController.text.length==10,
-              child:const Icon(Icons.check_circle,
-              color: Colors.green,
-              size: 32,
-            ),)
-    )
-    );
+            suffixIcon: Visibility(
+              visible: phoneNumberEditingController.text.length == 10,
+              child: const Icon(
+                Icons.check_circle,
+                color: Colors.green,
+                size: 32,
+              ),
+            )));
 
     final loginButton = Material(
       elevation: 5,
@@ -147,7 +148,7 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
             final form = _formkey.currentState;
             if (form != null && form.validate()) {
               print("Hello");
-              await login_func(name, pass, "+92"+phone.toString());
+              await login_func(name, pass, "+92" + phone.toString());
               SharedPreferences prefs = await SharedPreferences.getInstance();
               String? msg = prefs.getString("msg");
               print("message is:");
@@ -246,7 +247,7 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
 }
 
 login_func(name, pass, phone) async {
-  var url = "https://bloodlink-api-server.herokuapp.com/auth/login";
+  var url = base_url + "/auth/login";
   print("In login");
   try {
     final http.Response response = await http.post(
@@ -381,16 +382,19 @@ class SigupButton extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(width:MediaQuery.of(context).size.width*0.06),
+        SizedBox(width: MediaQuery.of(context).size.width * 0.06),
         Text("Don't have an Account? "),
         TextButton(
             onPressed: () => {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => LoginWithPhone()))
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => LoginWithPhone()))
                 },
             child: const Text(
               "Sign up",
-              style: TextStyle(fontSize: 15, color: red, decoration: TextDecoration.underline),
+              style: TextStyle(
+                  fontSize: 15,
+                  color: red,
+                  decoration: TextDecoration.underline),
             )),
       ],
     );

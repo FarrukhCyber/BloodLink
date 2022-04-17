@@ -1,3 +1,4 @@
+import 'package:bloodlink/base_url.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -325,7 +326,7 @@ class _editProfileState extends State<editProfile> {
 }
 
 signup_func(name, pass, email, phone, blood, gender, age) async {
-  var url = "http://localhost:8080/auth/signup";
+  var url = base_url + "/auth/signup";
   print("In signup");
   try {
     final http.Response response = await http.post(
