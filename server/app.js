@@ -38,6 +38,10 @@ app.get('/', (req, res) => {
     res.send("Hello World")
 })
 
+app.get('/check', (req,res) => {
+    res.send("Checking...")
+})
+
 app.use('/auth', auth)
 app.use("/register_donor", registerAsDonor)
 app.use("/my_requests", myRequests)
