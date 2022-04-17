@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:bloodlink/screens/activeDetails.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -12,7 +13,7 @@ bool error = false;
 NetworkHandler networkHandler = NetworkHandler();
 String userPhoneNum = UserSimplePreferences.getPhoneNumber() ?? "Error";
 Future<List<Data>> fetchData() async {
-  final response = await networkHandler.get('/my_requests', "+923187007636","user_contact_num");
+  final response = await networkHandler.active('/active_request');
   if (response.statusCode == 200) {
     List jsonResponse = jsonDecode(response.body)["data"];
     return jsonResponse.map((data) => new Data.fromJson(data)).toList();
@@ -76,15 +77,15 @@ class Data {
   }
 }
 
-class myRequests extends StatefulWidget {
+class activeRequests extends StatefulWidget {
   var futureData;
-  myRequests({Key? key}) : super(key: key);
+  activeRequests({ Key? key }) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<activeRequests> createState() => _activeRequestsState();
 }
 
-class _MyAppState extends State<myRequests> {
+class _activeRequestsState extends State<activeRequests> {
   @override
   void initState() {
     super.initState();
@@ -440,14 +441,14 @@ class _RequestCardState extends State<RequestCard> {
                               onPressed: () {
                                 print("hi");
                                 Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => myDetails(
+                                    builder: (context) => activeDetails(
                                           attendantName: widget.name,
                                           attendantNum: widget.attendantNum,
                                           bloodGroup: widget.bloodgroup,
                                           status: widget.status,
                                           userContact: userPhoneNum,
-                                          date: widget.date,
-                                          time: widget.time,
+                                          date: widget.date.split('T')[0],
+                                          time: widget.time.split('T')[1],
                                           quantity: widget.quantity,
                                           hospital: widget.location,
                                           id: widget.id,
@@ -471,36 +472,6 @@ class _RequestCardState extends State<RequestCard> {
                             ),
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.275,
-                            ),
-                            OutlinedButton(
-                              onPressed: () {
-                                print("hi");
-                                setState(() {
-                                  widget.visible = !widget.visible;
-                                  Map<String, dynamic> res = {
-                                    "_id": widget.id,
-                                    "status": widget.visible,
-                                  };
-                                  networkHandler.replace('/status', res);
-                                });
-                              },
-                              style: ButtonStyle(
-                                shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(30.0)),
-                                ),
-                              ),
-                              child: Text(
-                                  widget.visible
-                                      ? "Mark as Active"
-                                      : "Mark as resolved",
-                                  style: TextStyle(
-                                      color: Color(0xffde2c2c),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                              0.035)),
                             ),
                           ],
                         ),
