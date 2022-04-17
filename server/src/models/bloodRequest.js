@@ -11,10 +11,18 @@ const bloodRequestSchema = new mongoose.Schema({
     admin_id: Number,
     moderator_id: Number,
     date: Date,
+<<<<<<< HEAD
+    time: Date,    
+=======
     time: Date,
+>>>>>>> main
     hospital : String,
     city: String
 });
 
+<<<<<<< HEAD
+const RequestModel = mongoose.model("blood_request", bloodRequestSchema);
+=======
 const RequestModel = mongoose.model("blood_requests", bloodRequestSchema);
+>>>>>>> main
 module.exports = RequestModel;

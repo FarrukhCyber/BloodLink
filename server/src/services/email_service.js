@@ -25,3 +25,4 @@ function sendEmail(to, content) {
 }
 
 module.exports = sendEmail
+
