@@ -1,5 +1,6 @@
 import 'package:bloodlink/screens/login.dart';
 import 'package:bloodlink/screens/registerDonor.dart';
+import 'package:bloodlink/screens/viewActiveRequest.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bloodlink/widgets/navbar.dart';
@@ -98,6 +99,8 @@ class _homepageState extends State<homepage>
                     splashColor: Colors.blue.withAlpha(30),
                     onTap: () {
                       print('Card tapped.');
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => activeRequests()));
                     },
                     child: SizedBox(
                         width: width * 0.85, // determines the size of the card

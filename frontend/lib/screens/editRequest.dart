@@ -1,6 +1,6 @@
-import 'package:bloodlink/base_url.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // var bloodGroups = [
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -17,14 +17,6 @@ import 'package:bloodlink/screens/dummy.dart';
 //   'O Positive (O+)',
 //   'O Negative (O-)'
 // ];
-var name = "";
-var number = "";
-var bloodType = "";
-var date = "";
-var time = "";
-var location = '';
-var city = '';
-var quantity = '';
 
 var items = [
   'Choose a Blood Group',
@@ -37,10 +29,45 @@ var items = [
   'O Positive (O+)',
   'O Negative (O-)'
 ];
-String dropDownValue = "Choose a Blood Group";
 
-class CreateBloodRequest extends StatelessWidget {
-  const CreateBloodRequest({Key? key}) : super(key: key);
+var name1;
+var number1;
+var bloodType1;
+var date1;
+var time1;
+var location1;
+var city1;
+var quantity1;
+var bloodgroup;
+var time2;
+var date2;
+
+class editRequest extends StatefulWidget {
+  var name;
+  var number;
+  var bloodType;
+  var date;
+  var time;
+  var location;
+  var city;
+  var quantity;
+  editRequest(
+      {Key? key,
+      required this.name,
+      required this.number,
+      required this.bloodType,
+      required this.date,
+      required this.time,
+      required this.location,
+      required this.city,
+      required this.quantity})
+      : super(key: key);
+
+  @override
+  State<editRequest> createState() => _editRequestState();
+}
+
+class _editRequestState extends State<editRequest> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,31 +82,65 @@ class CreateBloodRequest extends StatelessWidget {
                     "Please provide the required \n information to initiate a \n blood request"),
             InputFieldWithLabel(
                 inputController: new TextEditingController(),
-                hintText: "Required",
-                labelText: "Attendant Name"),
+                hintText: widget.name,
+                labelText: "Attendant Name",
+                name: widget.name,
+                number: widget.number,
+                location: widget.location,
+                city: widget.city,
+                quantity: widget.quantity),
             InputFieldWithLabel(
                 inputController: new TextEditingController(),
-                hintText: "Required",
-                labelText: "Attendant Phone Number"),
-            const DropDownMenu(),
-            getDate(title: "Please select a date"),
-            getTime(),
+                hintText: widget.number,
+                labelText: "Attendant Phone Number",
+                name: widget.name,
+                number: widget.number,
+                location: widget.location,
+                city: widget.city,
+                quantity: widget.quantity),
+            DropDownMenu(
+              bloodType: widget.bloodType,
+            ),
+            getDate(title: "Please select a date", date: widget.date),
+            getTime(time: widget.time),
             // continueButton()
             InputFieldWithLabel(
                 inputController: new TextEditingController(),
-                hintText: "In which City blood is required",
-                labelText: "City"),
+                hintText: widget.city,
+                labelText: "City",
+                name: widget.name,
+                number: widget.number,
+                location: widget.location,
+                city: widget.city,
+                quantity: widget.quantity),
             InputFieldWithLabel(
                 inputController: new TextEditingController(),
-                hintText: "Where is the blood required",
-                labelText: "Location"),
-
+                hintText: widget.location,
+                labelText: "Location",
+                name: widget.name,
+                number: widget.number,
+                location: widget.location,
+                city: widget.city,
+                quantity: widget.quantity),
             InputFieldWithLabel(
                 inputController: new TextEditingController(),
-                hintText: "How many bottles of blood is required?",
-                labelText: "Quantity"),
-
-            const PairButton(text: "hello"),
+                hintText: widget.quantity,
+                labelText: "Quantity",
+                name: widget.name,
+                number: widget.number,
+                location: widget.location,
+                city: widget.city,
+                quantity: widget.quantity),
+            PairButton(
+                text: "hello",
+                name: widget.name,
+                location: widget.location,
+                city: widget.city,
+                number: widget.number,
+                quantity: widget.quantity,
+                bloodType: widget.bloodType,
+                date: widget.date,
+                time: widget.time)
           ],
         ),
       ]),
@@ -89,7 +150,6 @@ class CreateBloodRequest extends StatelessWidget {
     );
   }
 }
-
 
 class TopBarFb3 extends StatelessWidget {
   final String title;
@@ -175,19 +235,51 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
   }
 }
 
-class InputFieldWithLabel extends StatelessWidget {
-  final TextEditingController inputController;
-  final String hintText;
-  final Color primaryColor;
-  final String labelText;
+class InputFieldWithLabel extends StatefulWidget {
+  TextEditingController inputController;
+  String hintText;
+  Color primaryColor;
+  String labelText;
+  String name;
+  String number;
+  String location;
+  String city;
+  String quantity;
 
-  const InputFieldWithLabel(
+  InputFieldWithLabel(
       {Key? key,
       required this.inputController,
       required this.hintText,
       required this.labelText,
+      required this.name,
+      required this.number,
+      required this.location,
+      required this.city,
+      required this.quantity,
       this.primaryColor = const Color(0xffde2c2c)})
       : super(key: key);
+
+  @override
+  State<InputFieldWithLabel> createState() => _InputFieldWithLabelState();
+}
+
+class _InputFieldWithLabelState extends State<InputFieldWithLabel> {
+  @override
+  void initState() {
+    super.initState();
+    () => {
+          if (widget.labelText == "Attendant Name")
+            {widget.hintText = widget.name}
+          else if (widget.labelText == "Attendant Phone Number")
+            {widget.hintText = widget.number}
+          else if (widget.labelText == "Location")
+            {widget.hintText = widget.location}
+          else if (widget.labelText == "City")
+            {widget.hintText = widget.city}
+          else if (widget.labelText == "Quantity")
+            {widget.hintText = widget.quantity}
+        };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -206,18 +298,23 @@ class InputFieldWithLabel extends StatelessWidget {
       margin: EdgeInsets.fromLTRB(
           0, MediaQuery.of(context).size.height * 0.05, 0, 0),
       child: TextField(
-        controller: inputController,
+        controller: widget.inputController,
         onChanged: (value) {
-          if (labelText == "Attendant Name") {
-            name = value;
-          } else if (labelText == "Attendant Phone Number") {
-            number = value;
-          } else if (labelText == "Location") {
-            location = value;
-          } else if (labelText == "City") {
-            city = value;
-          } else if (labelText == "Quantity") {
-            quantity = value;
+          if (widget.labelText == "Attendant Name") {
+            widget.name = value;
+            name1 = value;
+          } else if (widget.labelText == "Attendant Phone Number") {
+            widget.number = value;
+            number1 = value;
+          } else if (widget.labelText == "Location") {
+            widget.location = value;
+            location1 = value;
+          } else if (widget.labelText == "City") {
+            widget.city = value;
+            city1 = value;
+          } else if (widget.labelText == "Quantity") {
+            widget.quantity = value;
+            quantity1 = value;
           }
           //Do something with value
         },
@@ -225,29 +322,29 @@ class InputFieldWithLabel extends StatelessWidget {
         style:
             const TextStyle(fontSize: 16, color: Color.fromARGB(255, 0, 0, 0)),
         decoration: InputDecoration(
-          labelText: labelText,
-          labelStyle: TextStyle(color: primaryColor),
+          labelText: widget.labelText,
+          labelStyle: TextStyle(color: widget.primaryColor),
           floatingLabelBehavior: FloatingLabelBehavior.always,
           filled: true,
-          hintText: hintText,
+          hintText: widget.hintText,
           // hintStyle: TextStyle(color: Colors.red),
           hintStyle: TextStyle(color: Colors.grey.withOpacity(.75)),
           fillColor: Colors.transparent,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
           border: UnderlineInputBorder(
-            borderSide:
-                BorderSide(color: primaryColor.withOpacity(.1), width: 2.0),
+            borderSide: BorderSide(
+                color: widget.primaryColor.withOpacity(.1), width: 2.0),
           ),
           focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: primaryColor, width: 2.0),
+            borderSide: BorderSide(color: widget.primaryColor, width: 2.0),
           ),
           errorBorder: const UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.red, width: 2.0),
           ),
           enabledBorder: UnderlineInputBorder(
-            borderSide:
-                BorderSide(color: primaryColor.withOpacity(.1), width: 2.0),
+            borderSide: BorderSide(
+                color: widget.primaryColor.withOpacity(.1), width: 2.0),
           ),
         ),
       ),
@@ -256,13 +353,20 @@ class InputFieldWithLabel extends StatelessWidget {
 }
 
 class DropDownMenu extends StatefulWidget {
-  const DropDownMenu({Key? key}) : super(key: key);
+  String bloodType;
+  DropDownMenu({Key? key, required this.bloodType}) : super(key: key);
 
   @override
   State<DropDownMenu> createState() => _DropDownMenuState();
 }
 
 class _DropDownMenuState extends State<DropDownMenu> {
+  String dropDownValue1 = "Choose a Blood Group";
+  void initState() {
+    super.initState();
+    () => {dropDownValue1 = widget.bloodType};
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -271,15 +375,15 @@ class _DropDownMenuState extends State<DropDownMenu> {
             0, MediaQuery.of(context).size.height * 0.03, 0, 0),
         child: DropdownButton(
           isExpanded: true,
-          value: dropDownValue,
+          value: dropDownValue1,
           icon: Icon(Icons.keyboard_arrow_down),
           items: items.map((String items) {
             return DropdownMenuItem(value: items, child: Text(items));
           }).toList(),
           onChanged: (String? newValue) {
             setState(() {
-              dropDownValue = newValue!;
-              bloodType = newValue;
+              dropDownValue1 = newValue!;
+              widget.bloodType = newValue;
             });
           },
         ));
@@ -287,7 +391,9 @@ class _DropDownMenuState extends State<DropDownMenu> {
 }
 
 class getDate extends StatefulWidget {
-  getDate({Key? key, required this.title}) : super(key: key);
+  String date;
+  getDate({Key? key, required this.title, required this.date})
+      : super(key: key);
 
   final String title;
 
@@ -298,6 +404,12 @@ class getDate extends StatefulWidget {
 class _DropDownState extends State<getDate> {
   DateTime selectedDate = DateTime.now();
 
+  void initState() {
+    super.initState();
+    () => {finalDate = widget.date};
+  }
+
+  String finalDate = "";
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -320,7 +432,8 @@ class _DropDownState extends State<getDate> {
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
-        date = picked.toIso8601String();
+        widget.date = picked.toIso8601String();
+        finalDate = picked.toIso8601String();
       });
     }
   }
@@ -333,7 +446,7 @@ class _DropDownState extends State<getDate> {
           0, MediaQuery.of(context).size.height * 0.03, 0, 0),
       child: Column(
         children: <Widget>[
-          Text("${selectedDate.toLocal()}".split(' ')[0]),
+          Text(finalDate.split(' ')[0]),
           SizedBox(
             height: 0,
           ),
@@ -350,6 +463,9 @@ class _DropDownState extends State<getDate> {
 }
 
 class getTime extends StatefulWidget {
+  String time;
+  String finalTime = "";
+  getTime({Key? key, required this.time}) : super(key: key);
   @override
   _getTimeState createState() {
     return _getTimeState();
@@ -358,6 +474,12 @@ class getTime extends StatefulWidget {
 
 class _getTimeState extends State<getTime> {
   TimeOfDay _selectedTime = TimeOfDay.now();
+
+  void initState() {
+    super.initState();
+    () => {widget.finalTime = widget.time};
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -378,7 +500,7 @@ class _getTimeState extends State<getTime> {
               child: Text("Please select time by which blood is requried",
                   style: TextStyle(color: Color(0xffffffff))),
             ),
-            Text("${_selectedTime.hour}:${_selectedTime.minute}"),
+            Text(widget.finalTime),
           ],
         ),
       ),
@@ -406,7 +528,10 @@ class _getTimeState extends State<getTime> {
     if (obtainedTime != null && obtainedTime != _selectedTime) {
       setState(() {
         _selectedTime = obtainedTime;
-        time = obtainedTime.toString();
+        widget.time = obtainedTime.toString();
+        time2 = obtainedTime.toString();
+        widget.finalTime = obtainedTime.toString();
+        ;
       });
     }
   }
@@ -416,7 +541,8 @@ createRequest_func(
     name, number, bloodType, time, date, location, city, quantity) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  var url = base_url+ "/create"; // check what localhost is for you
+  var url =
+      "http://10.0.2.2:8080/submit_request"; // check what localhost is for you
   print("In createRequest");
   try {
     final http.Response response = await http.post(
@@ -474,11 +600,35 @@ errorGenerator(context, title, message) {
           ));
 }
 
-class PairButton extends StatelessWidget {
+class PairButton extends StatefulWidget {
   final String text;
+  String name;
+  String number;
+  String location;
+  String city;
+  String quantity;
+  String bloodType;
+  String date;
+  String time;
   // final Function() onPressed;
-  const PairButton({required this.text, Key? key}) : super(key: key);
+  PairButton(
+      {required this.text,
+      Key? key,
+      required this.name,
+      required this.location,
+      required this.city,
+      required this.number,
+      required this.quantity,
+      required this.bloodType,
+      required this.date,
+      required this.time})
+      : super(key: key);
 
+  @override
+  State<PairButton> createState() => _PairButtonState();
+}
+
+class _PairButtonState extends State<PairButton> {
   @override
   Widget build(BuildContext context) {
     const primaryColor = Color.fromARGB(255, 222, 44, 44);
@@ -537,30 +687,65 @@ class PairButton extends StatelessWidget {
                   //     builder: (context) => CreateBloodRequestPage2(key: key))),
                   // onPressed: () => {print("here")},
                   onPressed: () async {
-                    print(name);
-                    print(number);
-                    print(bloodType);
-                    print(date);
-                    print(time);
+                    print(widget.name);
+                    print(widget.number);
+                    print(widget.bloodType);
+                    print(widget.date);
+                    print(widget.time);
                     print("Continue pls");
-                    if (name == "" ||
-                        number == "" ||
-                        bloodType == "" ||
-                        date == "" ||
-                        time == "" ||
-                        city == "" ||
-                        location == "" ||
-                        quantity == "") {
+                    if (widget.name == "" ||
+                        widget.number == "" ||
+                        widget.bloodType == "" ||
+                        widget.date == "" ||
+                        widget.time == "" ||
+                        widget.city == "" ||
+                        widget.location == "" ||
+                        widget.quantity == "") {
                       errorGenerator(
                           context, "Empty fields", "Please fill all fileds");
                     } else {
-                      await createRequest_func(
-                          name, number, bloodType, time, date, location, city, quantity);
+                      if (time2 != widget.time) {
+                        print("time");
+                      }
+                      if (name1 != widget.name) {
+                        print("name");
+                      }
+                      if (date2 != widget.date) {
+                        print("date");
+                      }
+                      if (location1 != widget.location) {
+                        print("location");
+                      }
+                      if (quantity1 != widget.quantity) {
+                        print("quantity");
+                      }
+                      if (number1 != widget.number) {
+                        print("number");
+                      }
+                      if (city1 != widget.city) {
+                        print("city");
+                      }
+                      if (bloodType1 != widget.bloodType) {
+                        print("bloodtype");
+                      }
+
+                      //await createRequest_func(
+                      //    name, number, bloodType, time, date, location, city, quantity);
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       String? msg = prefs.getString("createRequest");
                       print("message is:");
                       print(msg);
+                      Fluttertoast.showToast(
+                      msg: "Request Updated",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Color.fromARGB(255, 193, 0, 0),
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                      Navigator.pop(context, 'Ok');
+                      
                       if (msg == "Request Added") {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => dummyPage()));

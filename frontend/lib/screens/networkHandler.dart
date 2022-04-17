@@ -4,7 +4,6 @@ import 'package:bloodlink/base_url.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
-
 class NetworkHandler {
   String baseurl = base_url;
 
@@ -37,9 +36,18 @@ class NetworkHandler {
     url1 = formater(url1);
     print(url1);
     print("--------------------------------------------...................");
+    var response = await http.get(Uri.parse(url1),
+        headers: {"Content-type": "application/json", title: body});
+    print(response);
+    return response;
+  }
+
+  Future<http.Response> active(String url1) async {
+    url1 = formater(url1);
+    print(url1);
+    print("--------------------------------------------...................");
     var response = await http.get(Uri.parse(url1), headers: {
       "Content-type": "application/json",
-      title: body
     });
     print(response);
     return response;
