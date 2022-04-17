@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart'; // var bloodGroups 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
-import 'package:frontend/screens/dummy.dart';
+import 'package:frontend/screens/request_success_msg';
 
 //   'A Positive (A+)',
 //   'A Negative (A-)',
@@ -606,7 +606,7 @@ class PairButton extends StatelessWidget {
                       print(msg);
                       if (msg == "Request Added") {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => dummyPage()));
+                            builder: (context) => Confirmation()));
                       }
                     }
                   },
