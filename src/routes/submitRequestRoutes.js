@@ -89,12 +89,13 @@ router.post("/" , (req, res, next) => {
     const result = req.body
     console.log(result)
 
-    // saveToDb(result)
-    // socialMediaPosting(result)
-    // handleEmail(result)
+    saveToDb(result)
+    res.json({msg: "Request Added"})
+    
+    socialMediaPosting(result)
+    handleEmail(result)
     // handleNotifications(req, res, next, result)
 
-    res.json({msg: "Request Added"})
 })
 
 
