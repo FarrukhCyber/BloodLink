@@ -1,11 +1,11 @@
-import 'package:bloodlink/base_url.dart';
-import 'package:bloodlink/screens/request_success_msg.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // var bloodGroups = [
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
+import 'package:bloodlink/screens/dummy.dart';
+// import 'package:bloodlink/utils/user_info.dart';
 
 //   'A Positive (A+)',
 //   'A Negative (A-)',
@@ -415,7 +415,8 @@ createRequest_func(
     name, number, bloodType, time, date, location, city, quantity) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  var url = base_url+ "/create"; // check what localhost is for you
+  var url =
+      "http://10.0.2.2:8080/submit_request"; // check what localhost is for you
   print("In createRequest");
   try {
     final http.Response response = await http.post(
@@ -562,7 +563,7 @@ class PairButton extends StatelessWidget {
                       print(msg);
                       if (msg == "Request Added") {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => Confirmation()));
+                            builder: (context) => dummyPage()));
                       }
                     }
                   },

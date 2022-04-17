@@ -105,7 +105,7 @@ class _MyAppState extends State<myRequests> {
               title: "My Requests",
               upperTitle: "\nFollowing are your blood requests."),
           Container(
-            height: MediaQuery.of(context).size.height * 0.8,
+            height: MediaQuery.of(context).size.height * 0.7,
             margin: EdgeInsets.only(top: 20),
             child: FutureBuilder<List<Data>>(
               future: widget.futureData,
@@ -202,7 +202,7 @@ class _RequestCardState extends State<RequestCard> {
                     },
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.85,
-                  height: MediaQuery.of(context).size.height * 0.20,
+                  height: MediaQuery.of(context).size.height * 0.21,
                   child: Column(
                     children: [
                       Container(

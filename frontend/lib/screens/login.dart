@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:bloodlink/base_url.dart';
+import 'package:bloodlink/screens/admin_dashboard.dart';
 import 'package:bloodlink/screens/changePassword.dart';
 import 'package:bloodlink/screens/otp.dart';
 import 'package:flutter/material.dart';
@@ -161,6 +162,10 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
                 errorGenerator(context, "There was an error in server",
                     "Please try again in some time");
               }
+              else if(msg=="ADMIN MODE"){
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => adminHomepage()));
+              }
               // else if (msg != "null" && msg != null) {
               else if (msg == "Login Successful") {
                 UserSimplePreferences.setUsername(
@@ -194,20 +199,6 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
                     ),
           )),
     );
-    final newButton = Material(
-      elevation: 5,
-      borderRadius: BorderRadius.circular(6),
-      color: white,
-      child: MaterialButton(
-          padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          minWidth: MediaQuery.of(context).size.width,
-          onPressed: () => print("ADMIN MODE"),
-          child: Text(
-            "Login as Admin instead",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20, color: red),
-          )),
-    );
     return Scaffold(
       backgroundColor: backgroundColor,
       body: Center(
@@ -235,8 +226,6 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
                       passwordField,
                       SizedBox(height: 45),
                       loginButton,
-                      SizedBox(height: 15),
-                      newButton,
                       SizedBox(height: 15),
                       Align(
                           alignment: Alignment.bottomCenter,
@@ -271,11 +260,15 @@ login_func(name, pass, phone) async {
     print("this one");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var parse = jsonDecode(response.body);
-    if (parse["msg"] == null) {
+    if (parse["msg"] == "null") {
       print("it is null");
       // message = "null";
       await prefs.setString('msg', "null");
-    } else {
+    }else if(parse["msg"] == "ADMIN MODE"){
+
+      await prefs.setString('msg', "ADMIN MODE");
+    } 
+    else {
       await prefs.setString('msg', parse["msg"]);
       await prefs.setString('userName', parse["userName"]);
       await prefs.setString('phoneNumber', parse["phoneNumber"]);

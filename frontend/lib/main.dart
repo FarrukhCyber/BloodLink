@@ -1,3 +1,4 @@
+import 'package:bloodlink/screens/settings.dart';
 import 'package:bloodlink/screens/viewActiveRequest.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:bloodlink/screens/registerDonor.dart';
 import 'package:bloodlink/screens/myRequests.dart';
 import 'package:bloodlink/screens/editRequest.dart';
+import 'package:bloodlink/screens/admin_dashboard.dart';
 
 Future main() async {
   // new one
@@ -38,7 +40,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       routes: {
-        '/': (context) => login(),
+        '/': (context) => Settings(),
         // '/signup': (context) => const signup_page()
       },
       // home: login(),

@@ -10,7 +10,10 @@ const newSchema = new Schema({
     gender:String, 
     age: Date,
     donor:Boolean,
-    deviceID: String
+    deviceID: String,
+    notifyAllowed: Boolean,
+    emailAllowed: Boolean,
+    unavailable:Boolean
 })
 
 module.exports = mongoose.model('user', newSchema)

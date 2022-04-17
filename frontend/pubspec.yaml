@@ -46,6 +46,7 @@ dependencies:
   csc_picker: ^0.2.6
   flutter_phone_direct_caller: ^2.1.0
   url_launcher: ^6.0.12
+  onesignal_flutter: ^3.3.0
 
 dev_dependencies:
   flutter_test:
