@@ -49,7 +49,16 @@ class _myDetailsState extends State<myDetails> {
           children: [
             AppBarFb2(),
             TopBarFb3(title: "BloodLink", upperTitle: "\nRequest Information"),
-            Heading(title: "\n  Request Information", name: widget.attendantName, number: widget.attendantNum, bloodType: widget.bloodGroup, date: widget.date, time: widget.time, location: widget.hospital, city: widget.city, quantity: widget.quantity),
+            Heading(
+                title: "\n  Request Information",
+                name: widget.attendantName,
+                number: widget.attendantNum,
+                bloodType: widget.bloodGroup,
+                date: widget.date,
+                time: widget.time,
+                location: widget.hospital,
+                city: widget.city,
+                quantity: widget.quantity),
             Divider(
               height: 5,
               color: Color(0xffc10110),
@@ -146,16 +155,17 @@ class Heading extends StatefulWidget {
   var city;
   var quantity;
 
-  Heading({ Key? key,
-  required this.title,
-  required this.name,
-  required this.number,
-  required this.bloodType,
-  required this.date,
-  required this.time,
-  required this.location,
-  required this.city,
-  required this.quantity})
+  Heading(
+      {Key? key,
+      required this.title,
+      required this.name,
+      required this.number,
+      required this.bloodType,
+      required this.date,
+      required this.time,
+      required this.location,
+      required this.city,
+      required this.quantity})
       : super(key: key);
 
   @override
@@ -212,7 +222,15 @@ class _HeadingState extends State<Heading> {
                   onPressed: () => {
                     print(widget.time),
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => editRequest(name: widget.name, number: widget.number, bloodType: widget.bloodType, date: widget.date, time: widget.time, location: widget.location, city: widget.city, quantity: widget.quantity)))
+                        builder: (context) => editRequest(
+                            name: widget.name,
+                            number: widget.number,
+                            bloodType: widget.bloodType,
+                            date: widget.date,
+                            time: widget.time,
+                            location: widget.location,
+                            city: widget.city,
+                            quantity: widget.quantity)))
                   },
                   child: Text(
                     "Edit",
