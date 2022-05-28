@@ -58,5 +58,32 @@ router.get('/sheet', (req, res) => {
     }, (err) => console.log(err))
 })
 
+router.post('/add', (req, res) => {
+    console.log("IN add -- AddDonor")
+    const { userName, roll, status, lastContact, blood, gender, phone, city } = req.body
+    console.log(userName, "|", roll, "|", phone, "|", gender, "|", city, "|", status, "|", lastContact, "|", blood)
+    if(!userName || !roll || !phone || !blood || !gender || !status || !city || !lastContact)
+        {
+            console.log("null values")
+            res.json({addDonor:"null values"})
+    }
+    else{
+        var tempUser = new Cat({
+            Name: userName,
+            Gender: gender,
+            RollNo:	roll, 
+            Blood: blood,
+            Status: status,
+            Number: phone,
+            LastContact: lastContact,
+            City: city })
+            console.log(tempUser)
+            tempUser.save((err,doc)=>{
+            if(!err) res.json({addDonor: "Success",
+            })
+            else console.log("there was erorr\n\n", err)
+            })
+                    
+        }})
 
 module.exports = router;

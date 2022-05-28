@@ -1,9 +1,11 @@
+import 'package:bloodlink/screens/addDonor.dart';
 import 'package:bloodlink/screens/pending_requests.dart';
 import 'package:bloodlink/screens/viewActiveRequest.dart';
 import 'package:bloodlink/screens/view_request.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'createBloodRequest.dart';
+import 'addDonor.dart';
 
 class adminHomepage extends StatefulWidget {
   adminHomepage({Key? key}) : super(key: key);
@@ -54,6 +56,11 @@ class _adminHomepageState extends State<adminHomepage>
                 color: Color.fromARGB(255, 169, 100, 36)),
             CardWithIconPendingRequest(
               text: "Resolved Requests",
+              symbol: Icons.pending_actions,
+              color: Color.fromARGB(255, 193, 0, 0),
+            ),
+            CardWithIconAddDonor(
+              text: "Add Donor to Catalouge",
               symbol: Icons.pending_actions,
               color: Color.fromARGB(255, 193, 0, 0),
             )
@@ -218,6 +225,73 @@ class _CardWithIconInitiateRequestState
       ),
     );
     // InfoCard(title: "Use my Current Location", onMoreTap: null)
+  }
+}
+
+class CardWithIconAddDonor extends StatefulWidget {
+  @override
+  final String text;
+  final IconData symbol;
+  final Color color;
+  CardWithIconAddDonor(
+      {required this.text, required this.symbol, required this.color, Key? key})
+      : super(key: key);
+
+  @override
+  State<CardWithIconAddDonor> createState() => _CardWithIconAddDonorState();
+}
+
+class _CardWithIconAddDonorState extends State<CardWithIconAddDonor> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.1),
+      child: Card(
+        elevation: 10,
+        child: InkWell(
+          splashColor: Colors.blue.withAlpha(30),
+          onTap: () => {
+            print("I was tapped"),
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => addDonor()))
+          },
+          // print('Card tapped.');
+          child: SizedBox(
+              width: MediaQuery.of(context).size.width *
+                  0.85, // determines the size of the card
+              height: MediaQuery.of(context).size.height * 0.12,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    alignment: AlignmentDirectional(-1, 0),
+                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Text(
+                      widget.text,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: widget.color,
+                          fontWeight: FontWeight.bold,
+                          fontSize: MediaQuery.of(context).size.width * 0.05),
+                    ),
+                  ),
+                  Container(
+                    alignment: AlignmentDirectional(1, 0),
+                    padding: EdgeInsets.fromLTRB(
+                        0, 0, MediaQuery.of(context).size.width * 0.05, 0),
+                    child: Icon(
+                      widget.symbol,
+                      color: widget.color,
+                      size: MediaQuery.of(context).size.width * 0.1,
+                    ),
+                  ),
+                  //
+                ],
+              )),
+        ),
+      ),
+    );
   }
 }
 
