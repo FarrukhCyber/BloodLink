@@ -162,7 +162,9 @@ module.exports = router
     "user_contact_num": "03364984545",
     "admin_id": 1,
     "moderator_id": 2,
-    "deadline": "2022-04-08",
-    "hospital" : "Jinnah"
+    "date": "2022-05-20T19:00:00.000+00:00",
+    "time": "2022-05-20T19:05:00.000+00:00",
+    "hospital" : "Jinnah",
+    "city": Lahore
 }
 */
