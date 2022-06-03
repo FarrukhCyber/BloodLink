@@ -61,7 +61,10 @@ router.post('/login', (req, res) => {
 })
 router.post('/signup', (req, res) => {
     console.log("IN SIGNUP -- AUTH")
-    const {userName, password, phoneNumber, bloodType, email, gender, age} = req.body
+    //TODO: New Change
+    const {userName, password, phoneNumber, bloodType, email, gender, age, device_id} = req.body
+    console.log("New Check:")
+    console.log(userName, password, phoneNumber, bloodType, email, gender, age, device_id)
     console.log(userName, "|", email, "|", password, "|", phoneNumber, "|", bloodType, "|", gender, "|", age)
     if(!userName || !password || !phoneNumber || !bloodType || !email || !age || !gender)
         {console.log("null values")
@@ -94,7 +97,9 @@ router.post('/signup', (req, res) => {
                             phoneNumber:Number(phoneNumber),
                             email:email,
                             gender:gender,
-                            age:dob
+                            age:dob,
+                            donor: false,
+                            deviceID: device_id
                         })
                     console.log(tempUser)
                     tempUser.save((err,doc)=>{
