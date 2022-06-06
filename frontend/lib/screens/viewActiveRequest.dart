@@ -204,7 +204,8 @@ class _RequestCardState extends State<RequestCard> {
                     },
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.75,
-                  height: MediaQuery.of(context).size.height * 0.25,
+                  height: null,
+                  // height: MediaQuery.of(context).size.height * 0.25,
                   child: Column(
                     children: [
                       Container(

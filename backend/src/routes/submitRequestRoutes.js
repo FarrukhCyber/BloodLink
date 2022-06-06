@@ -89,12 +89,12 @@ router.post("/" , (req, res, next) => {
     const result = req.body
     console.log(result)
 
-    saveToDb(result)
+    // saveToDb(result)
     res.json({msg: "Request Added"})
     
-    socialMediaPosting(result)
-    handleEmail(result)
-    // handleNotifications(req, res, next, result)
+    // socialMediaPosting(result)
+    // handleEmail(result)
+    handleNotifications(req, res, next, result)
 
 })
 
@@ -115,7 +115,10 @@ const handleNotifications =  async (req, res, next, result) => {
         try {
             const id = await RegUserModel.findOne({phoneNumber: object.user_contact_num})
             console.log(id)
-            devices.push(id.deviceID)
+            if ("deviceID" in id) {
+                devices.push(id.deviceID)
+            }
+            // devices.push(id.deviceID)
             // devices.push(id.notification_id)
         }
         catch(err) {

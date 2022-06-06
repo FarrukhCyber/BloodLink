@@ -8,6 +8,9 @@ import 'package:bloodlink/screens/edit_profile.dart';
 import 'package:bloodlink/screens/login.dart';
 import 'package:bloodlink/screens/user_profile.dart';
 import 'package:bloodlink/utils/user_info.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+String attendNum = "";
 
 class myDetails extends StatefulWidget {
   String attendantName;
@@ -85,7 +88,7 @@ class _myDetailsState extends State<myDetails> {
             DisplayInfo(label: "Status", data: widget.status),
             DisplayInfo(
                 label: "Hospital", data: "${widget.hospital} , ${widget.city}"),
-            const PairButton(text: "Hello")
+            PairButton(text: "Hello", attendNumber: widget.attendantNum)
           ],
         ));
   }
@@ -293,8 +296,9 @@ class TopBarFb3 extends StatelessWidget {
 
 class PairButton extends StatelessWidget {
   final String text;
+  final String attendNumber;
   // final Function() onPressed;
-  const PairButton({required this.text, Key? key}) : super(key: key);
+  const PairButton({required this.text, required this.attendNumber, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -338,7 +342,9 @@ class PairButton extends StatelessWidget {
                               borderRadius: BorderRadius.circular(borderRadius),
                             ),
                           )),
-                      onPressed: () => {},
+                      onPressed: () => {
+                        print("Notify button is pressed")
+                      },
                       // onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                       //     builder: (context) => homepage(
                       //           key: key,
@@ -383,7 +389,12 @@ class PairButton extends StatelessWidget {
                       )),
                   // onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                   //     builder: (context) => CreateBloodRequestPage2(key: key))),
-                  onPressed: () => {print("here")},
+                  onPressed: () => {
+                    print("contact button:"),
+                    print(attendNumber),
+                    _makePhoneCall(attendNumber)
+
+                  },
                   // onPressed: () => CreateBloodRequestPage2(key: key),
                   child: Row(
                     children: [
@@ -406,5 +417,14 @@ class PairButton extends StatelessWidget {
             ],
           ),
         ));
+  }
+}
+
+Future<void> _makePhoneCall(String url) async {
+  url = 'tel:' + url;
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
   }
 }

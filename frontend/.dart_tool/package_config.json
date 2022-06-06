@@ -446,6 +446,54 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "url_launcher",
+      "rootUri": "file:///D:/myApps/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-6.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "url_launcher_android",
+      "rootUri": "file:///D:/myApps/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher_android-6.0.17",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "url_launcher_ios",
+      "rootUri": "file:///D:/myApps/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher_ios-6.0.17",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "url_launcher_linux",
+      "rootUri": "file:///D:/myApps/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher_linux-3.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "url_launcher_macos",
+      "rootUri": "file:///D:/myApps/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher_macos-3.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "url_launcher_platform_interface",
+      "rootUri": "file:///D:/myApps/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher_platform_interface-2.0.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "url_launcher_web",
+      "rootUri": "file:///D:/myApps/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher_web-2.0.11",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "url_launcher_windows",
+      "rootUri": "file:///D:/myApps/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher_windows-3.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "vector_math",
       "rootUri": "file:///D:/myApps/flutter/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.1",
       "packageUri": "lib/",
@@ -470,7 +518,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-06-03T10:15:34.147742Z",
+  "generated": "2022-06-06T19:48:12.134883Z",
   "generator": "pub",
   "generatorVersion": "2.16.1"
 }
