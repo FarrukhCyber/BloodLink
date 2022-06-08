@@ -67,15 +67,17 @@ class CreateBloodRequest extends StatelessWidget {
             const DropDownMenu(),
             getDate(title: "Please select a date"),
             getTime(),
+            //TODO: For not implementing maps, uncomment this section-------------
             // continueButton()
-            // InputFieldWithLabel(
-            //     inputController: new TextEditingController(),
-            //     hintText: "In which City blood is required",
-            //     labelText: "City"),
-            // InputFieldWithLabel(
-            //     inputController: new TextEditingController(),
-            //     hintText: "Where is the blood required",
-            //     labelText: "Location"),
+            InputFieldWithLabel(
+                inputController: new TextEditingController(),
+                hintText: "In which City blood is required",
+                labelText: "City"),
+            InputFieldWithLabel(
+                inputController: new TextEditingController(),
+                hintText: "Where is the blood required",
+                labelText: "Location"),
+            //-------------------------------------------------------------------
             InputFieldWithLabel(
                 inputController: new TextEditingController(),
                 hintText: "How many bottles of blood is required?",
@@ -546,45 +548,47 @@ class PairButton extends StatelessWidget {
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(borderRadius)),
                       )),
-                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => CreateBloodRequestPage2(key: key))),
+                  //TODO: For turning On the maps uncomment the below section---------------------------    
+                  // onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  //     builder: (context) => CreateBloodRequestPage2(key: key))),
+                  //------------------------------------------------------------------------------------
                   // onPressed: () => {print("here")},
-                  // onPressed: () async {
-                  //   print(name);
-                  //   print(number);
-                  //   print(bloodType);
-                  //   print(date);
-                  //   print(time);
-                  //   print("Continue pls");
-                  //   if (name == "" ||
-                  //       number == "" ||
-                  //       bloodType == "" ||
-                  //       date == "" ||
-                  //       time == "" ||
-                  //       city == "" ||
-                  //       location == "" ||
-                  //       quantity == "") {
-                  //     errorGenerator(
-                  //         context, "Empty fields", "Please fill all fileds");
-                  //   } else {
-                  //     await createRequest_func(name, number, bloodType, time,
-                  //         date, location, city, quantity);
-                  //     SharedPreferences prefs =
-                  //         await SharedPreferences.getInstance();
-                  //     String? msg = prefs.getString("createRequest");
-                  //     print("message is:");
-                  //     print(msg);
-                  //     Navigator.of(context).push(MaterialPageRoute(
-                  //         builder: (context) => Confirmation()));
-                  //     // if (msg == "Request Added") {
-                  //     //   Navigator.of(context).push(MaterialPageRoute(
-                  //     //       builder: (context) => Confirmation()));
-                  //     // }
-                  //   }
-                  // },
+                  onPressed: () async {
+                    print(name);
+                    print(number);
+                    print(bloodType);
+                    print(date);
+                    print(time);
+                    print("Continue pls");
+                    if (name == "" ||
+                        number == "" ||
+                        bloodType == "" ||
+                        date == "" ||
+                        time == "" ||
+                        city == "" ||
+                        location == "" ||
+                        quantity == "") {
+                      errorGenerator(
+                          context, "Empty fields", "Please fill all fileds");
+                    } else {
+                      await createRequest_func(name, number, bloodType, time,
+                          date, location, city, quantity);
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      String? msg = prefs.getString("createRequest");
+                      print("message is:");
+                      print(msg);
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => Confirmation()));
+                      // if (msg == "Request Added") {
+                      //   Navigator.of(context).push(MaterialPageRoute(
+                      //       builder: (context) => Confirmation()));
+                      // }
+                    }
+                  },
                   // onPressed: () => CreateBloodRequestPage2(key: key),
                   child: Text(
-                    "Continue",
+                    "Submit",
                     style: const TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),

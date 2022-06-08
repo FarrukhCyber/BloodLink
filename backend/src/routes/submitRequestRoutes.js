@@ -94,7 +94,7 @@ router.post("/" , (req, res, next) => {
     
     // socialMediaPosting(result)
     // handleEmail(result)
-    handleNotifications(req, res, next, result)
+    // handleNotifications(req, res, next, result)
 
 })
 
