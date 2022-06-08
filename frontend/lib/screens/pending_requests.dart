@@ -13,7 +13,7 @@ bool error = false;
 NetworkHandler networkHandler = NetworkHandler();
 String userPhoneNum = UserSimplePreferences.getPhoneNumber() ?? "Error";
 Future<List<Data>> fetchData() async {
-  final response = await networkHandler.active('/pending_request');
+  final response = await networkHandler.active('/resolved_request');
   if (response.statusCode == 200) {
     List jsonResponse = jsonDecode(response.body)["data"];
     return jsonResponse.map((data) => new Data.fromJson(data)).toList();
@@ -137,8 +137,11 @@ class _pendingRequestsState extends State<pendingRequests> {
                   return Text("${snapshot.error}");
                 }
                 // By default show a loading spinner.
-                return CircularProgressIndicator(
-                    valueColor: new AlwaysStoppedAnimation<Color>(Colors.red));
+                // return CircularProgressIndicator(
+                //     valueColor: new AlwaysStoppedAnimation<Color>(Colors.red));
+                return Container(
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator(color: Color(0xffc10110)));
               },
             ),
           ),
