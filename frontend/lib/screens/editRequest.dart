@@ -1,3 +1,5 @@
+import 'package:bloodlink/screens/myRequests.dart';
+import 'package:bloodlink/utils/user_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -79,7 +81,7 @@ class _editRequestState extends State<editRequest> {
             TopBarFb3(
                 title: "Initiate a Request",
                 upperTitle:
-                    "Please provide the required \n information to initiate a \n blood request"),
+                    "Please provide the required \n information to edit the \n blood request"),
             InputFieldWithLabel(
                 inputController: new TextEditingController(),
                 hintText: widget.name,
@@ -560,7 +562,7 @@ createRequest_func(
         'hospital': location,
         'city': city,
         'quantity': quantity,
-        // 'user_contact_num': UserSimplePreferences.getPhoneNumber(),
+        'user_contact_num': UserSimplePreferences.getPhoneNumber(),
       }),
     );
     var parse = jsonDecode(response.body);
@@ -666,7 +668,8 @@ class _PairButtonState extends State<PairButton> {
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(borderRadius)),
                       )),
-                  onPressed: null,
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                     builder: (context) => myRequests(key: widget.key))),
                   child: Text(
                     "Cancel",
                     style: const TextStyle(color: primaryColor, fontSize: 16),
@@ -758,7 +761,7 @@ class _PairButtonState extends State<PairButton> {
                   },
                   // onPressed: () => CreateBloodRequestPage2(key: key),
                   child: Text(
-                    "Contiue",
+                    "Update",
                     style: const TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
