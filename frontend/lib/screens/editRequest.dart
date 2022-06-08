@@ -1,3 +1,4 @@
+import 'package:bloodlink/base_url.dart';
 import 'package:bloodlink/screens/myRequests.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:flutter/cupertino.dart';
@@ -543,9 +544,8 @@ createRequest_func(
     name, number, bloodType, time, date, location, city, quantity) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  var url =
-      "http://10.0.2.2:8080/submit_request"; // check what localhost is for you
-  print("In createRequest");
+var url = base_url + "/edit_request";  
+print("In createRequest");
   try {
     final http.Response response = await http.post(
       Uri.parse(url),
@@ -555,13 +555,13 @@ createRequest_func(
       body: jsonEncode(<String, dynamic>{
         //TODO: Need to add requestor contact number
         'attendant_name': name,
+        'attendant_num': number,
+        'blood_group': bloodType,
+        'quantity': quantity,
         'time': time,
         'date': date,
-        'blood_group': bloodType,
-        'attendant_num': number,
         'hospital': location,
         'city': city,
-        'quantity': quantity,
         'user_contact_num': UserSimplePreferences.getPhoneNumber(),
       }),
     );
@@ -736,8 +736,8 @@ class _PairButtonState extends State<PairButton> {
                         print("bloodtype");
                       }
 
-                      //await createRequest_func(
-                      //    name, number, bloodType, time, date, location, city, quantity);
+                      await createRequest_func(
+                         widget.name, widget.number, widget.bloodType, widget.time, widget.date, widget.location, widget.city, widget.quantity);
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       String? msg = prefs.getString("createRequest");
@@ -753,10 +753,10 @@ class _PairButtonState extends State<PairButton> {
                           fontSize: 16.0);
                       Navigator.pop(context, 'Ok');
 
-                      if (msg == "Request Added") {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => dummyPage()));
-                      }
+                      // if (msg == "Request Added") {
+                      //   Navigator.of(context).push(MaterialPageRoute(
+                      //       builder: (context) => dummyPage()));
+                      // }
                     }
                   },
                   // onPressed: () => CreateBloodRequestPage2(key: key),
