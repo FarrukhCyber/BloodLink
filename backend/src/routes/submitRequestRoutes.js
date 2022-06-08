@@ -40,7 +40,7 @@ function saveToDb(result) {
         attendant_name: result.attendant_name,
         attendant_num: result.attendant_num ,
         blood_group: result.blood_group ,
-        status: false,
+        status: true,
         quantity: ('quantity' in result ? result.quantity : "500ml"),
         user_contact_num: ('user_contact_num' in result ? result.user_contact_num : "923364984545"),
         admin_id: ('admin_id' in result ? result.admin_id : null),
@@ -89,7 +89,7 @@ router.post("/" , (req, res, next) => {
     const result = req.body
     console.log(result)
 
-    // saveToDb(result)
+    saveToDb(result)
     res.json({msg: "Request Added"})
     
     // socialMediaPosting(result)

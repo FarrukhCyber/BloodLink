@@ -6,13 +6,20 @@ const Request = require('../models/bloodRequest')
 
 router.route("/").get((req, res) => {
   console.log("hi")
-    Request.find({ user_contact_num : req.headers.user_contact_num}, (err, result) => {
-      if (err) return res.json({ err: err });
-      if (result == null) return res.json({ data: [] });
-      else {
-        console.log(result)
-        return res.json({ data: result });}
-    });
+  Request.find({ user_contact_num : req.headers.user_contact_num}).sort({'_id': -1}).exec(function(err,result){
+    if (err) return res.json({ err: err });
+    if (result == null) return res.json({ data: [] });
+    else {
+      console.log(result)
+      return res.json({ data: result });}
   });
+  // Request.find({ user_contact_num : req.headers.user_contact_num}, (err, result) => {
+  //   if (err) return res.json({ err: err });
+  //   if (result == null) return res.json({ data: [] });
+  //   else {
+  //     console.log(result)
+  //     return res.json({ data: result });}
+  // });
+});
 
-  module.exports = router
+module.exports = router

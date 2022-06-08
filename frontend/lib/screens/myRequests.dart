@@ -137,8 +137,11 @@ class _MyAppState extends State<myRequests> {
                   return Text("${snapshot.error}");
                 }
                 // By default show a loading spinner.
-                return CircularProgressIndicator(
-                    valueColor: new AlwaysStoppedAnimation<Color>(Colors.red));
+                // return CircularProgressIndicator(
+                //     valueColor: new AlwaysStoppedAnimation<Color>(Colors.red));
+                return Container(
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator(color: Color(0xffc10110)));
               },
             ),
           ),
