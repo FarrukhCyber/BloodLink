@@ -7,6 +7,7 @@ import 'package:bloodlink/screens/user_profile.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:bloodlink/utils/user_info.dart';
+import 'package:bloodlink/screens/aboutPage.dart';
 
 class navBar extends StatelessWidget {
   final String userName;
@@ -51,6 +52,18 @@ class navBar extends StatelessWidget {
                   builder: (context) => userProfile(
                         phoneNum: phoneNo,
                       )))
+            },
+          ),
+          ListTile(
+            // logout
+            leading: Icon(Icons.info_outline_rounded),
+            title: Text("About"),
+            onTap: () async => {
+              // SharedPreferences prefs = await SharedPreferences.getInstance(),
+              // await prefs.clear(),
+              UserSimplePreferences.clear(),
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => aboutPage()))
             },
           ),
           ListTile(
