@@ -6,6 +6,7 @@ const router = express.Router();
 const Cat = require('../models/donorCatalouge')
 const csvtojson =require("csvtojson");
 const fs = require('fs')
+const jsontocsv = require('json2csv')
 
 router.get('/test', (req,res) => {
     var tempUser = new Cat({
@@ -85,5 +86,25 @@ router.post('/add', (req, res) => {
             })
                     
         }})
+
+
+router.get('/export', (req, res) => {
+    console.log("Hello there")
+    Cat.find((err, data) => { // returns all the documents 
+        if(err) res.json({err: "Failed"})
+        else {
+            console.log("type: ", typeof(data[0]))
+            try{
+                const csvData = jsontocsv.parse(data, {fields : ["Name", "Gender", "RollNo", "Blood",  "Status", "Number", "LastContact", "City"]})
+                console.log(typeof(csvData))
+                // res.json({len : data.length, first : data[0], csv: csvData})
+                res.json({csv: csvData})
+            }
+            catch(err){
+                console.log(err)
+            }
+        }
+    })
+})
 
 module.exports = router;
