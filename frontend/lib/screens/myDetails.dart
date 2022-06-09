@@ -1,4 +1,5 @@
 import 'package:bloodlink/screens/editRequest.dart';
+import 'package:bloodlink/screens/notifyConfirmation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -24,6 +25,7 @@ class myDetails extends StatefulWidget {
   String hospital;
   String id;
   String city;
+  bool ownership;
   myDetails(
       {Key? key,
       required this.attendantName,
@@ -36,7 +38,8 @@ class myDetails extends StatefulWidget {
       required this.hospital,
       required this.quantity,
       required this.id,
-      required this.city})
+      required this.city,
+      required this.ownership})
       : super(key: key);
 
   @override
@@ -53,15 +56,17 @@ class _myDetailsState extends State<myDetails> {
             AppBarFb2(),
             TopBarFb3(title: "BloodLink", upperTitle: "\nRequest Information"),
             Heading(
-                title: "\n  Request Information",
-                name: widget.attendantName,
-                number: widget.attendantNum,
-                bloodType: widget.bloodGroup,
-                date: widget.date,
-                time: widget.time,
-                location: widget.hospital,
-                city: widget.city,
-                quantity: widget.quantity),
+              title: "\n  Request Information",
+              name: widget.attendantName,
+              number: widget.attendantNum,
+              bloodType: widget.bloodGroup,
+              date: widget.date,
+              time: widget.time,
+              location: widget.hospital,
+              city: widget.city,
+              quantity: widget.quantity,
+              owner: widget.ownership,
+            ),
             Divider(
               height: 5,
               color: Color(0xffc10110),
@@ -168,6 +173,7 @@ class Heading extends StatefulWidget {
   var location;
   var city;
   var quantity;
+  var owner;
 
   Heading(
       {Key? key,
@@ -179,7 +185,8 @@ class Heading extends StatefulWidget {
       required this.time,
       required this.location,
       required this.city,
-      required this.quantity})
+      required this.quantity,
+      required this.owner})
       : super(key: key);
 
   @override
@@ -201,60 +208,86 @@ class _HeadingState extends State<Heading> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.08,
-      decoration: BoxDecoration(color: accentColor),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            widget.title, // this is personal information
-            style: const TextStyle(
-                color: Color(0xffc10110),
-                fontSize: 15,
-                fontWeight: FontWeight.bold),
-            // textAlign: TextAlign.left,
-          ),
-          Align(
-              alignment: Alignment.centerRight,
-              child: Container(
-                margin: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width * 0.40),
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      elevation: MaterialStateProperty.all(0),
-                      alignment: Alignment.centerRight,
-                      padding: MaterialStateProperty.all(const EdgeInsets.only(
-                          right: 20, left: 20, top: 10, bottom: 10)),
-                      backgroundColor: MaterialStateProperty.all(primaryColor),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(borderRadius)),
-                      )),
-                  onPressed: () => {
-                    print(widget.time),
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => editRequest(
-                            name: widget.name,
-                            number: widget.number,
-                            bloodType: widget.bloodType,
-                            date: widget.date,
-                            time: widget.time,
-                            location: widget.location,
-                            city: widget.city,
-                            quantity: widget.quantity)))
-                  },
-                  child: Text(
-                    "Edit",
-                    style: TextStyle(color: Color(0xffffffff), fontSize: 16),
+    if (widget.owner == true) {
+      print("edit displayed");
+      return new Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height * 0.08,
+        decoration: BoxDecoration(color: accentColor),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.title, // this is personal information
+              style: const TextStyle(
+                  color: Color(0xffc10110),
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold),
+              // textAlign: TextAlign.left,
+            ),
+            Align(
+                alignment: Alignment.centerRight,
+                child: Container(
+                  margin: EdgeInsets.only(
+                      left: MediaQuery.of(context).size.width * 0.40),
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                        elevation: MaterialStateProperty.all(0),
+                        alignment: Alignment.centerRight,
+                        padding: MaterialStateProperty.all(
+                            const EdgeInsets.only(
+                                right: 20, left: 20, top: 10, bottom: 10)),
+                        backgroundColor:
+                            MaterialStateProperty.all(primaryColor),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(borderRadius)),
+                        )),
+                    onPressed: () => {
+                      print(widget.time),
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => editRequest(
+                              name: widget.name,
+                              number: widget.number,
+                              bloodType: widget.bloodType,
+                              date: widget.date,
+                              time: widget.time,
+                              location: widget.location,
+                              city: widget.city,
+                              quantity: widget.quantity)))
+                    },
+                    child: Text(
+                      "Edit",
+                      style: TextStyle(color: Color(0xffffffff), fontSize: 16),
+                    ),
                   ),
+                )),
+          ],
+        ),
+      );
+    } else {
+      print("edit not displayed");
+      return new Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height * 0.08,
+          decoration: BoxDecoration(color: accentColor),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.title, // this is personal information
+                  style: const TextStyle(
+                      color: Color(0xffc10110),
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold),
+                  // textAlign: TextAlign.left,
                 ),
-              )),
-        ],
-      ),
-    );
+              ]));
+      ;
+    }
   }
 }
 
@@ -298,7 +331,8 @@ class PairButton extends StatelessWidget {
   final String text;
   final String attendNumber;
   // final Function() onPressed;
-  const PairButton({required this.text, required this.attendNumber, Key? key}) : super(key: key);
+  const PairButton({required this.text, required this.attendNumber, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -342,14 +376,10 @@ class PairButton extends StatelessWidget {
                               borderRadius: BorderRadius.circular(borderRadius),
                             ),
                           )),
-                      onPressed: () => {
-                        print("Notify button is pressed")
-                      },
-                      // onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                      //     builder: (context) => homepage(
-                      //           key: key,
-                      //           userName: "user",
-                      //         ))),
+                      // onPressed: () => {print("Notify button is pressed")},
+                      onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => NotifyConfirmation())),
                       child: Row(
                         children: [
                           Text(
@@ -393,7 +423,6 @@ class PairButton extends StatelessWidget {
                     print("contact button:"),
                     print(attendNumber),
                     _makePhoneCall(attendNumber)
-
                   },
                   // onPressed: () => CreateBloodRequestPage2(key: key),
                   child: Row(

@@ -31,24 +31,26 @@ class navBar extends StatelessWidget {
               )),
               backgroundColor: Colors.white,
             ),
-            decoration: BoxDecoration(color: Colors.red),
+            decoration: BoxDecoration(color: Color(0xffc10110)),
           ),
           ListTile(
               // logout
               leading: Icon(Icons.settings),
               title: Text("Settings"),
               onTap: () => {
-                Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => Settings()))
-              }),
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => Settings()))
+                  }),
           ListTile(
             // logout
             leading: Icon(Icons.person),
             title: Text("User Profile"),
             onTap: () => {
               print("User profile clicked"),
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => userProfile(phoneNum: phoneNo,)))
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => userProfile(
+                        phoneNum: phoneNo,
+                      )))
             },
           ),
           ListTile(

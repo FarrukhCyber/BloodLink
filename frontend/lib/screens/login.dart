@@ -16,7 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:bloodlink/screens/signup.dart';
 
-const red = Color(0xffde2c2c);
+const red = Color(0xffc10110);
 var backgroundColor = Color.fromARGB(255, 229, 229, 229);
 var opacity = 0.3;
 var darkred = Color(0xffc10110);

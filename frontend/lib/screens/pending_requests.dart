@@ -126,7 +126,7 @@ class _pendingRequestsState extends State<pendingRequests> {
                           bloodgroup: data[index].bloodgroup,
                           status: data[index].status,
                           attendantNum: data[index].attendantNum,
-                          city:data[index].city,
+                          city: data[index].city,
                           quantity: data[index].quantity,
                           id: data[index].id,
                           visible:
@@ -455,7 +455,8 @@ class _RequestCardState extends State<RequestCard> {
                                           quantity: widget.quantity,
                                           hospital: widget.location,
                                           id: widget.id,
-                                          city:widget.city,
+                                          city: widget.city,
+                                          ownership: true,
                                         )));
                               },
                               style: ButtonStyle(

@@ -548,7 +548,7 @@ class PairButton extends StatelessWidget {
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(borderRadius)),
                       )),
-                  //TODO: For turning On the maps uncomment the below section---------------------------    
+                  //TODO: For turning On the maps uncomment the below section---------------------------
                   // onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                   //     builder: (context) => CreateBloodRequestPage2(key: key))),
                   //------------------------------------------------------------------------------------
@@ -579,7 +579,7 @@ class PairButton extends StatelessWidget {
                       print("message is:");
                       print(msg);
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Confirmation()));
+                          builder: (context) => RequestConfirmation()));
                       // if (msg == "Request Added") {
                       //   Navigator.of(context).push(MaterialPageRoute(
                       //       builder: (context) => Confirmation()));

@@ -8,8 +8,8 @@ import 'dart:io';
 import 'package:material_design_icons_flutter/icon_map.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class Confirmation extends StatelessWidget {
-  const Confirmation({Key? key}) : super(key: key);
+class RequestConfirmation extends StatelessWidget {
+  const RequestConfirmation({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,7 +86,7 @@ class PopUp extends StatelessWidget with PreferredSizeWidget {
             0, MediaQuery.of(context).size.height * 0.2, 0, 0),
         child: Column(
           children: [
-            Icon(Icons.add_task,
+            Icon(Icons.check_circle,
                 color: Colors.red,
                 size: MediaQuery.of(context).size.width * 0.5),
             Text(
