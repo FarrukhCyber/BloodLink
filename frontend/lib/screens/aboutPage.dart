@@ -11,17 +11,19 @@ class aboutPage extends StatefulWidget {
   State<aboutPage> createState() => _aboutPageState();
 }
 
-class _aboutPageState extends State<aboutPage> {
-  var aboutContent = "Loading...";
-  var lcssContent = "Loading...";
-  var lumsContent = "Loading...";
-  var bloodlinkContent = "Loading...";
+class _aboutPageState extends State<aboutPage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  String aboutContent = "Loading...";
+  String lcssContent = "Loading...";
+  String lumsContent = "Loading...";
+  String bloodlinkContent = "Loading...";
 
   getData() async {
-    var temp1 = await rootBundle.loadString("assets/about.txt");
-    var temp2 = await rootBundle.loadString("assets/lcss.txt");
-    var temp3 = await rootBundle.loadString("assets/lums.txt");
-    var temp4 = await rootBundle.loadString("assets/bloodlink.txt");
+    String temp1 = await rootBundle.loadString("assets/about.txt");
+    String temp2 = await rootBundle.loadString("assets/lcss.txt");
+    String temp3 = await rootBundle.loadString("assets/lums.txt");
+    String temp4 = await rootBundle.loadString("assets/bloodlink.txt");
 
     setState(() {
       aboutContent = temp1;
@@ -33,9 +35,16 @@ class _aboutPageState extends State<aboutPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
     getData();
+    _controller = AnimationController(vsync: this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -50,47 +59,53 @@ class _aboutPageState extends State<aboutPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: Container(
-          width: width,
-          child: Column(
-            children: [
-              AppBarFb2(),
-              Container(
-                margin: EdgeInsets.only(left: mar, right: mar),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.02,
-                    ),
-                    Text(
-                      "About",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          fontSize: aboutSize, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.01,
-                    ),
-                    Text(
-                      aboutContent,
-                      style: TextStyle(fontSize: paraSize),
-                    ),
-                    infoFunc("Bloodlink", "assets/bloodlink.png",
-                        bloodlinkContent, headSize, paraSize, imgSize, dist),
-                    infoFunc("LCSS", "assets/lcss_logo.png", lcssContent,
-                        headSize, paraSize, imgSize, dist),
-                    infoFunc("LUMS", "assets/lums_logo_2.png", lumsContent,
-                        headSize, paraSize, imgSize, dist),
-                  ],
-                ),
-              )
+        child: SingleChildScrollView(
+          child: Container(
+            width: width,
+            child: Column(
+              children: [
+                AppBarFb2(),
+                Container(
+                  margin: EdgeInsets.only(left: mar, right: mar),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.02,
+                      ),
+                      Text(
+                        "About",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            fontSize: aboutSize, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.01,
+                      ),
+                      Text(
+                        aboutContent,
+                        style: TextStyle(fontSize: paraSize),
+                      ),
+                      Divider(
+                        thickness: 2,
+                        color: Color(0xFFF44336),
+                      ),
+                      infoFunc("Bloodlink", "assets/bloodlink.png",
+                          bloodlinkContent, headSize, paraSize, imgSize, dist),
+                      infoFunc("LCSS", "assets/lcss_logo.png", lcssContent,
+                          headSize, paraSize, imgSize, dist),
+                      infoFunc("LUMS", "assets/lums_logo_2.png", lumsContent,
+                          headSize, paraSize, imgSize, dist),
+                    ],
+                  ),
+                )
 
-              // TopBarFb3(
-              //   title: "BloodLink",
-              // ),
-            ],
+                // TopBarFb3(
+                //   title: "BloodLink",
+                // ),
+              ],
+            ),
           ),
         ),
       ),
@@ -195,23 +210,32 @@ infoFunc(heading, logo, content, headSize, paraSize, imgSize, dist) {
             style: headingDecoration(headSize),
             textAlign: TextAlign.start,
           ),
+          SizedBox(
+            height: dist * .1,
+          ),
           Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                child: Text(
-                  content,
-                  style: paraDecoration(paraSize),
+                child: Expanded(
+                  child: Text(
+                    content,
+                    style: paraDecoration(paraSize),
+                  ),
                 ),
               ),
               Image.asset(
                 logo,
                 width: imgSize,
                 alignment: Alignment.centerRight,
-              )
+              ),
             ],
-          )
+          ),
+          Divider(
+            thickness: 2,
+            color: Color(0xFFF44336),
+          ),
         ]),
   );
 }
