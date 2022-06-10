@@ -1,15 +1,43 @@
+import 'package:bloodlink/screens/createBloodRequest.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/services.dart' show rootBundle;
 
 class aboutPage extends StatefulWidget {
-  const aboutPage({Key? key}) : super(key: key);
+  aboutPage({Key? key}) : super(key: key);
 
   @override
   State<aboutPage> createState() => _aboutPageState();
 }
 
 class _aboutPageState extends State<aboutPage> {
+  var aboutContent = "Loading...";
+  var lcssContent = "Loading...";
+  var lumsContent = "Loading...";
+  var bloodlinkContent = "Loading...";
+
+  getData() async {
+    var temp1 = await rootBundle.loadString("assets/about.txt");
+    var temp2 = await rootBundle.loadString("assets/lcss.txt");
+    var temp3 = await rootBundle.loadString("assets/lums.txt");
+    var temp4 = await rootBundle.loadString("assets/bloodlink.txt");
+
+    setState(() {
+      aboutContent = temp1;
+      lcssContent = temp2;
+      lumsContent = temp3;
+      bloodlinkContent = temp4;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getData();
+  }
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -46,20 +74,14 @@ class _aboutPageState extends State<aboutPage> {
                       height: MediaQuery.of(context).size.height * 0.01,
                     ),
                     Text(
-                      "Lorem Ipsum",
+                      aboutContent,
                       style: TextStyle(fontSize: paraSize),
                     ),
-                    infoFunc(
-                        "Bloodlink",
-                        "assets/bloodlink.png",
-                        "Lorem Ipsum \nLorem \nLorem",
-                        headSize,
-                        paraSize,
-                        imgSize,
-                        dist),
-                    infoFunc("LCSS", "assets/lcss_logo.png", "Lorem Ipsum",
+                    infoFunc("Bloodlink", "assets/bloodlink.png",
+                        bloodlinkContent, headSize, paraSize, imgSize, dist),
+                    infoFunc("LCSS", "assets/lcss_logo.png", lcssContent,
                         headSize, paraSize, imgSize, dist),
-                    infoFunc("LUMS", "assets/lums_logo_2.png", "Lorem Ipsum",
+                    infoFunc("LUMS", "assets/lums_logo_2.png", lumsContent,
                         headSize, paraSize, imgSize, dist),
                   ],
                 ),
