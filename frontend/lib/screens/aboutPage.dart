@@ -13,6 +13,12 @@ class _aboutPageState extends State<aboutPage> {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
+    var aboutSize = MediaQuery.of(context).size.width * 0.12;
+    var headSize = MediaQuery.of(context).size.width * 0.08;
+    var paraSize = MediaQuery.of(context).size.width * 0.05;
+    var imgSize = MediaQuery.of(context).size.width * 0.2;
+    var dist = MediaQuery.of(context).size.height * 0.1;
+    var mar = MediaQuery.of(context).size.width * 0.05;
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -21,9 +27,47 @@ class _aboutPageState extends State<aboutPage> {
           child: Column(
             children: [
               AppBarFb2(),
-              TopBarFb3(
-                title: "BloodLink",
-              ),
+              Container(
+                margin: EdgeInsets.only(left: mar, right: mar),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.02,
+                    ),
+                    Text(
+                      "About",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          fontSize: aboutSize, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.01,
+                    ),
+                    Text(
+                      "Lorem Ipsum",
+                      style: TextStyle(fontSize: paraSize),
+                    ),
+                    infoFunc(
+                        "Bloodlink",
+                        "assets/bloodlink.png",
+                        "Lorem Ipsum \nLorem \nLorem",
+                        headSize,
+                        paraSize,
+                        imgSize,
+                        dist),
+                    infoFunc("LCSS", "assets/lcss_logo.png", "Lorem Ipsum",
+                        headSize, paraSize, imgSize, dist),
+                    infoFunc("LUMS", "assets/lums_logo_2.png", "Lorem Ipsum",
+                        headSize, paraSize, imgSize, dist),
+                  ],
+                ),
+              )
+
+              // TopBarFb3(
+              //   title: "BloodLink",
+              // ),
             ],
           ),
         ),
@@ -105,4 +149,47 @@ class TopBarFb3 extends StatelessWidget {
           ),
         ));
   }
+}
+
+headingDecoration(headSize) {
+  return TextStyle(fontSize: headSize, fontWeight: FontWeight.bold);
+}
+
+paraDecoration(paraSize) {
+  return TextStyle(fontSize: paraSize);
+}
+
+infoFunc(heading, logo, content, headSize, paraSize, imgSize, dist) {
+  return Container(
+    child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: dist,
+          ),
+          Text(
+            heading,
+            style: headingDecoration(headSize),
+            textAlign: TextAlign.start,
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                child: Text(
+                  content,
+                  style: paraDecoration(paraSize),
+                ),
+              ),
+              Image.asset(
+                logo,
+                width: imgSize,
+                alignment: Alignment.centerRight,
+              )
+            ],
+          )
+        ]),
+  );
 }
