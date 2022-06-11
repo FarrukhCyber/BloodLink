@@ -23,10 +23,33 @@ function saveToDb(result,res) {
 
 }
 
-router.post("/" , (req,res) => {
+router.post("/add" , (req,res) => {
     console.log(req.body.attendant_name)
     const result = req.body
     saveToDb(result,res)
+})
+
+router.post("/settings" , (req,res) => {
+    console.log(req.body)
+    const {phone, email, notification, available} = req.body
+    if(phone == "")
+        res.json({setting: "null"})
+    
+    DonorsModel.findOneAndUpdate({user_contact_num: phone}, {email:email, notification:notification, available:available}, 
+        (err, res) => {
+            if(err) {
+                console.log("Error\n", err)
+                res.json({setting:"null"})
+            }
+            else{
+                console.log("done")
+                res.json({setting:"done"})
+            }
+            })
+
+            
+
+
 })
 
 module.exports = router

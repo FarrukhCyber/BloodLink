@@ -210,7 +210,7 @@ class _registerDonorState extends State<registerDonor> {
                 "plasma": plasmaSelection
               };
               var responseRegister =
-                  await networkHandler.post('/register_donor', res);
+                  await networkHandler.post('/register_donor/add', res);
               if (responseRegister.statusCode == 200 ||
                   responseRegister.statusCode == 201) {
                 print('successful');
