@@ -4,4 +4,4 @@ Bloodlink was created in Spring 2022 by 5 students of LUMS under the guidance of
     •	Muhammad Hassnain
     •	Sharjeel Ahmad Shiekh
     •	Muhammad Ahmad Mahmood
-They can be contacted at the email appDeveloper@gmail.com.
+They can be contacted at the email darmaan.dev@gmail.com.

@@ -94,7 +94,7 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
         super(key: key);
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xffde2c2c);
+    const primaryColor = Color(0xffc10110);
     const secondaryColor = Color(0xff6D28D9);
     const accentColor = Color(0xffffffff);
     const backgroundColor = Color(0xffffffff);
@@ -120,7 +120,7 @@ class TopBarFb3 extends StatelessWidget {
   final String upperTitle;
   TopBarFb3({required this.title, required this.upperTitle, Key? key})
       : super(key: key);
-  final primaryColor = Color.fromARGB(255, 222, 44, 44);
+  final primaryColor = Color(0xffc10110);
   final secondaryColor = const Color(0xff6D28D9);
   final accentColor = const Color(0xffffffff);
   final backgroundColor = const Color(0xffffffff);
@@ -191,7 +191,7 @@ class _CardWithIconInitiateRequestState
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.1),
+      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.03),
       // left: MediaQuery.of(context).size.width * 0.05),
       child: Card(
         elevation: 10,
@@ -263,7 +263,7 @@ class CardWithIconActiveRequest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.1),
+      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.03),
       // left: MediaQuery.of(context).size.width * 0.05),
       child: Card(
         elevation: 10,
@@ -335,7 +335,7 @@ class CardWithIconResolvedRequest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.1),
+      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.03),
       // left: MediaQuery.of(context).size.width * 0.05),
       child: Card(
         elevation: 10,
@@ -405,7 +405,7 @@ class CardwithIconAddDonor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.1),
+      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.03),
       // left: MediaQuery.of(context).size.width * 0.05),
       child: Card(
         elevation: 10,
@@ -475,7 +475,7 @@ class CardWithIconPendingRequest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.1),
+      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.03),
       // left: MediaQuery.of(context).size.width * 0.05),
       child: Card(
         elevation: 10,
