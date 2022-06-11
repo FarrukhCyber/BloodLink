@@ -10,9 +10,6 @@ const donorsSchema = new mongoose.Schema({
     region: String,
     gender : String,
     plasma: Boolean,
-    email: Boolean,
-    notification : Boolean,
-    available: Boolean
 });
 
 const DonorsModel = mongoose.model("donors", donorsSchema);

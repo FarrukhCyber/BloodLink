@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user_model')
+const Admin = require('../models/admin')
 
 
 router.get('/login', (req,res)=>{
@@ -40,8 +41,10 @@ router.post('/login', (req, res) => {
                 if(user.userName=="ADMIN" && user.phoneNumber=="923187007636")
                 {
                 res.json({msg:"ADMIN MODE", 
-                    userName: user.userName,
-                    phoneNumber:String(user.phoneNumber)})
+                    userName: Admin.userName,
+                    phoneNumber:String(Admin.phoneNumber),
+                    
+                })
                 }
                 else{
                 res.json({msg:"Login Successful", 
@@ -51,7 +54,8 @@ router.post('/login', (req, res) => {
                     gender:user.gender,
                     bloodType:user.bloodType,
                     age:String(user.age),
-                    phoneNumber:String(user.phoneNumber)})
+                    phoneNumber:String(user.phoneNumber),
+                    donor: String(user.donor)})
                 }
             }
         }

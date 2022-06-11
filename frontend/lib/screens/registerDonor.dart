@@ -210,7 +210,7 @@ class _registerDonorState extends State<registerDonor> {
                 "plasma": plasmaSelection
               };
               var responseRegister =
-                  await networkHandler.post('/register_donor/add', res);
+                  await networkHandler.post('/register_donor', res);
               if (responseRegister.statusCode == 200 ||
                   responseRegister.statusCode == 201) {
                 print('successful');
@@ -222,6 +222,7 @@ class _registerDonorState extends State<registerDonor> {
                     backgroundColor: Color(0xffc10110),
                     textColor: Colors.white,
                     fontSize: 16.0);
+                UserSimplePreferences.setisDonor("true");
                 Navigator.pop(context, 'Ok');
               } else {
                 errorGenerator(context, 'There was an error in server',

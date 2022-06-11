@@ -19,13 +19,16 @@
   },
   "homepage": "https://github.com/FarrukhCyber/BloodLink#readme",
   "dependencies": {
+    "csvtojson": "^2.0.10",
     "express": "^4.17.3",
+    "json2csv": "^5.0.7",
+    "modules": "^0.4.0",
     "mongoose": "^6.2.11",
     "nodejs-nodemailer-outlook": "^1.2.4",
     "nodemailer": "^6.7.3",
     "social-post-api": "^1.0.20"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.16"
   }
 }
