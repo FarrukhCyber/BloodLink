@@ -50,64 +50,93 @@ class _aboutPageState extends State<aboutPage>
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    var aboutSize = MediaQuery.of(context).size.width * 0.12;
-    var headSize = MediaQuery.of(context).size.width * 0.08;
+    // var aboutSize = MediaQuery.of(context).size.width * 0.12;
+    var headSize = MediaQuery.of(context).size.width * 0.05;
     var paraSize = MediaQuery.of(context).size.width * 0.05;
     var imgSize = MediaQuery.of(context).size.width * 0.2;
-    var dist = MediaQuery.of(context).size.height * 0.1;
+    var dist = MediaQuery.of(context).size.height * 0.01;
     var mar = MediaQuery.of(context).size.width * 0.05;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            width: width,
-            child: Column(
-              children: [
-                AppBarFb2(),
-                Container(
-                  margin: EdgeInsets.only(left: mar, right: mar),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.02,
-                      ),
-                      Text(
-                        "About",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: aboutSize, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.01,
-                      ),
-                      Text(
-                        aboutContent,
-                        style: TextStyle(fontSize: paraSize),
-                      ),
-                      Divider(
-                        thickness: 2,
-                        color: Color(0xFFF44336),
-                      ),
-                      infoFunc("Bloodlink", "assets/bloodlink.png",
-                          bloodlinkContent, headSize, paraSize, imgSize, dist),
-                      infoFunc("LCSS", "assets/lcss_logo.png", lcssContent,
-                          headSize, paraSize, imgSize, dist),
-                      infoFunc("LUMS", "assets/lums_logo_2.png", lumsContent,
-                          headSize, paraSize, imgSize, dist),
-                    ],
-                  ),
-                )
+      body: ListView(
+        children: [
+          Center(
+            child: Container(
+              width: width,
+              child: Column(
+                children: [
+                  AppBarFb2(),
+                  Container(
+                    margin: EdgeInsets.only(left: mar, right: mar),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.width * 0.05),
+                          child: Text(
+                            aboutContent,
+                            style: TextStyle(fontSize: paraSize),
+                          ),
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.width * 0.1,
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).size.width * 0.1),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment
+                                .spaceEvenly, //Center Row contents horizontally,
+                            children: [
+                              Image.asset(
+                                "assets/lcss_logo.png",
+                                width: MediaQuery.of(context).size.width * 0.2,
+                              ),
+                              // Container(
+                              //   padding: EdgeInsets.only(
+                              //       left: MediaQuery.of(context).size.width * 0.1),
+                              // ),
+                              Image.asset(
+                                "assets/lums_logo_2.png",
+                                width: MediaQuery.of(context).size.width * 0.2,
+                              ),
+                              // Container(
+                              //   padding: EdgeInsets.only(
+                              //       left: MediaQuery.of(context).size.width * 0.1),
+                              // ),
+                              Image.asset(
+                                "assets/bloodlink.png",
+                                width: MediaQuery.of(context).size.width * 0.2,
+                              ),
+                            ],
+                          ),
+                        ),
+                        infoFunc("LUMS", "assets/lums_logo_2.png", lumsContent,
+                            headSize, paraSize, imgSize, dist),
+                        infoFunc("LCSS", "assets/lcss_logo.png", lcssContent,
+                            headSize, paraSize, imgSize, dist),
+                        infoFunc(
+                            "Bloodlink",
+                            "assets/bloodlink.png",
+                            bloodlinkContent,
+                            headSize,
+                            paraSize,
+                            imgSize,
+                            dist),
+                      ],
+                    ),
+                  )
 
-                // TopBarFb3(
-                //   title: "BloodLink",
-                // ),
-              ],
+                  // TopBarFb3(
+                  //   title: "BloodLink",
+                  // ),
+                ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -130,7 +159,7 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
 
     return AppBar(
       centerTitle: true,
-      title: const Text("BloodLink", style: TextStyle(color: Colors.white)),
+      title: const Text("About Us", style: TextStyle(color: Colors.white)),
       backgroundColor: primaryColor,
     );
   }
@@ -198,13 +227,14 @@ paraDecoration(paraSize) {
 
 infoFunc(heading, logo, content, headSize, paraSize, imgSize, dist) {
   return Container(
+    padding: EdgeInsets.only(top: dist, bottom: dist),
     child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            height: dist,
-          ),
+          // SizedBox(
+          //   height: dist,
+          // ),
           Text(
             heading,
             style: headingDecoration(headSize),
@@ -218,6 +248,7 @@ infoFunc(heading, logo, content, headSize, paraSize, imgSize, dist) {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
+                // padding: EdgeInsets.only(left: dist, right: dist),
                 child: Expanded(
                   child: Text(
                     content,
@@ -225,17 +256,17 @@ infoFunc(heading, logo, content, headSize, paraSize, imgSize, dist) {
                   ),
                 ),
               ),
-              Image.asset(
-                logo,
-                width: imgSize,
-                alignment: Alignment.centerRight,
-              ),
+              // Image.asset(
+              //   logo,
+              //   width: imgSize,
+              //   alignment: Alignment.centerRight,
+              // ),
             ],
           ),
-          Divider(
-            thickness: 2,
-            color: Color(0xFFF44336),
-          ),
+          // Divider(
+          //   thickness: 2,
+          //   color: Color(0xFFF44336),
+          // ),
         ]),
   );
 }

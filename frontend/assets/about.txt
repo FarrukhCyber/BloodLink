@@ -1,3 +1,7 @@
-Bloodlink was created in Spring 2022 by 5 students of LUMS in the guidance of Dr. Suleman Shahid (suleman.shahid@lums.edu.pk), the name of the students are Daim Armaghan, Muhammad Ahmad Mahmood, Muhammad Farrukh, Muhammad Hassnain, Sharjeel Ahmad Shiekh. They can be contacted at the email appDeveloper@gmail.com. 
-
-The main aim of the aim was to automate the process of blood donation for the LCSS. (LUMS Community Service Society).
+Bloodlink was created in Spring 2022 by 5 students of LUMS under the guidance of Dr Suleman Shahid (suleman.shahid@lums.edu.pk), the names of the students are:
+    •	Daim Armaghan
+    •	Muhammad Farrukh
+    •	Muhammad Hassnain
+    •	Sharjeel Ahmad Shiekh
+    •	Muhammad Ahmad Mahmood
+They can be contacted at the email appDeveloper@gmail.com.

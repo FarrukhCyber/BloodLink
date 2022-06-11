@@ -1,3 +1,4 @@
+import 'package:bloodlink/screens/aboutPage.dart';
 import 'package:bloodlink/screens/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:bloodlink/screens/login.dart';
@@ -57,9 +58,18 @@ class navBar extends StatelessWidget {
             },
           ),
           ListTile(
+            leading: const Icon(Icons.info_outline),
+            title: const Text("About Us"),
+            onTap: () => {
+              print("About Us clicked"),
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => aboutPage()))
+            },
+          ),
+          ListTile(
             // logout
-            leading: Icon(Icons.logout_sharp),
-            title: Text("Logout"),
+            leading: const Icon(Icons.logout_sharp),
+            title: const Text("Logout"),
             onTap: () async => {
               // SharedPreferences prefs = await SharedPreferences.getInstance(),
               // await prefs.clear(),
