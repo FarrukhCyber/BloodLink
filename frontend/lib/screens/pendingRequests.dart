@@ -1,4 +1,3 @@
-// import 'dart:_http';
 import 'dart:async';
 import 'dart:convert';
 import 'package:bloodlink/base_url.dart';
@@ -13,7 +12,6 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:bloodlink/screens/myDetails.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
@@ -27,7 +25,6 @@ import 'package:bloodlink/screens/phone_auth.dart';
 import 'signup.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:bloodlink/screens/homepage.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:bloodlink/screens/signup.dart';
@@ -600,7 +597,11 @@ class _RequestCardState extends State<RequestCard> {
                                       NetworkHandler();
                                   final response =
                                       await pending_request(widget.id);
-                                  if (response == "null") {
+
+                                  SharedPreferences prefs =
+                                      await SharedPreferences.getInstance();
+                                  var msg = prefs.getString("msg");
+                                  if (msg == null) {
                                     errorGenerator(context, "Error",
                                         "There is an error on server");
                                   } else {
@@ -763,7 +764,7 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
 }
 
 pending_request(id) async {
-  var url = base_url + "/pending_request_rejected";
+  var url = base_url + "/rejectEmail/rej";
   print("In pending request");
   try {
     final http.Response response = await http.post(
@@ -775,9 +776,10 @@ pending_request(id) async {
         'id': id,
       }),
     );
-    print("this one");
+    print("DONE WITH HTTPS");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var parse = jsonDecode(response.body);
+    print("DONE PARSE");
     if (parse["msg"] == "null") {
       print("it is null");
       // message = "null";
@@ -792,7 +794,9 @@ pending_request(id) async {
     print(error);
     return null;
   } on Object catch (error) {
+    print("Error here ");
     print(error);
+    print("Done");
     return null;
   }
 }
