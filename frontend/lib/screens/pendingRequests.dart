@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bloodlink/base_url.dart';
 import 'package:bloodlink/screens/activeDetails.dart';
 import 'package:bloodlink/screens/addDonor.dart';
+import 'package:bloodlink/screens/editRequest.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -569,7 +570,33 @@ class _RequestCardState extends State<RequestCard> {
                             Container(
                               padding: EdgeInsets.only(left: 10.0),
                               child: OutlinedButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  bool error = false;
+                                  NetworkHandler networkHandler =
+                                      NetworkHandler();
+                                  final response = await createRequest_func(
+                                      widget.name,
+                                      widget.attendantNum,
+                                      widget.bloodgroup,
+                                      widget.time,
+                                      widget.date,
+                                      widget.location,
+                                      widget.city,
+                                      widget.quantity);
+                                  SharedPreferences prefs =
+                                      await SharedPreferences.getInstance();
+                                  var msg = prefs.getString("msg");
+                                  if (msg == null) {
+                                    errorGenerator(context, "Error",
+                                        "There is an error on server");
+                                  } else {
+                                    var key;
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                pendingRequests(key: key)));
+                                  }
+                                },
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
                                       Color.fromARGB(255, 0, 116, 4)),
@@ -597,7 +624,6 @@ class _RequestCardState extends State<RequestCard> {
                                       NetworkHandler();
                                   final response =
                                       await pending_request(widget.id);
-
                                   SharedPreferences prefs =
                                       await SharedPreferences.getInstance();
                                   var msg = prefs.getString("msg");
@@ -797,6 +823,52 @@ pending_request(id) async {
     print("Error here ");
     print(error);
     print("Done");
+    return null;
+  }
+}
+
+createRequest_func(
+    name, number, bloodType, time, date, location, city, quantity) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  var url = base_url + "/sendEmail"; // check what localhost is for you
+  print("In createRequest");
+  try {
+    final http.Response response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'attendant_name': name,
+        'time': time,
+        'date': date,
+        'blood_group': bloodType,
+        'attendant_num': number,
+        'hospital': location,
+        'city': city,
+        'quantity': quantity,
+        'user_contact_num': UserSimplePreferences.getPhoneNumber(),
+      }),
+    );
+    var parse = jsonDecode(response.body);
+    if (parse["createRequest"] == null) {
+      print("it is null");
+      // message = "null";
+      await prefs.setString('createRequest', "null");
+    } else
+      await prefs.setString('createRequest', parse["createRequest"]);
+
+    print("Message received:");
+    print(parse["createRequest"]);
+  } on HttpException catch (err) {
+    print(err);
+    return null;
+  } on Error catch (error) {
+    print(error);
+    return null;
+  } on Object catch (error) {
+    print(error);
     return null;
   }
 }

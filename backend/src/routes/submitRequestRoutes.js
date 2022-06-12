@@ -12,7 +12,7 @@ const socialPost = new require('social-post-api')
 const social = new socialPost("TRSHJM6-NQK4KXQ-KT57N53-0BGWNBP")
 
 //Email handling
-const sendEmail = require('../services/email_service')
+// const sendEmail = require('../services/email_service')
 
 
 

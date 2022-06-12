@@ -18,6 +18,7 @@ const editRequest = require('./src/routes/editRequest')
 const donorCatalouge = require("./src/routes/donorCat")
 const rejectEmail = require("./src/routes/rejectEmail")
 const pendingRequest = require("./src/routes/pendingRequests")
+const sendEmail = require("./src/routes/sendEmail")
 
 app.use(express.json({extended:false}))
 
@@ -58,6 +59,7 @@ app.use("/edit_request", editRequest);
 app.use("/cat", donorCatalouge);
 app.use("/rejectEmail" , rejectEmail);
 app.use("/pending_request", pendingRequest);
+app.use("/sendEmail" , sendEmail);
 
 // 404 page
 // app.use((req, res) => {
