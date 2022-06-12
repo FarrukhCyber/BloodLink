@@ -13,7 +13,8 @@ const bloodRequestSchema = new mongoose.Schema({
     date: Date,
     time: Date,
     hospital : String,
-    city: String
+    city: String,
+    email: String
 });
 
 const RequestModel = mongoose.model("blood_requests", bloodRequestSchema);

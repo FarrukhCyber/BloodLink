@@ -48,7 +48,7 @@ class navBar extends StatelessWidget {
           ListTile(
             // logout
             leading: Icon(Icons.person),
-            title: Text("User Profile"),
+            title: Text("Profile"),
             onTap: () => {
               print("User profile clicked"),
               Navigator.of(context).push(MaterialPageRoute(
@@ -59,7 +59,7 @@ class navBar extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.info_outline),
-            title: const Text("About Us"),
+            title: const Text("About"),
             onTap: () => {
               print("About Us clicked"),
               Navigator.of(context)

@@ -199,7 +199,7 @@ class _CardWithIconInitiateRequestState
           splashColor: Colors.blue.withAlpha(30),
           onTap: () => {
             Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => CreateBloodRequest()))
+                MaterialPageRoute(builder: (context) => CreateBloodRequest(admin : true)))
           },
           // print('Card tapped.');
           child: SizedBox(

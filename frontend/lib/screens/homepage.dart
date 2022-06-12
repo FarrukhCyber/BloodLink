@@ -178,7 +178,8 @@ class CardWithIconInitiateRequest extends StatelessWidget {
         child: InkWell(
           splashColor: Colors.blue.withAlpha(30),
           onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => CreateBloodRequest(key: key))),
+              builder: (context) =>
+                  CreateBloodRequest(key: key, admin: false))),
           // onTap: () => {},
           // print('Card tapped.');
           child: SizedBox(

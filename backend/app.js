@@ -15,6 +15,8 @@ const plasmaDonorRegister = require('./src/routes/plasmaDonorRegister.js')
 const resolvedRequests = require('./src/routes/resolvedRequest')
 const editRequest = require('./src/routes/editRequest')
 const donorCatalouge = require("./src/routes/donorCat")
+const pendingRequestRejected = require("./src/routes/pendingRequestRejected")
+const pendingRequest = require("./src/routes/pendingRequests")
 
 app.use(express.json({extended:false}))
 
@@ -52,7 +54,9 @@ app.use("/plasma_donor_register",plasmaDonorRegister)
 app.use("/submit_request", submitRequestRoutes)
 app.use("/resolved_request", resolvedRequests);
 app.use("/edit_request", editRequest);
-app.use("/cat", donorCatalouge)
+app.use("/cat", donorCatalouge);
+app.use("/pending_request_rejected" , pendingRequestRejected);
+app.use("/pending_request", pendingRequest);
 
 // 404 page
 // app.use((req, res) => {
