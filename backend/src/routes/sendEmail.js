@@ -1,4 +1,8 @@
+const express = require('express')
+const router = express.Router()
 const sendEmail = require('../services/email_service')
+const Request = require('../models/bloodRequest')
+
 
 const handleEmail = async (result) => {
     let docs
