@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const sendEmail = require('../services/email_service')
 const Request = require('../models/bloodRequest')
+const RegUserModel = require("../models/user_model")
 
 
 const handleEmail = async (result) => {
@@ -34,18 +35,20 @@ router.route("/").post((req, res) => {
     //   })
     const result = req.body
     console.log(result)
-
-    // handleEmail(result);
+    handleEmail(result); 
+    Request.findById(req.body.id , (err,doc) => {
+        console.log("I found :"  , doc)
+    })
     Request.findByIdAndUpdate(req.body.id, {email:"3"}, (err,doc) => {
-    if(err){
-        console.log("Error")
-        res.json({msg: "null"})
-    }
-    else{
-        console.log("done")
-        res.json({msg:"done"})
-    }
-      }) }) 
+        if(err){
+            console.log("Error")
+            res.json({msg: "null"})
+        }
+        else{
+            console.log("done")
+            res.json({msg:"done"})
+        }
+    }) }) 
   
 
 module.exports = router

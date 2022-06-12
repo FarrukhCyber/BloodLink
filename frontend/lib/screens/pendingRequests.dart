@@ -582,7 +582,8 @@ class _RequestCardState extends State<RequestCard> {
                                       widget.date,
                                       widget.location,
                                       widget.city,
-                                      widget.quantity);
+                                      widget.quantity,
+                                      widget.id);
                                   SharedPreferences prefs =
                                       await SharedPreferences.getInstance();
                                   var msg = prefs.getString("msg");
@@ -828,7 +829,7 @@ pending_request(id) async {
 }
 
 createRequest_func(
-    name, number, bloodType, time, date, location, city, quantity) async {
+    name, number, bloodType, time, date, location, city, quantity, id) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
   var url = base_url + "/sendEmail"; // check what localhost is for you
@@ -849,6 +850,7 @@ createRequest_func(
         'city': city,
         'quantity': quantity,
         'user_contact_num': UserSimplePreferences.getPhoneNumber(),
+        'id': id
       }),
     );
     var parse = jsonDecode(response.body);
