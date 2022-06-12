@@ -1,4 +1,5 @@
 import 'package:bloodlink/screens/homepage.dart';
+import 'package:bloodlink/utils/user_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,15 +9,18 @@ import 'dart:io';
 import 'package:material_design_icons_flutter/icon_map.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import 'admin_dashboard.dart';
+
 class RequestConfirmation extends StatelessWidget {
-  const RequestConfirmation({Key? key}) : super(key: key);
+  var admin;
+  RequestConfirmation({Key? key, required this.admin}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: Column(
         children: <Widget>[
-          AppBarFb2(),
+          AppBarFb2(admin: admin),
           PopUp(),
         ],
       ),
@@ -30,8 +34,9 @@ class RequestConfirmation extends StatelessWidget {
 class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
   @override
   final Size preferredSize;
+  var admin;
 
-  AppBarFb2({Key? key})
+  AppBarFb2({Key? key, required this.admin})
       : preferredSize = const Size.fromHeight(56.0),
         super(key: key);
   @override
@@ -60,9 +65,25 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
           Icons.keyboard_arrow_left,
           color: accentColor,
         ),
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => homepage(userName: "farrukh", key: key)));
+        onPressed: () => {
+          if (admin == true)
+            {
+              print("here in admin"),
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => adminHomepage(
+                        key: key,
+                        // userName: UserSimplePreferences.getUsername(),
+                      )))
+            }
+          else
+            {
+              print("here in User"),
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => homepage(
+                        key: key,
+                        userName: UserSimplePreferences.getUsername() ?? "",
+                      )))
+            }
         },
       ),
     );

@@ -89,7 +89,10 @@ class CreateBloodRequest extends StatelessWidget {
                 hintText: "How many bottles of blood is required?",
                 labelText: "Quantity"),
 
-            const PairButton(text: "hello"),
+            PairButton(
+              text: "hello",
+              admin: admin,
+            ),
           ],
         ),
       ]),
@@ -503,8 +506,10 @@ errorGenerator(context, title, message) {
 
 class PairButton extends StatelessWidget {
   final String text;
+  var admin;
   // final Function() onPressed;
-  const PairButton({required this.text, Key? key}) : super(key: key);
+  PairButton({required this.text, required this.admin, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -600,7 +605,8 @@ class PairButton extends StatelessWidget {
                       print("message is:");
                       print(msg);
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => RequestConfirmation()));
+                          builder: (context) =>
+                              RequestConfirmation(admin: admin)));
                       // if (msg == "Request Added") {
                       //   Navigator.of(context).push(MaterialPageRoute(
                       //       builder: (context) => Confirmation()));
