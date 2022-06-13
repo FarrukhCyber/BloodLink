@@ -18,7 +18,7 @@ router.post("/" , (req, res, next) => {
     const result = req.body
     console.log(result)
 
-    // saveToDb(result)
+    saveToDb(result)
     
     
     //Remove the below lines, when Signup starts working--------
