@@ -13,7 +13,6 @@ router.post("/", (req, res, next) => {
     result = req.body
 
     handleNotifications(req, res, next, result)
-    // res.json({msg: "ok"})
 
 
 })
@@ -42,7 +41,7 @@ const handleNotifications =  async (req, res, next, result) => {
         console.log(err + "while querying")
     }
 
-    devices = ["096c6f7e-f1ec-404e-bb10-8d16274f1a7b"] // Qari Sahb's phone for testing
+    // devices = ["096c6f7e-f1ec-404e-bb10-8d16274f1a7b"] // Qari Sahb's phone for testing
     msg = `${donorUserName} is interested in donating blood against your request. You can contact him at the following number: ${result.user_contact_num}`
     sendNotificationToDevice(devices,res, next, msg)
 
