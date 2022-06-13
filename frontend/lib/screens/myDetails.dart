@@ -1,3 +1,4 @@
+import 'package:bloodlink/base_url.dart';
 import 'package:bloodlink/screens/editRequest.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -88,7 +89,10 @@ class _myDetailsState extends State<myDetails> {
             DisplayInfo(label: "Status", data: widget.status),
             DisplayInfo(
                 label: "Hospital", data: "${widget.hospital} , ${widget.city}"),
-            PairButton(text: "Hello", attendNumber: widget.attendantNum)
+            PairButton(
+                text: "Hello",
+                attendNumber: widget.attendantNum,
+                userContact: widget.userContact)
           ],
         ));
   }
@@ -297,8 +301,14 @@ class TopBarFb3 extends StatelessWidget {
 class PairButton extends StatelessWidget {
   final String text;
   final String attendNumber;
+  final String userContact;
   // final Function() onPressed;
-  const PairButton({required this.text, required this.attendNumber, Key? key}) : super(key: key);
+  const PairButton(
+      {required this.text,
+      required this.attendNumber,
+      required this.userContact,
+      Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -342,14 +352,36 @@ class PairButton extends StatelessWidget {
                               borderRadius: BorderRadius.circular(borderRadius),
                             ),
                           )),
-                      onPressed: () => {
-                        print("Notify button is pressed")
+                      onPressed: () async {
+                        print("Notify button is pressed");
+                        print("userContact: " + userContact);
+                        print("Attend Number: " + attendNumber);
+                        await sendNotification(userContact, attendNumber);
+                        // SharedPreferences prefs =
+                        //     await SharedPreferences.getInstance();
+                        // String? msg = prefs.getString("send");
+                        // print("message is:");
+                        // print(msg);
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                                return Expanded(
+                                  child: AlertDialog(
+                                    title: Text('Notified Successfully'),
+                                    content: Text('The requestor has been notified that you are interested in donating blood'),
+                                    actions: [
+                                      FlatButton(
+                                        textColor: Colors.black,
+                                        onPressed: () {Navigator.pop(context);},
+                                        child: Text('Ok'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                          },
+                        );
+
                       },
-                      // onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                      //     builder: (context) => homepage(
-                      //           key: key,
-                      //           userName: "user",
-                      //         ))),
                       child: Row(
                         children: [
                           Text(
@@ -393,7 +425,6 @@ class PairButton extends StatelessWidget {
                     print("contact button:"),
                     print(attendNumber),
                     _makePhoneCall(attendNumber)
-
                   },
                   // onPressed: () => CreateBloodRequestPage2(key: key),
                   child: Row(
@@ -426,5 +457,44 @@ Future<void> _makePhoneCall(String url) async {
     await launch(url);
   } else {
     throw 'Could not launch $url';
+  }
+}
+
+sendNotification(userContact, attendNumber) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  var url = base_url + "/notify";
+  print("In sendNotification");
+
+  try {
+    final http.Response response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'attendant_num': attendNumber,
+        'user_contact_num': userContact,
+      }),
+    );
+
+    // await prefs.setString('send', "ok");
+
+    // var parse = jsonDecode(response.body);
+    // if (parse["createRequest"] == null) {
+    //   print("it is null");
+    //   // message = "null";
+    //   await prefs.setString('createRequest', "null");
+    // } else
+    //   await prefs.setString('createRequest', parse["createRequest"]);
+
+  } on HttpException catch (err) {
+    print(err);
+    return null;
+  } on Error catch (error) {
+    print(error);
+    return null;
+  } on Object catch (error) {
+    print(error);
+    return null;
   }
 }

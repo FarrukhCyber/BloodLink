@@ -14,6 +14,31 @@ const social = new socialPost("TRSHJM6-NQK4KXQ-KT57N53-0BGWNBP")
 //Email handling
 const sendEmail = require('../services/email_service')
 
+router.post("/" , (req, res, next) => {
+    const result = req.body
+    console.log(result)
+
+    // saveToDb(result)
+    
+    
+    //Remove the below lines, when Signup starts working--------
+    // devices = ["8eb7ea7e-e434-445a-8c9d-521f7b55dfe0"] // SM-A50
+    devices = ["096c6f7e-f1ec-404e-bb10-8d16274f1a7b"] // Qari Sahb's phone
+    let message = `${result.blood_group} blood is required at ${result.hospital} in ${result.city}`
+    sendNotificationToDevice(devices,res, next, message)
+    //----------------------------------------------------------
+    
+    // socialMediaPosting(result)
+    // handleEmail(result)
+    // handleNotifications(req, res, next, result)
+    
+    // testing---------------
+    // sendNotificationToAll(res, next)
+
+    //Problematic statement----------------------
+    // res.json({msg: "Request Added"})
+
+})
 
 
 const getPostData = (result) => {
@@ -85,18 +110,32 @@ const sendNotificationToDevice = (devices, res, next, msg) => {
     })
 }
 
-router.post("/" , (req, res, next) => {
-    const result = req.body
-    console.log(result)
+const sendNotificationToAll = (res, next, msg="Hello G!", devices) => {
+    var message = {
+        app_id: ONE_SIGNAL_CONFIG.APP_ID,
+        contents: {'en' : msg},
+        included_segments: ["All"], // for sending notification to all devices
+        // included_segments: ["included_player_ids"], 
+        // include_player_ids: devices,  
+        content_available: true,
+        small_icon: "ic_notification_icon",
+        data: {
+            PushTitle: "Custom Notification"
+        }
+    }
 
-    saveToDb(result)
-    res.json({msg: "Request Added"})
-    
-    // socialMediaPosting(result)
-    // handleEmail(result)
-    // handleNotifications(req, res, next, result)
+    pushNotificationService.sendNotification(message, (err, results) => {
+        if(err) {
+            return next(err)
+        }
 
-})
+        return res.status(200).send({
+            message: "Success",
+            data: results
+        })
+    })
+}
+
 
 
 const handleNotifications =  async (req, res, next, result) => {

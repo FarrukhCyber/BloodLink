@@ -275,6 +275,7 @@ signup_func(name, pass, email, phone, blood, gender, age) async {
 
   var url = base_url + "/auth/signup";
   print("In signup");
+  print("DeviceID: " + device_id);
   try {
     final http.Response response = await http.post(
       Uri.parse(url),

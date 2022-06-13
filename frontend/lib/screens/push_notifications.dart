@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 // import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 // class PushNotifications extends StatefulWidget {
@@ -29,8 +29,16 @@ import 'package:flutter/material.dart';
 //   Future<void> initPlatform() async {
 //     await OneSignal.shared.setAppId("0a075bcf-6425-4c41-9834-6fa9304050e0");
 
+//     //Testing-------------------------------
+
 //     //gives the device unique id. TODO: need to store it in Registeredusers collection
+
+//     // await OneSignal.shared.promptUserForPushNotificationPermission().then(
+//     //     (value) => {print("Permission Status:"), print(value)});
+
 //     await OneSignal.shared.getDeviceState().then(
-//         (value) => {print("here is the device ID:"), print(value!.userId)});
+//         (value) => {print("Here is the device ID:"), print(value!.userId.toString())});
+    
 //   }
+ 
 // }
