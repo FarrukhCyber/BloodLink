@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user_model')
+const Admin = require('../models/admin')
 
 
 router.get('/login', (req,res)=>{
@@ -23,39 +24,56 @@ router.post('/login', (req, res) => {
     const {userName, password, phoneNumber} = req.body
     console.log(userName, password, phoneNumber)
     // res.json({msg:"success"})
-    User.findOne({phoneNumber: req.body.phoneNumber, password:req.body.password}, (err, user)=>{
+
+    Admin.findOne({contact_num: req.body.phoneNumber, password: req.body.password}, (err, admin)=>{
         if(err){
             console.log("Sendnig", err)
             res.json({msg: "ERROR"})
         }
         else{
-            if(user==null) // exists
+            if(admin==null) // exists
             {
-                console.log("Sending", user)
-                res.json({msg:"null"})
+                console.log("could not find in admin")
+                User.findOne({phoneNumber: req.body.phoneNumber, password:req.body.password}, (err, user)=>{
+                    if(err){
+                        console.log("Sendnig", err)
+                        res.json({msg: "ERROR"})
+                    }
+                    else{
+                        if(user==null) // exists
+                        {
+                            console.log("Sending", user)
+                            res.json({msg:"null"})
+                        }
+                        else
+                        {
+                            console.log("exists", user)
+                            res.json({msg:"Login Successful", 
+                                userName: user.userName,
+                                email:user.email,
+                                password:user.password,
+                                gender:user.gender,
+                                bloodType:user.bloodType,
+                                age:String(user.age),
+                                phoneNumber:String(user.phoneNumber),
+                                donor: String(user.donor)})
+                        }
+                    }
+                    
+                })
             }
             else
             {
-                console.log("exists", user)
-                if(user.userName=="ADMIN" && user.phoneNumber=="923187007636")
-                {
                 res.json({msg:"ADMIN MODE", 
-                    userName: user.userName,
-                    phoneNumber:String(user.phoneNumber)})
-                }
-                else{
-                res.json({msg:"Login Successful", 
-                    userName: user.userName,
-                    email:user.email,
-                    password:user.password,
-                    gender:user.gender,
-                    bloodType:user.bloodType,
-                    age:String(user.age),
-                    phoneNumber:String(user.phoneNumber)})
-                }
+                    userName: admin.admin_name,
+                    phoneNumber:String(admin.contact_num),
+                    email : admin.email,
+                    password : admin.password,
+                })
             }
         }
     })
+
     // return res.send("In Login")
     console.log("IN Login")
 })

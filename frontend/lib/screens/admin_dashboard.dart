@@ -1,9 +1,12 @@
-import 'package:bloodlink/screens/pending_requests.dart';
+import 'package:bloodlink/screens/addDonor.dart';
+import 'package:bloodlink/screens/adminResolvedRequests.dart';
+import 'package:bloodlink/screens/pendingRequests.dart';
 import 'package:bloodlink/screens/viewActiveRequest.dart';
 import 'package:bloodlink/screens/view_request.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'createBloodRequest.dart';
+import 'package:bloodlink/widgets/navbar.dart';
 
 class adminHomepage extends StatefulWidget {
   adminHomepage({Key? key}) : super(key: key);
@@ -32,35 +35,53 @@ class _adminHomepageState extends State<adminHomepage>
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
-        body: Center(
-      child: Container(
-        width: width,
-        child: Column(
-          children: [
-            AppBarFb2(),
-            TopBarFb3(title: "BloodLink", upperTitle: "\n Welcome Admin \n "),
-            // SizedBox(
-            //   height: 20,
-            // ),
-            CardWithIconInitiateRequest(
-              text: "Initiate a new Request",
-              symbol: MdiIcons.plusCircle,
-              color: Color(0xff24A979),
-              // newLocation: CreateBloodRequest(key:key),
-            ),
-            CardWithIconActiveRequest(
-                text: "Active Requests",
-                symbol: MdiIcons.clock,
-                color: Color.fromARGB(255, 169, 100, 36)),
-            CardWithIconPendingRequest(
-              text: "Resolved Requests",
-              symbol: Icons.pending_actions,
-              color: Color.fromARGB(255, 193, 0, 0),
-            )
-          ],
+        drawer: navBar(
+          userName: "Admin",
+          userEmail: "Email",
         ),
-      ),
-    ));
+        // backgroundColor: Color.fromARGB(255, 229, 229, 229),
+        backgroundColor: Colors.white,
+        body: ListView(
+          children: [
+            Center(
+              child: Container(
+                width: width,
+                child: Column(
+                  children: [
+                    AppBarFb2(),
+                    TopBarFb3(
+                        title: "BloodLink", upperTitle: "\n Welcome Admin \n "),
+                    // SizedBox(
+                    //   height: 20,
+                    // ),
+                    CardWithIconInitiateRequest(
+                      text: "Initiate a new Request",
+                      symbol: MdiIcons.plusCircle,
+                      color: Color(0xff24A979),
+                      // newLocation: CreateBloodRequest(key:key),
+                    ),
+                    CardWithIconPendingRequest(
+                        text: "Pending Requests",
+                        symbol: Icons.pending_actions_outlined,
+                        color: Color.fromARGB(255, 75, 5, 0)),
+                    CardWithIconActiveRequest(
+                        text: "Active Requests",
+                        symbol: MdiIcons.clock,
+                        color: Color.fromARGB(255, 193, 0, 0)),
+                    CardWithIconResolvedRequest(
+                        text: "Resolved Requests",
+                        symbol: Icons.check_circle_outline_outlined,
+                        color: Color.fromARGB(255, 13, 95, 13)),
+                    CardwithIconAddDonor(
+                        text: "Add a Donor",
+                        symbol: Icons.person_add,
+                        color: Color.fromARGB(255, 0, 153, 255))
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ));
   }
 }
 
@@ -73,7 +94,7 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
         super(key: key);
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xffde2c2c);
+    const primaryColor = Color(0xffc10110);
     const secondaryColor = Color(0xff6D28D9);
     const accentColor = Color(0xffffffff);
     const backgroundColor = Color(0xffffffff);
@@ -99,7 +120,7 @@ class TopBarFb3 extends StatelessWidget {
   final String upperTitle;
   TopBarFb3({required this.title, required this.upperTitle, Key? key})
       : super(key: key);
-  final primaryColor = Color.fromARGB(255, 222, 44, 44);
+  final primaryColor = Color(0xffc10110);
   final secondaryColor = const Color(0xff6D28D9);
   final accentColor = const Color(0xffffffff);
   final backgroundColor = const Color(0xffffffff);
@@ -170,7 +191,7 @@ class _CardWithIconInitiateRequestState
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.1),
+      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.03),
       // left: MediaQuery.of(context).size.width * 0.05),
       child: Card(
         elevation: 10,
@@ -178,7 +199,7 @@ class _CardWithIconInitiateRequestState
           splashColor: Colors.blue.withAlpha(30),
           onTap: () => {
             Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => CreateBloodRequest()))
+                MaterialPageRoute(builder: (context) => CreateBloodRequest(admin : true)))
           },
           // print('Card tapped.');
           child: SizedBox(
@@ -242,16 +263,156 @@ class CardWithIconActiveRequest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.1),
+      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.03),
       // left: MediaQuery.of(context).size.width * 0.05),
       child: Card(
         elevation: 10,
         child: InkWell(
           splashColor: Colors.blue.withAlpha(30),
           onTap: () => {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => activeRequests()))
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => activeRequests(admin: true)))
           },
+          // print('Card tapped.');
+          child: SizedBox(
+              width: MediaQuery.of(context).size.width *
+                  0.85, // determines the size of the card
+              height: MediaQuery.of(context).size.height * 0.12,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    alignment: AlignmentDirectional(-1, 0),
+                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Text(
+                      text,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: color,
+                          fontWeight: FontWeight.bold,
+                          fontSize: MediaQuery.of(context).size.width * 0.05),
+                    ),
+                  ),
+                  Container(
+                    alignment: AlignmentDirectional(1, 0),
+                    padding: EdgeInsets.fromLTRB(
+                        0, 0, MediaQuery.of(context).size.width * 0.05, 0),
+                    child: Icon(
+                      symbol,
+                      color: color,
+                      size: MediaQuery.of(context).size.width * 0.1,
+                    ),
+                  ),
+                  //
+                ],
+              )),
+        ),
+      ),
+    );
+    // InfoCard(title: "Use my Current Location", onMoreTap: null)
+  }
+}
+
+class CardWithIconResolvedRequest extends StatelessWidget {
+  // final String heading;
+  @override
+  final String text;
+  final IconData symbol;
+  final Color color;
+  // final Function? newLocation;
+  // final Size preferredSize;
+  CardWithIconResolvedRequest(
+      {required this.text,
+      required this.symbol,
+      required this.color,
+      // required this.newLocation,
+      Key? key})
+      : super(key: key);
+  // CardWithIconInitiateViewRequest({Key? key})
+  //     // : preferredSize = const Size.fromHeight(56.0),
+  //     : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.03),
+      // left: MediaQuery.of(context).size.width * 0.05),
+      child: Card(
+        elevation: 10,
+        child: InkWell(
+          splashColor: Colors.blue.withAlpha(30),
+          onTap: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => adminResolvedRequests(key: key))),
+          // print('Card tapped.');
+          child: SizedBox(
+              width: MediaQuery.of(context).size.width *
+                  0.85, // determines the size of the card
+              height: MediaQuery.of(context).size.height * 0.12,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    alignment: AlignmentDirectional(-1, 0),
+                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                    child: Text(
+                      text,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: color,
+                          fontWeight: FontWeight.bold,
+                          fontSize: MediaQuery.of(context).size.width * 0.05),
+                    ),
+                  ),
+                  Container(
+                    alignment: AlignmentDirectional(1, 0),
+                    padding: EdgeInsets.fromLTRB(
+                        0, 0, MediaQuery.of(context).size.width * 0.05, 0),
+                    child: Icon(
+                      symbol,
+                      color: color,
+                      size: MediaQuery.of(context).size.width * 0.1,
+                    ),
+                  ),
+                  //
+                ],
+              )),
+        ),
+      ),
+    );
+    // InfoCard(title: "Use my Current Location", onMoreTap: null)
+  }
+}
+
+class CardwithIconAddDonor extends StatelessWidget {
+  // final String heading;
+  @override
+  final String text;
+  final IconData symbol;
+  final Color color;
+  // final Function? newLocation;
+  // final Size preferredSize;
+  CardwithIconAddDonor(
+      {required this.text,
+      required this.symbol,
+      required this.color,
+      // required this.newLocation,
+      Key? key})
+      : super(key: key);
+  // CardWithIconInitiateViewRequest({Key? key})
+  //     // : preferredSize = const Size.fromHeight(56.0),
+  //     : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.03),
+      // left: MediaQuery.of(context).size.width * 0.05),
+      child: Card(
+        elevation: 10,
+        child: InkWell(
+          splashColor: Colors.blue.withAlpha(30),
+          onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => addDonor(key: key))),
           // print('Card tapped.');
           child: SizedBox(
               width: MediaQuery.of(context).size.width *
@@ -314,7 +475,7 @@ class CardWithIconPendingRequest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.1),
+      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.03),
       // left: MediaQuery.of(context).size.width * 0.05),
       child: Card(
         elevation: 10,

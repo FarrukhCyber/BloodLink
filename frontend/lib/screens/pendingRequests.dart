@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:bloodlink/base_url.dart';
 import 'package:bloodlink/screens/activeDetails.dart';
+import 'package:bloodlink/screens/addDonor.dart';
+import 'package:bloodlink/screens/editRequest.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -9,6 +12,23 @@ import 'package:material_design_icons_flutter/icon_map.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:bloodlink/screens/myDetails.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'dart:ui';
+import 'package:bloodlink/base_url.dart';
+import 'package:bloodlink/screens/admin_dashboard.dart';
+import 'package:bloodlink/screens/changePassword.dart';
+import 'package:bloodlink/screens/otp.dart';
+import 'package:flutter/material.dart';
+import 'package:bloodlink/screens/homepage.dart';
+import 'package:bloodlink/screens/phone_auth.dart';
+import 'signup.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:bloodlink/screens/homepage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bloodlink/utils/user_info.dart';
+import 'package:bloodlink/screens/signup.dart';
 
 List months = [
   'Jan',
@@ -33,13 +53,12 @@ String converter(_selectedTime) {
   var dateFormat = DateFormat("h:mm a"); // you can change the format here
   return dateFormat.format(tempDate);
 }
-// print(dateFormat.format(tempDate));
 
 bool error = false;
 NetworkHandler networkHandler = NetworkHandler();
 String userPhoneNum = UserSimplePreferences.getPhoneNumber() ?? "Error";
 Future<List<Data>> fetchData() async {
-  final response = await networkHandler.active('/active_request');
+  final response = await networkHandler.active('/pending_request');
   if (response.statusCode == 200) {
     List jsonResponse = jsonDecode(response.body)["data"];
     return jsonResponse.map((data) => new Data.fromJson(data)).toList();
@@ -103,23 +122,21 @@ class Data {
   }
 }
 
-class activeRequests extends StatefulWidget {
+class pendingRequests extends StatefulWidget {
   var futureData;
-  bool admin;
-  activeRequests({Key? key, required this.admin}) : super(key: key);
+  pendingRequests({Key? key}) : super(key: key);
 
   @override
-  State<activeRequests> createState() => _activeRequestsState();
+  State<pendingRequests> createState() => _pendingRequestsState();
 }
 
-class _activeRequestsState extends State<activeRequests> {
+class _pendingRequestsState extends State<pendingRequests> {
   @override
   void initState() {
     super.initState();
     widget.futureData = fetchData();
   }
 
-  @override
   @override
   Widget build(BuildContext context) {
     //errorGenerator(context, "There was an error in server",
@@ -131,51 +148,46 @@ class _activeRequestsState extends State<activeRequests> {
         children: <Widget>[
           AppBarFb2(),
           TopBarFb3(
-              title: "Active Requests",
-              upperTitle: "\nFollowing are the Active Blood Requests"),
-          Expanded(
-            child: Container(
-              // height: MediaQuery.of(context).size.height * 0.7,
-              width: MediaQuery.of(context).size.width * 0.98,
-              // margin: EdgeInsets.only(top: 20),
-              child: FutureBuilder<List<Data>>(
-                future: widget.futureData,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    List<Data> data = snapshot.data!;
-                    return ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: data.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return RequestCard(
-                            name: data[index].name,
-                            date: data[index].date,
-                            time: data[index].time,
-                            location: data[index].location,
-                            bloodgroup: data[index].bloodgroup,
-                            status: data[index].status,
-                            attendantNum: data[index].attendantNum,
-                            city: data[index].city,
-                            quantity: data[index].quantity,
-                            id: data[index].id,
-                            admin: widget.admin,
-                            visible:
-                                data[index].status == "Active" ? false : true,
-                          );
-                        });
-                  } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
-                  }
-                  // By default show a loading spinner.
-                  // return CircularProgressIndicator(
-                  //     valueColor: new AlwaysStoppedAnimation<Color>(Colors.red));
-                  return Container(
-                      alignment: Alignment.center,
-                      child:
-                          CircularProgressIndicator(color: Color(0xffc10110)));
-                },
-              ),
+              title: "Resolved Requests",
+              upperTitle: "\nFollowing are your blood requests."),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.7,
+            margin: EdgeInsets.only(top: 20),
+            child: FutureBuilder<List<Data>>(
+              future: widget.futureData,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<Data> data = snapshot.data!;
+                  return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return RequestCard(
+                          name: data[index].name,
+                          date: data[index].date,
+                          time: data[index].time,
+                          location: data[index].location,
+                          bloodgroup: data[index].bloodgroup,
+                          status: data[index].status,
+                          attendantNum: data[index].attendantNum,
+                          city: data[index].city,
+                          quantity: data[index].quantity,
+                          id: data[index].id,
+                          visible:
+                              data[index].status == "Active" ? false : true,
+                        );
+                      });
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                // By default show a loading spinner.
+                // return CircularProgressIndicator(
+                //     valueColor: new AlwaysStoppedAnimation<Color>(Colors.red));
+                return Container(
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator(color: Color(0xffc10110)));
+              },
             ),
           ),
         ],
@@ -196,7 +208,6 @@ class RequestCard extends StatefulWidget {
   final String city;
   final String status;
   final String quantity;
-  final bool admin;
   bool visible;
   // Function moreDetails;
 
@@ -213,7 +224,6 @@ class RequestCard extends StatefulWidget {
       required this.status,
       required this.id,
       required this.visible,
-      required this.admin,
       Key? key})
       : super(key: key);
 
@@ -320,6 +330,39 @@ class _RequestCardState extends State<RequestCard> {
                       //     ],
                       //   ),
                       // ),
+                      // Row(children: [
+                      //   Container(
+                      //       padding: EdgeInsets.fromLTRB(
+                      //           MediaQuery.of(context).size.width * 0.03,
+                      //           0,
+                      //           0,
+                      //           0),
+                      //       child: Icon(Icons.circle,
+                      //           color:
+                      //               widget.visible ? Colors.green : Colors.red,
+                      //           size: 24)),
+                      //   Container(
+                      //       padding: EdgeInsets.fromLTRB(
+                      //           MediaQuery.of(context).size.width * 0.03,
+                      //           0,
+                      //           0,
+                      //           0),
+                      //       child: const Text("Status: ")),
+                      //   TextButton(
+                      //       // backgroundColor: Colors.white,
+                      //       onPressed: (() => {print("Share clicked")}),
+                      //       child: Text(
+                      //         widget.visible ? "Resolved" : "Active",
+                      //         style: TextStyle(
+                      //             color: widget.visible
+                      //                 ? Colors.green
+                      //                 : Colors.red),
+                      //       )),
+                      //   Visibility(
+                      //       visible: widget.visible,
+                      //       child: const Icon(Icons.check_circle,
+                      //           color: Colors.green))
+                      // ]),
                       Container(
                         padding: EdgeInsets.fromLTRB(
                             0, MediaQuery.of(context).size.width * 0.02, 0, 0),
@@ -520,86 +563,137 @@ class _RequestCardState extends State<RequestCard> {
                       //   ),
                       // ),
                       Container(
-                        padding: EdgeInsets.only(right: 10.0),
+                        // padding: EdgeInsets.only(right: 10.0),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            widget.admin == true
-                                ? Container(
-                                    padding: EdgeInsets.only(left: 10.0),
-                                    child: OutlinedButton(
-                                      onPressed: () {
-                                        print("hi");
-                                        setState(() {
-                                          widget.visible = !widget.visible;
-                                          Map<String, dynamic> res = {
-                                            "_id": widget.id,
-                                            "status": !widget.visible,
-                                          };
-                                          networkHandler.replace(
-                                              '/status', res);
-                                        });
-                                        // Navigator.of(context).push(MaterialPageRoute(
-                                        //     builder: (context) =>
-                                        //         ResolvedConfirmation(
-                                        //           zarourat:
-                                        //               widget.visible ? true : false,
-                                        //         )));
-                                      },
-                                      style: ButtonStyle(
-                                        shape: MaterialStateProperty.all(
-                                          RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(30.0)),
-                                        ),
-                                      ),
-                                      child: Text(
-                                          widget.visible
-                                              ? "Mark as Active"
-                                              : "Mark as resolved",
-                                          style: TextStyle(
-                                              color: Color(0xffc10110),
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.035)),
-                                    ),
-                                  )
-                                : Container(),
-                            const Spacer(),
-                            OutlinedButton(
-                              onPressed: () {
-                                print("hi");
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => myDetails(
-                                          attendantName: widget.name,
-                                          attendantNum: widget.attendantNum,
-                                          bloodGroup: widget.bloodgroup,
-                                          status: widget.status,
-                                          userContact: userPhoneNum,
-                                          date: widget.date,
-                                          time: widget.time,
-                                          quantity: widget.quantity,
-                                          hospital: widget.location,
-                                          id: widget.id,
-                                          city: widget.city,
-                                          ownership: false,
-                                        )));
-                              },
-                              style: ButtonStyle(
-                                shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(30.0)),
+                            Container(
+                              padding: EdgeInsets.only(left: 10.0),
+                              child: OutlinedButton(
+                                onPressed: () async {
+                                  bool error = false;
+                                  NetworkHandler networkHandler =
+                                      NetworkHandler();
+                                  final response = await createRequest_func(
+                                      widget.name,
+                                      widget.attendantNum,
+                                      widget.bloodgroup,
+                                      widget.time,
+                                      widget.date,
+                                      widget.location,
+                                      widget.city,
+                                      widget.quantity,
+                                      widget.id);
+                                  SharedPreferences prefs =
+                                      await SharedPreferences.getInstance();
+                                  var msg = prefs.getString("msg");
+                                  if (msg == null) {
+                                    errorGenerator(context, "Error",
+                                        "There is an error on server");
+                                  } else {
+                                    var key;
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                pendingRequests(key: key)));
+                                  }
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Color.fromARGB(255, 0, 116, 4)),
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30.0)),
+                                  ),
                                 ),
+                                child: Text("Send Email",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.035)),
                               ),
-                              child: Text("View Details",
-                                  style: TextStyle(
-                                      color: Color(0xffc10110),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                              0.035)),
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(left: 10.0),
+                              child: OutlinedButton(
+                                onPressed: () async {
+                                  bool error = false;
+                                  NetworkHandler networkHandler =
+                                      NetworkHandler();
+                                  final response =
+                                      await pending_request(widget.id);
+                                  SharedPreferences prefs =
+                                      await SharedPreferences.getInstance();
+                                  var msg = prefs.getString("msg");
+                                  if (msg == null) {
+                                    errorGenerator(context, "Error",
+                                        "There is an error on server");
+                                  } else {
+                                    var key;
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                pendingRequests(key: key)));
+                                  }
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(Colors.red),
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30.0)),
+                                  ),
+                                ),
+                                child: Text("Remove",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.035)),
+                              ),
+                            ),
+                            const Spacer(),
+                            Container(
+                              padding: EdgeInsets.only(right: 10.0),
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  print("hi");
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => myDetails(
+                                            attendantName: widget.name,
+                                            attendantNum: widget.attendantNum,
+                                            bloodGroup: widget.bloodgroup,
+                                            status: widget.status,
+                                            userContact: userPhoneNum,
+                                            date: widget.date,
+                                            time: widget.time,
+                                            quantity: widget.quantity,
+                                            hospital: widget.location,
+                                            id: widget.id,
+                                            city: widget.city,
+                                            ownership: true,
+                                          )));
+                                },
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30.0)),
+                                  ),
+                                ),
+                                child: Text("View Details",
+                                    style: TextStyle(
+                                        color: Color(0xffc10110),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.035)),
+                              ),
                             ),
                           ],
                         ),
@@ -624,14 +718,23 @@ class TopBarFb3 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.15,
+      height: MediaQuery.of(context).size.height * 0.08,
       decoration: BoxDecoration(
           color: primaryColor,
           borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60))),
+      // gradient: LinearGradient(colors: [primaryColor, secondaryColor])),
+      // child: Padding(
+      //   padding: const EdgeInsets.all(25.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Text(title,
+          //     textAlign: TextAlign.center,
+          //     style: const TextStyle(
+          //         color: Colors.white70,
+          //         fontSize: 20,
+          //         fontWeight: FontWeight.bold)),
           Center(
               child: Text(upperTitle,
                   textAlign: TextAlign.center,
@@ -663,10 +766,17 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
 
     return AppBar(
       centerTitle: true,
-      title:
-          const Text("Active Requests", style: TextStyle(color: Colors.white)),
+      title: const Text("My Requests", style: TextStyle(color: Colors.white)),
       backgroundColor: primaryColor,
-      actions: [],
+      actions: [
+        // IconButton(
+        // icon: Icon(
+        // Icons.share,
+        // color: accentColor,
+        // ),
+        // onPressed: () {},
+        // )
+      ],
       leading: IconButton(
         icon: Icon(
           Icons.keyboard_arrow_left,
@@ -677,5 +787,90 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
         },
       ),
     );
+  }
+}
+
+pending_request(id) async {
+  var url = base_url + "/rejectEmail/rej";
+  print("In pending request");
+  try {
+    final http.Response response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'id': id,
+      }),
+    );
+    print("DONE WITH HTTPS");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var parse = jsonDecode(response.body);
+    print("DONE PARSE");
+    if (parse["msg"] == "null") {
+      print("it is null");
+      // message = "null";
+      await prefs.setString('msg', "null");
+    }
+    print("Message received:");
+    print(parse["msg"]);
+  } on HttpException catch (err) {
+    print(err);
+    return null;
+  } on Error catch (error) {
+    print(error);
+    return null;
+  } on Object catch (error) {
+    print("Error here ");
+    print(error);
+    print("Done");
+    return null;
+  }
+}
+
+createRequest_func(
+    name, number, bloodType, time, date, location, city, quantity, id) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  var url = base_url + "/sendEmail"; // check what localhost is for you
+  print("In createRequest");
+  try {
+    final http.Response response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'attendant_name': name,
+        'time': time,
+        'date': date,
+        'blood_group': bloodType,
+        'attendant_num': number,
+        'hospital': location,
+        'city': city,
+        'quantity': quantity,
+        'user_contact_num': UserSimplePreferences.getPhoneNumber(),
+        'id': id
+      }),
+    );
+    var parse = jsonDecode(response.body);
+    if (parse["createRequest"] == null) {
+      print("it is null");
+      // message = "null";
+      await prefs.setString('createRequest', "null");
+    } else
+      await prefs.setString('createRequest', parse["createRequest"]);
+
+    print("Message received:");
+    print(parse["createRequest"]);
+  } on HttpException catch (err) {
+    print(err);
+    return null;
+  } on Error catch (error) {
+    print(error);
+    return null;
+  } on Object catch (error) {
+    print(error);
+    return null;
   }
 }

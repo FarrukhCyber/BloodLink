@@ -475,6 +475,7 @@ class _RequestCardState extends State<RequestCard> {
                                           hospital: widget.location,
                                           id: widget.id,
                                           city: widget.city,
+                                          ownership: true,
                                         )));
                               },
                               style: ButtonStyle(

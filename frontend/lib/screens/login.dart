@@ -16,7 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:bloodlink/screens/signup.dart';
 
-const red = Color(0xffde2c2c);
+const red = Color(0xffc10110);
 var backgroundColor = Color.fromARGB(255, 229, 229, 229);
 var opacity = 0.3;
 var darkred = Color(0xffc10110);
@@ -180,6 +180,9 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
                     prefs.getString("password") ?? "ERROR");
                 UserSimplePreferences.setGender(
                     prefs.getString("gender") ?? "ERROR");
+                UserSimplePreferences.setisDonor(
+                    prefs.getString("donor") ?? "ERROR");
+
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => homepage(
                           userName: name,
@@ -274,6 +277,7 @@ login_func(name, pass, phone) async {
       await prefs.setString('gender', parse["gender"]);
       await prefs.setString('age', parse["age"]);
       await prefs.setString('email', parse["email"]);
+      await prefs.setString('donor', parse["donor"]);
       print("Here they are");
       print(parse["userName"]);
       print(parse["email"]);
@@ -282,6 +286,7 @@ login_func(name, pass, phone) async {
       print(parse["phoneNumber"]);
       print(parse["password"]);
       print(parse["bloodType"]);
+      print(parse["donor"]);
     }
 
     print("Message received:");

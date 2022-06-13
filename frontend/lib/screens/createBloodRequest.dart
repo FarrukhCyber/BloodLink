@@ -1,4 +1,7 @@
+// import 'dart:html';
+
 import 'package:bloodlink/base_url.dart';
+import 'package:bloodlink/screens/admin_dashboard.dart';
 import 'package:bloodlink/screens/homepage.dart';
 import 'package:bloodlink/screens/request_success_msg.dart';
 import 'package:flutter/cupertino.dart';
@@ -43,7 +46,8 @@ var items = [
 String dropDownValue = "Choose a Blood Group";
 
 class CreateBloodRequest extends StatelessWidget {
-  const CreateBloodRequest({Key? key}) : super(key: key);
+  var admin;
+  CreateBloodRequest({Key? key, required this.admin}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +55,9 @@ class CreateBloodRequest extends StatelessWidget {
       body: ListView(children: <Widget>[
         Column(
           children: <Widget>[
-            AppBarFb2(),
+            AppBarFb2(
+              admin: admin,
+            ),
             TopBarFb3(
                 title: "Initiate a Request",
                 upperTitle:
@@ -83,7 +89,10 @@ class CreateBloodRequest extends StatelessWidget {
                 hintText: "How many bottles of blood is required?",
                 labelText: "Quantity"),
 
-            const PairButton(text: "hello"),
+            PairButton(
+              text: "hello",
+              admin: admin,
+            ),
           ],
         ),
       ]),
@@ -142,8 +151,9 @@ class TopBarFb3 extends StatelessWidget {
 class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
   @override
   final Size preferredSize;
+  final admin;
 
-  AppBarFb2({Key? key})
+  AppBarFb2({Key? key, required this.admin})
       : preferredSize = const Size.fromHeight(56.0),
         super(key: key);
   @override
@@ -172,11 +182,25 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
           Icons.keyboard_arrow_left,
           color: accentColor,
         ),
-        onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => homepage(
-                  key: key,
-                  userName: "user",
-                ))),
+        onPressed: () => {
+          if (admin == true)
+            {
+              print("here in admin"),
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => adminHomepage(
+                        key: key,
+                        // userName: UserSimplePreferences.getUsername(),
+                      )))
+            }
+          else
+            {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => homepage(
+                        key: key,
+                        userName: UserSimplePreferences.getUsername() ?? "",
+                      )))
+            }
+        },
       ),
     );
   }
@@ -482,8 +506,10 @@ errorGenerator(context, title, message) {
 
 class PairButton extends StatelessWidget {
   final String text;
+  var admin;
   // final Function() onPressed;
-  const PairButton({required this.text, Key? key}) : super(key: key);
+  PairButton({required this.text, required this.admin, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -548,7 +574,7 @@ class PairButton extends StatelessWidget {
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(borderRadius)),
                       )),
-                  //TODO: For turning On the maps uncomment the below section---------------------------    
+                  //TODO: For turning On the maps uncomment the below section---------------------------
                   // onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                   //     builder: (context) => CreateBloodRequestPage2(key: key))),
                   //------------------------------------------------------------------------------------
@@ -579,7 +605,8 @@ class PairButton extends StatelessWidget {
                       print("message is:");
                       print(msg);
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => Confirmation()));
+                          builder: (context) =>
+                              RequestConfirmation(admin: admin)));
                       // if (msg == "Request Added") {
                       //   Navigator.of(context).push(MaterialPageRoute(
                       //       builder: (context) => Confirmation()));

@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:bloodlink/screens/activeDetails.dart';
+import 'package:bloodlink/screens/resolvedConfirmation.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -7,7 +9,46 @@ import 'package:bloodlink/screens/networkHandler.dart';
 import 'package:material_design_icons_flutter/icon_map.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:bloodlink/screens/myDetails.dart';
+import 'package:intl/intl.dart';
 
+List months = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec'
+];
+
+String converter(_selectedTime) {
+  DateTime tempDate = DateFormat("hh:mm").parse(
+      (_selectedTime.split('T')[1].split(":"))[0].toString() +
+          ":" +
+          (_selectedTime.split('T')[1].split(":"))[1].toString());
+  var dateFormat = DateFormat("h:mm a"); // you can change the format here
+  return dateFormat.format(tempDate);
+}
+// print(dateFormat.format(tempDate));
+
+// bool error = false;
+// NetworkHandler networkHandler = NetworkHandler();
+// String userPhoneNum = UserSimplePreferences.getPhoneNumber() ?? "Error";
+// Future<List<Data>> fetchData() async {
+//   final response = await networkHandler.active('/active_request');
+//   if (response.statusCode == 200) {
+//     List jsonResponse = jsonDecode(response.body)["data"];
+//     return jsonResponse.map((data) => new Data.fromJson(data)).toList();
+//   } else {
+//     error = true;
+//     throw Exception('Unexpected error occured!');
+//   }
+// }
 bool error = false;
 NetworkHandler networkHandler = NetworkHandler();
 String userPhoneNum = UserSimplePreferences.getPhoneNumber() ?? "Error";
@@ -82,16 +123,17 @@ class myRequests extends StatefulWidget {
   myRequests({Key? key}) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
+  State<myRequests> createState() => _activeRequestsState();
 }
 
-class _MyAppState extends State<myRequests> {
+class _activeRequestsState extends State<myRequests> {
   @override
   void initState() {
     super.initState();
     widget.futureData = fetchData();
   }
 
+  @override
   @override
   Widget build(BuildContext context) {
     //errorGenerator(context, "There was an error in server",
@@ -103,46 +145,50 @@ class _MyAppState extends State<myRequests> {
         children: <Widget>[
           AppBarFb2(),
           TopBarFb3(
-              title: "My Requests",
-              upperTitle: "\nFollowing are your blood requests."),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.7,
-            margin: EdgeInsets.only(top: 20),
-            child: FutureBuilder<List<Data>>(
-              future: widget.futureData,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  List<Data> data = snapshot.data!;
-                  return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return RequestCard(
-                          name: data[index].name,
-                          date: data[index].date,
-                          time: data[index].time,
-                          location: data[index].location,
-                          bloodgroup: data[index].bloodgroup,
-                          status: data[index].status,
-                          attendantNum: data[index].attendantNum,
-                          city: data[index].city,
-                          quantity: data[index].quantity,
-                          id: data[index].id,
-                          visible:
-                              data[index].status == "Active" ? false : true,
-                        );
-                      });
-                } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
-                }
-                // By default show a loading spinner.
-                // return CircularProgressIndicator(
-                //     valueColor: new AlwaysStoppedAnimation<Color>(Colors.red));
-                return Container(
-                    alignment: Alignment.center,
-                    child: CircularProgressIndicator(color: Color(0xffc10110)));
-              },
+              title: "Your Requests",
+              upperTitle: "\nFollowing are your Blood Requests"),
+          Expanded(
+            child: Container(
+              // height: MediaQuery.of(context).size.height * 0.7,
+              width: MediaQuery.of(context).size.width * 0.98,
+              // margin: EdgeInsets.only(top: 20),
+              child: FutureBuilder<List<Data>>(
+                future: widget.futureData,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<Data> data = snapshot.data!;
+                    return ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: data.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return RequestCard(
+                            name: data[index].name,
+                            date: data[index].date,
+                            time: data[index].time,
+                            location: data[index].location,
+                            bloodgroup: data[index].bloodgroup,
+                            status: data[index].status,
+                            attendantNum: data[index].attendantNum,
+                            city: data[index].city,
+                            quantity: data[index].quantity,
+                            id: data[index].id,
+                            visible:
+                                data[index].status == "Active" ? false : true,
+                          );
+                        });
+                  } else if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
+                  // By default show a loading spinner.
+                  // return CircularProgressIndicator(
+                  //     valueColor: new AlwaysStoppedAnimation<Color>(Colors.red));
+                  return Container(
+                      alignment: Alignment.center,
+                      child:
+                          CircularProgressIndicator(color: Color(0xffc10110)));
+                },
+              ),
             ),
           ),
         ],
@@ -191,9 +237,12 @@ class _RequestCardState extends State<RequestCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.05),
+        // margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.05),
         child: Card(
             elevation: 10,
+            shape: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: BorderSide(color: Colors.white)),
             child: InkWell(
                 splashColor: Colors.blue.withAlpha(30),
                 onTap: () => {
@@ -205,8 +254,9 @@ class _RequestCardState extends State<RequestCard> {
                       print(widget.id),
                     },
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: MediaQuery.of(context).size.height * 0.25,
+                  // width: MediaQuery.of(context).size.width * 0.75,
+                  height: null,
+                  // height: MediaQuery.of(context).size.height * 0.25,
                   child: Column(
                     children: [
                       Container(
@@ -214,7 +264,7 @@ class _RequestCardState extends State<RequestCard> {
                         // padding: EdgeInsets.fromLTRB(5, 10, 0, 0),
                         padding: EdgeInsets.fromLTRB(
                             MediaQuery.of(context).size.width * 0.0250,
-                            MediaQuery.of(context).size.width * 0.0120,
+                            MediaQuery.of(context).size.width * 0.03,
                             0,
                             0),
                         child: Row(
@@ -227,7 +277,7 @@ class _RequestCardState extends State<RequestCard> {
                                 style: TextButton.styleFrom(
                                     // primary: Colors.white,
                                     backgroundColor:
-                                        Color(0xffde2c2c) // Text Color
+                                        Color(0xffc10110) // Text Color
                                     ),
                                 onPressed: null,
                                 child: Text(
@@ -266,59 +316,100 @@ class _RequestCardState extends State<RequestCard> {
                           ],
                         ),
                       ),
-                      Container(
-                        padding: EdgeInsets.fromLTRB(
-                            MediaQuery.of(context).size.width * 0.05, 0, 0, 0),
-                        child: Row(children: [
-                          SizedBox(width: 20),
-                          const Text("Status: "),
-                          TextButton(
-                              // backgroundColor: Colors.white,
-                              onPressed: (() => {print("Share clicked")}),
-                              child: Text(
-                                widget.visible ? "Resolved" : "Active",
-                                style: TextStyle(
-                                    color: widget.visible
-                                        ? Colors.green
-                                        : Colors.red),
-                              )),
-                          Visibility(
-                              visible: widget.visible,
-                              child: const Icon(Icons.check_circle,
-                                  color: Colors.green))
-                        ]),
-                      ),
+                      // Container(
+                      //   padding: EdgeInsets.fromLTRB(
+                      //       0, MediaQuery.of(context).size.width * 0.02, 0, 0),
+                      //   child: Column(
+                      //     children: [
+                      //       Divider(
+                      //         thickness: 2,
+                      //         color: Color(0xffc10110),
+                      //         indent: MediaQuery.of(context).size.width * 0.05,
+                      //         endIndent:
+                      //             MediaQuery.of(context).size.width * 0.05,
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      Row(children: [
+                        Container(
+                            padding: EdgeInsets.fromLTRB(
+                                MediaQuery.of(context).size.width * 0.03,
+                                0,
+                                0,
+                                0),
+                            child: Icon(Icons.circle,
+                                color:
+                                    widget.visible ? Colors.green : Colors.red,
+                                size: 24)),
+                        Container(
+                            padding: EdgeInsets.fromLTRB(
+                                MediaQuery.of(context).size.width * 0.03,
+                                0,
+                                0,
+                                0),
+                            child: const Text("Status: ")),
+                        TextButton(
+                            // backgroundColor: Colors.white,
+                            onPressed: (() => {print("Share clicked")}),
+                            child: Text(
+                              widget.visible ? "Resolved" : "Active",
+                              style: TextStyle(
+                                  color: widget.visible
+                                      ? Colors.green
+                                      : Colors.red),
+                            )),
+                        Visibility(
+                            visible: widget.visible,
+                            child: const Icon(Icons.check_circle,
+                                color: Colors.green))
+                      ]),
                       Container(
                         padding: EdgeInsets.fromLTRB(
                             0, MediaQuery.of(context).size.width * 0.02, 0, 0),
-                        child: Row(
+                        child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            Column(
+                            Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
+                                      padding: EdgeInsets.fromLTRB(
+                                          MediaQuery.of(context).size.width *
+                                              0.03,
+                                          MediaQuery.of(context).size.width *
+                                              0.005,
+                                          0,
+                                          0),
+                                      child: Icon(
+                                        Icons.calendar_month_rounded,
+                                        color: Color(0xffc10110),
+                                        size: 24,
+                                      )),
+                                  Container(
                                     padding: EdgeInsets.fromLTRB(
-                                        MediaQuery.of(context).size.width * 0.1,
                                         MediaQuery.of(context).size.width *
-                                            0.005,
+                                            0.03,
+                                        MediaQuery.of(context).size.width *
+                                            0.01,
                                         0,
                                         0),
                                     child: Text(
                                       "Date",
                                       style: TextStyle(
                                           color: Colors.black,
-                                          // fontWeight: FontWeight.bold,
+                                          fontWeight: FontWeight.bold,
                                           fontSize: MediaQuery.of(context)
                                                   .size
                                                   .width *
                                               0.035),
-                                      textAlign: TextAlign.left,
+                                      // textAlign: TextAlign.left,
                                     ),
                                   ),
                                   Container(
                                     padding: EdgeInsets.fromLTRB(
-                                        MediaQuery.of(context).size.width * 0.1,
+                                        MediaQuery.of(context).size.width *
+                                            0.085,
                                         MediaQuery.of(context).size.width *
                                             0.005,
                                         0,
@@ -327,11 +418,12 @@ class _RequestCardState extends State<RequestCard> {
                                       ((widget.date
                                               .split('T')[0]
                                               .split('-'))[2] +
-                                          "-" +
-                                          (widget.date
-                                              .split('T')[0]
-                                              .split('-'))[1] +
-                                          "-" +
+                                          " " +
+                                          (months[int.parse((widget.date
+                                                  .split('T')[0]
+                                                  .split('-'))[1]) -
+                                              1]) +
+                                          " " +
                                           (widget.date
                                               .split('T')[0]
                                               .split('-'))[0]),
@@ -346,11 +438,26 @@ class _RequestCardState extends State<RequestCard> {
                                     ),
                                   ),
                                 ]),
-                            Column(
+                            Row(
                               children: [
+                                // Spacer(),
+                                Container(
+                                    padding: EdgeInsets.fromLTRB(
+                                        MediaQuery.of(context).size.width *
+                                            0.03,
+                                        MediaQuery.of(context).size.width *
+                                            0.005,
+                                        0,
+                                        0),
+                                    // alignment: Alignment.center,
+                                    child: Icon(
+                                      Icons.watch_later,
+                                      color: Color(0xffc10110),
+                                      size: 24,
+                                    )),
                                 Container(
                                   padding: EdgeInsets.fromLTRB(
-                                      MediaQuery.of(context).size.width * 0.04,
+                                      MediaQuery.of(context).size.width * 0.03,
                                       MediaQuery.of(context).size.width * 0.005,
                                       0,
                                       0),
@@ -358,41 +465,51 @@ class _RequestCardState extends State<RequestCard> {
                                     "Time",
                                     style: TextStyle(
                                         color: Colors.black,
-                                        // fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.bold,
                                         fontSize:
                                             MediaQuery.of(context).size.width *
                                                 0.035),
-                                    textAlign: TextAlign.left,
+                                    // textAlign: TextAlign.left,
                                   ),
                                 ),
                                 Container(
                                   padding: EdgeInsets.fromLTRB(
-                                      MediaQuery.of(context).size.width * 0.05,
+                                      MediaQuery.of(context).size.width * 0.08,
                                       MediaQuery.of(context).size.width * 0.005,
                                       0,
                                       0),
                                   child: Text(
-                                    (widget.time.split('T')[1].split(":"))[0] +
-                                        ":" +
-                                        (widget.time
-                                            .split('T')[1]
-                                            .split(":"))[1],
+                                    converter(widget.time),
                                     style: TextStyle(
                                         color: Colors.black,
                                         // fontWeight: FontWeight.bold,
                                         fontSize:
                                             MediaQuery.of(context).size.width *
                                                 0.035),
-                                    textAlign: TextAlign.left,
+                                    // textAlign: TextAlign.left,
                                   ),
                                 ),
                               ],
                             ),
-                            Column(
+                            Row(
                               children: [
                                 Container(
+                                    padding: EdgeInsets.fromLTRB(
+                                        MediaQuery.of(context).size.width *
+                                            0.03,
+                                        MediaQuery.of(context).size.width *
+                                            0.005,
+                                        0,
+                                        0),
+                                    // alignment: Alignment.center,
+                                    child: Icon(
+                                      Icons.location_on,
+                                      color: Color(0xffc10110),
+                                      size: 24,
+                                    )),
+                                Container(
                                   padding: EdgeInsets.fromLTRB(
-                                      MediaQuery.of(context).size.width * 0.00,
+                                      MediaQuery.of(context).size.width * 0.03,
                                       MediaQuery.of(context).size.width * 0.005,
                                       0,
                                       0),
@@ -400,111 +517,132 @@ class _RequestCardState extends State<RequestCard> {
                                     "Location",
                                     style: TextStyle(
                                         color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.035),
+                                    // textAlign: TextAlign.left,
+                                  ),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.fromLTRB(
+                                      MediaQuery.of(context).size.width * 0.03,
+                                      0,
+                                      0,
+                                      0),
+                                  // child: Expanded(
+                                  child: Text(
+                                    widget.location,
+                                    style: TextStyle(
+                                        color: Colors.black,
                                         // fontWeight: FontWeight.bold,
                                         fontSize:
                                             MediaQuery.of(context).size.width *
                                                 0.035),
                                     textAlign: TextAlign.left,
                                   ),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.fromLTRB(
-                                      MediaQuery.of(context).size.width * 0.13,
-                                      MediaQuery.of(context).size.width * 0.005,
-                                      0,
-                                      0),
-                                  child: Expanded(
-                                    child: Text(
-                                      widget.location,
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          // fontWeight: FontWeight.bold,
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.035),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ),
+                                  // ),
                                 ),
                               ],
                             ),
                           ],
                         ),
                       ),
+                      // Container(
+                      //   padding: EdgeInsets.fromLTRB(
+                      //       0, MediaQuery.of(context).size.width * 0.02, 0, 0),
+                      //   child: Column(
+                      //     children: [
+                      //       Divider(
+                      //         thickness: 2,
+                      //         color: Color(0xffc10110),
+                      //         indent: MediaQuery.of(context).size.width * 0.05,
+                      //         endIndent:
+                      //             MediaQuery.of(context).size.width * 0.05,
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                       Container(
-                        padding: EdgeInsets.fromLTRB(
-                            MediaQuery.of(context).size.width * 0.03,
-                            MediaQuery.of(context).size.width * 0.03,
-                            0,
-                            0),
+                        // padding: EdgeInsets.only(right: 10.0),
                         child: Row(
                           children: [
-                            OutlinedButton(
-                              onPressed: () {
-                                print("hi");
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => myDetails(
-                                          attendantName: widget.name,
-                                          attendantNum: widget.attendantNum,
-                                          bloodGroup: widget.bloodgroup,
-                                          status: widget.status,
-                                          userContact: userPhoneNum,
-                                          date: widget.date,
-                                          time: widget.time,
-                                          quantity: widget.quantity,
-                                          hospital: widget.location,
-                                          id: widget.id,
-                                          city: widget.city,
-                                        )));
-                              },
-                              style: ButtonStyle(
-                                shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(30.0)),
+                            Container(
+                              padding: EdgeInsets.only(left: 10.0),
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  print("hi");
+                                  setState(() {
+                                    widget.visible = !widget.visible;
+                                    Map<String, dynamic> res = {
+                                      "_id": widget.id,
+                                      "status": !widget.visible,
+                                    };
+                                    networkHandler.replace('/status', res);
+                                  });
+                                  // Navigator.of(context).push(MaterialPageRoute(
+                                  //     builder: (context) =>
+                                  //         ResolvedConfirmation(
+                                  //           zarourat:
+                                  //               widget.visible ? true : false,
+                                  //         )));
+                                },
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30.0)),
+                                  ),
                                 ),
+                                child: Text(
+                                    widget.visible
+                                        ? "Mark as Active"
+                                        : "Mark as resolved",
+                                    style: TextStyle(
+                                        color: Color(0xffc10110),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.035)),
                               ),
-                              child: Text("View Details",
-                                  style: TextStyle(
-                                      color: Color(0xffde2c2c),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                              0.035)),
                             ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.275,
-                            ),
-                            OutlinedButton(
-                              onPressed: () {
-                                print("hi");
-                                setState(() {
-                                  widget.visible = !widget.visible;
-                                  Map<String, dynamic> res = {
-                                    "_id": widget.id,
-                                    "status": !widget.visible,
-                                  };
-                                  networkHandler.replace('/status', res);
-                                });
-                              },
-                              style: ButtonStyle(
-                                shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(30.0)),
+                            const Spacer(),
+                            Container(
+                              padding: EdgeInsets.only(right: 10.0),
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  print("hi");
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => myDetails(
+                                            attendantName: widget.name,
+                                            attendantNum: widget.attendantNum,
+                                            bloodGroup: widget.bloodgroup,
+                                            status: widget.status,
+                                            userContact: userPhoneNum,
+                                            date: widget.date,
+                                            time: widget.time,
+                                            quantity: widget.quantity,
+                                            hospital: widget.location,
+                                            id: widget.id,
+                                            city: widget.city,
+                                            ownership: true,
+                                          )));
+                                },
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30.0)),
+                                  ),
                                 ),
+                                child: Text("View Details",
+                                    style: TextStyle(
+                                        color: Color(0xffc10110),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.035)),
                               ),
-                              child: Text(
-                                  widget.visible
-                                      ? "Mark as Active"
-                                      : "Mark as resolved",
-                                  style: TextStyle(
-                                      color: Color(0xffde2c2c),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                              0.035)),
                             ),
                           ],
                         ),
@@ -520,7 +658,7 @@ class TopBarFb3 extends StatelessWidget {
   final String upperTitle;
   TopBarFb3({required this.title, required this.upperTitle, Key? key})
       : super(key: key);
-  final primaryColor = Color.fromARGB(255, 222, 44, 44);
+  final primaryColor = Color(0xffc10110);
   final secondaryColor = const Color(0xff6D28D9);
   final accentColor = const Color(0xffffffff);
   final backgroundColor = const Color(0xffffffff);
@@ -529,23 +667,14 @@ class TopBarFb3 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.08,
+      height: MediaQuery.of(context).size.height * 0.15,
       decoration: BoxDecoration(
           color: primaryColor,
           borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60))),
-      // gradient: LinearGradient(colors: [primaryColor, secondaryColor])),
-      // child: Padding(
-      //   padding: const EdgeInsets.all(25.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Text(title,
-          //     textAlign: TextAlign.center,
-          //     style: const TextStyle(
-          //         color: Colors.white70,
-          //         fontSize: 20,
-          //         fontWeight: FontWeight.bold)),
           Center(
               child: Text(upperTitle,
                   textAlign: TextAlign.center,
@@ -569,7 +698,7 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
         super(key: key);
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xffde2c2c);
+    const primaryColor = Color(0xffc10110);
     const secondaryColor = Color(0xff6D28D9);
     const accentColor = Color(0xffffffff);
     const backgroundColor = Color(0xffffffff);
@@ -579,15 +708,7 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
       centerTitle: true,
       title: const Text("My Requests", style: TextStyle(color: Colors.white)),
       backgroundColor: primaryColor,
-      actions: [
-        // IconButton(
-        // icon: Icon(
-        // Icons.share,
-        // color: accentColor,
-        // ),
-        // onPressed: () {},
-        // )
-      ],
+      actions: [],
       leading: IconButton(
         icon: Icon(
           Icons.keyboard_arrow_left,

@@ -222,6 +222,7 @@ class _registerDonorState extends State<registerDonor> {
                     backgroundColor: Color(0xffc10110),
                     textColor: Colors.white,
                     fontSize: 16.0);
+                UserSimplePreferences.setisDonor("true");
                 Navigator.pop(context, 'Ok');
               } else {
                 errorGenerator(context, 'There was an error in server',

@@ -33,13 +33,12 @@ String converter(_selectedTime) {
   var dateFormat = DateFormat("h:mm a"); // you can change the format here
   return dateFormat.format(tempDate);
 }
-// print(dateFormat.format(tempDate));
 
 bool error = false;
 NetworkHandler networkHandler = NetworkHandler();
 String userPhoneNum = UserSimplePreferences.getPhoneNumber() ?? "Error";
 Future<List<Data>> fetchData() async {
-  final response = await networkHandler.active('/active_request');
+  final response = await networkHandler.active('/resolved_request');
   if (response.statusCode == 200) {
     List jsonResponse = jsonDecode(response.body)["data"];
     return jsonResponse.map((data) => new Data.fromJson(data)).toList();
@@ -103,23 +102,21 @@ class Data {
   }
 }
 
-class activeRequests extends StatefulWidget {
+class adminResolvedRequests extends StatefulWidget {
   var futureData;
-  bool admin;
-  activeRequests({Key? key, required this.admin}) : super(key: key);
+  adminResolvedRequests({Key? key}) : super(key: key);
 
   @override
-  State<activeRequests> createState() => _activeRequestsState();
+  State<adminResolvedRequests> createState() => _pendingRequestsState();
 }
 
-class _activeRequestsState extends State<activeRequests> {
+class _pendingRequestsState extends State<adminResolvedRequests> {
   @override
   void initState() {
     super.initState();
     widget.futureData = fetchData();
   }
 
-  @override
   @override
   Widget build(BuildContext context) {
     //errorGenerator(context, "There was an error in server",
@@ -131,11 +128,11 @@ class _activeRequestsState extends State<activeRequests> {
         children: <Widget>[
           AppBarFb2(),
           TopBarFb3(
-              title: "Active Requests",
-              upperTitle: "\nFollowing are the Active Blood Requests"),
+              title: "Resolved Requests",
+              upperTitle: "\nFollowing are resolved blood requests."),
           Expanded(
             child: Container(
-              // height: MediaQuery.of(context).size.height * 0.7,
+              // height: MediaQuery.of(context).size.height * 0.78,
               width: MediaQuery.of(context).size.width * 0.98,
               // margin: EdgeInsets.only(top: 20),
               child: FutureBuilder<List<Data>>(
@@ -159,7 +156,6 @@ class _activeRequestsState extends State<activeRequests> {
                             city: data[index].city,
                             quantity: data[index].quantity,
                             id: data[index].id,
-                            admin: widget.admin,
                             visible:
                                 data[index].status == "Active" ? false : true,
                           );
@@ -196,7 +192,6 @@ class RequestCard extends StatefulWidget {
   final String city;
   final String status;
   final String quantity;
-  final bool admin;
   bool visible;
   // Function moreDetails;
 
@@ -213,7 +208,6 @@ class RequestCard extends StatefulWidget {
       required this.status,
       required this.id,
       required this.visible,
-      required this.admin,
       Key? key})
       : super(key: key);
 
@@ -320,6 +314,39 @@ class _RequestCardState extends State<RequestCard> {
                       //     ],
                       //   ),
                       // ),
+                      // Row(children: [
+                      //   Container(
+                      //       padding: EdgeInsets.fromLTRB(
+                      //           MediaQuery.of(context).size.width * 0.03,
+                      //           0,
+                      //           0,
+                      //           0),
+                      //       child: Icon(Icons.circle,
+                      //           color:
+                      //               widget.visible ? Colors.green : Colors.red,
+                      //           size: 24)),
+                      //   Container(
+                      //       padding: EdgeInsets.fromLTRB(
+                      //           MediaQuery.of(context).size.width * 0.03,
+                      //           0,
+                      //           0,
+                      //           0),
+                      //       child: const Text("Status: ")),
+                      //   TextButton(
+                      //       // backgroundColor: Colors.white,
+                      //       onPressed: (() => {print("Share clicked")}),
+                      //       child: Text(
+                      //         widget.visible ? "Resolved" : "Active",
+                      //         style: TextStyle(
+                      //             color: widget.visible
+                      //                 ? Colors.green
+                      //                 : Colors.red),
+                      //       )),
+                      //   Visibility(
+                      //       visible: widget.visible,
+                      //       child: const Icon(Icons.check_circle,
+                      //           color: Colors.green))
+                      // ]),
                       Container(
                         padding: EdgeInsets.fromLTRB(
                             0, MediaQuery.of(context).size.width * 0.02, 0, 0),
@@ -520,86 +547,85 @@ class _RequestCardState extends State<RequestCard> {
                       //   ),
                       // ),
                       Container(
-                        padding: EdgeInsets.only(right: 10.0),
+                        // padding: EdgeInsets.only(right: 10.0),
                         child: Row(
                           children: [
-                            widget.admin == true
-                                ? Container(
-                                    padding: EdgeInsets.only(left: 10.0),
-                                    child: OutlinedButton(
-                                      onPressed: () {
-                                        print("hi");
-                                        setState(() {
-                                          widget.visible = !widget.visible;
-                                          Map<String, dynamic> res = {
-                                            "_id": widget.id,
-                                            "status": !widget.visible,
-                                          };
-                                          networkHandler.replace(
-                                              '/status', res);
-                                        });
-                                        // Navigator.of(context).push(MaterialPageRoute(
-                                        //     builder: (context) =>
-                                        //         ResolvedConfirmation(
-                                        //           zarourat:
-                                        //               widget.visible ? true : false,
-                                        //         )));
-                                      },
-                                      style: ButtonStyle(
-                                        shape: MaterialStateProperty.all(
-                                          RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(30.0)),
-                                        ),
-                                      ),
-                                      child: Text(
-                                          widget.visible
-                                              ? "Mark as Active"
-                                              : "Mark as resolved",
-                                          style: TextStyle(
-                                              color: Color(0xffc10110),
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.035)),
-                                    ),
-                                  )
-                                : Container(),
-                            const Spacer(),
-                            OutlinedButton(
-                              onPressed: () {
-                                print("hi");
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => myDetails(
-                                          attendantName: widget.name,
-                                          attendantNum: widget.attendantNum,
-                                          bloodGroup: widget.bloodgroup,
-                                          status: widget.status,
-                                          userContact: userPhoneNum,
-                                          date: widget.date,
-                                          time: widget.time,
-                                          quantity: widget.quantity,
-                                          hospital: widget.location,
-                                          id: widget.id,
-                                          city: widget.city,
-                                          ownership: false,
-                                        )));
-                              },
-                              style: ButtonStyle(
-                                shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(30.0)),
+                            Container(
+                              padding: EdgeInsets.only(left: 10.0),
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  print("hi");
+                                  setState(() {
+                                    widget.visible = !widget.visible;
+                                    Map<String, dynamic> res = {
+                                      "_id": widget.id,
+                                      "status": !widget.visible,
+                                    };
+                                    networkHandler.replace('/status', res);
+                                  });
+                                  // Navigator.of(context).push(MaterialPageRoute(
+                                  //     builder: (context) =>
+                                  //         ResolvedConfirmation(
+                                  //           zarourat:
+                                  //               widget.visible ? true : false,
+                                  //         )));
+                                },
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30.0)),
+                                  ),
                                 ),
+                                child: Text(
+                                    widget.visible
+                                        ? "Mark as Active"
+                                        : "Mark as resolved",
+                                    style: TextStyle(
+                                        color: Color(0xffc10110),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.035)),
                               ),
-                              child: Text("View Details",
-                                  style: TextStyle(
-                                      color: Color(0xffc10110),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize:
-                                          MediaQuery.of(context).size.width *
-                                              0.035)),
+                            ),
+                            const Spacer(),
+                            Container(
+                              padding: EdgeInsets.only(right: 10.0),
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  print("hi");
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => myDetails(
+                                            attendantName: widget.name,
+                                            attendantNum: widget.attendantNum,
+                                            bloodGroup: widget.bloodgroup,
+                                            status: widget.status,
+                                            userContact: userPhoneNum,
+                                            date: widget.date,
+                                            time: widget.time,
+                                            quantity: widget.quantity,
+                                            hospital: widget.location,
+                                            id: widget.id,
+                                            city: widget.city,
+                                            ownership: true,
+                                          )));
+                                },
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30.0)),
+                                  ),
+                                ),
+                                child: Text("View Details",
+                                    style: TextStyle(
+                                        color: Color(0xffc10110),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.035)),
+                              ),
                             ),
                           ],
                         ),
@@ -615,7 +641,7 @@ class TopBarFb3 extends StatelessWidget {
   final String upperTitle;
   TopBarFb3({required this.title, required this.upperTitle, Key? key})
       : super(key: key);
-  final primaryColor = Color(0xffc10110);
+  final primaryColor = Color.fromARGB(255, 222, 44, 44);
   final secondaryColor = const Color(0xff6D28D9);
   final accentColor = const Color(0xffffffff);
   final backgroundColor = const Color(0xffffffff);
@@ -624,14 +650,23 @@ class TopBarFb3 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.15,
+      height: MediaQuery.of(context).size.height * 0.08,
       decoration: BoxDecoration(
           color: primaryColor,
           borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60))),
+      // gradient: LinearGradient(colors: [primaryColor, secondaryColor])),
+      // child: Padding(
+      //   padding: const EdgeInsets.all(25.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Text(title,
+          //     textAlign: TextAlign.center,
+          //     style: const TextStyle(
+          //         color: Colors.white70,
+          //         fontSize: 20,
+          //         fontWeight: FontWeight.bold)),
           Center(
               child: Text(upperTitle,
                   textAlign: TextAlign.center,
@@ -655,7 +690,7 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
         super(key: key);
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xffc10110);
+    const primaryColor = Color(0xffde2c2c);
     const secondaryColor = Color(0xff6D28D9);
     const accentColor = Color(0xffffffff);
     const backgroundColor = Color(0xffffffff);
@@ -663,10 +698,18 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
 
     return AppBar(
       centerTitle: true,
-      title:
-          const Text("Active Requests", style: TextStyle(color: Colors.white)),
+      title: const Text("Resolved Requests",
+          style: TextStyle(color: Colors.white)),
       backgroundColor: primaryColor,
-      actions: [],
+      actions: [
+        // IconButton(
+        // icon: Icon(
+        // Icons.share,
+        // color: accentColor,
+        // ),
+        // onPressed: () {},
+        // )
+      ],
       leading: IconButton(
         icon: Icon(
           Icons.keyboard_arrow_left,

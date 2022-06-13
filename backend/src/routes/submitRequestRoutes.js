@@ -12,7 +12,7 @@ const socialPost = new require('social-post-api')
 const social = new socialPost("TRSHJM6-NQK4KXQ-KT57N53-0BGWNBP")
 
 //Email handling
-const sendEmail = require('../services/email_service')
+// const sendEmail = require('../services/email_service')
 
 router.post("/" , (req, res, next) => {
     const result = req.body
@@ -73,7 +73,8 @@ function saveToDb(result) {
         date: result.date,
         time: result.time,
         hospital : result.hospital,
-        city: result.city
+        city: result.city,
+        email : "2"
     })
 
     blood_req.save().then( ()=> console.log("Request added successfully")).catch((err)=>console.log(`${err} occurred while saving request to db`))

@@ -10,10 +10,12 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:material_design_icons_flutter/icon_map.dart';
 import 'package:bloodlink/screens/myRequests.dart';
 import 'package:bloodlink/screens/viewActiveRequest.dart';
+import 'package:bloodlink/utils/user_info.dart';
 
 class homepage extends StatefulWidget {
   final String userName;
-  const homepage({Key? key, required this.userName}) : super(key: key);
+  var isDonor = UserSimplePreferences.getisDonor();
+  homepage({Key? key, required this.userName}) : super(key: key);
 
   @override
   State<homepage> createState() => _homepageState();
@@ -73,7 +75,8 @@ class _homepageState extends State<homepage>
                   CardwithRegisterDonor(
                       text: "Register as Donor",
                       symbol: MdiIcons.heart,
-                      color: Color(0xffc10110))
+                      color: Color(0xffc10110),
+                      donor: widget.isDonor),
                 ],
               ),
             ]),
@@ -175,7 +178,8 @@ class CardWithIconInitiateRequest extends StatelessWidget {
         child: InkWell(
           splashColor: Colors.blue.withAlpha(30),
           onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => CreateBloodRequest(key: key))),
+              builder: (context) =>
+                  CreateBloodRequest(key: key, admin: false))),
           // onTap: () => {},
           // print('Card tapped.');
           child: SizedBox(
@@ -246,7 +250,9 @@ class CardWithIconActiveRequest extends StatelessWidget {
         child: InkWell(
           splashColor: Colors.blue.withAlpha(30),
           onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => activeRequests(key: key))),
+              builder: (context) => activeRequests(
+                    admin: false,
+                  ))),
           // onTap: () => {},
           // print('Card tapped.');
           child: SizedBox(
@@ -366,12 +372,14 @@ class CardwithRegisterDonor extends StatelessWidget {
   final String text;
   final IconData symbol;
   final Color color;
+  var donor;
   // final Function? newLocation;
   // final Size preferredSize;
   CardwithRegisterDonor(
       {required this.text,
       required this.symbol,
       required this.color,
+      required this.donor,
       // required this.newLocation,
       Key? key})
       : super(key: key);
@@ -380,53 +388,57 @@ class CardwithRegisterDonor extends StatelessWidget {
   //     : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.1),
-      // left: MediaQuery.of(context).size.width * 0.05),
-      child: Card(
-        elevation: 10,
-        child: InkWell(
-          splashColor: Colors.blue.withAlpha(30),
-          onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => registerDonor(key: key))),
-          // onTap: () => {},
-          // print('Card tapped.');
-          child: SizedBox(
-              width: MediaQuery.of(context).size.width *
-                  0.85, // determines the size of the card
-              height: MediaQuery.of(context).size.height * 0.12,
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    alignment: AlignmentDirectional(-1, 0),
-                    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                    child: Text(
-                      text,
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          color: color,
-                          fontWeight: FontWeight.bold,
-                          fontSize: MediaQuery.of(context).size.width * 0.05),
+    if (donor == "false") {
+      return Container(
+        margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.1),
+        // left: MediaQuery.of(context).size.width * 0.05),
+        child: Card(
+          elevation: 10,
+          child: InkWell(
+            splashColor: Colors.blue.withAlpha(30),
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => registerDonor(key: key))),
+            // onTap: () => {},
+            // print('Card tapped.');
+            child: SizedBox(
+                width: MediaQuery.of(context).size.width *
+                    0.85, // determines the size of the card
+                height: MediaQuery.of(context).size.height * 0.12,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      alignment: AlignmentDirectional(-1, 0),
+                      padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      child: Text(
+                        text,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                            color: color,
+                            fontWeight: FontWeight.bold,
+                            fontSize: MediaQuery.of(context).size.width * 0.05),
+                      ),
                     ),
-                  ),
-                  Container(
-                    alignment: AlignmentDirectional(1, 0),
-                    padding: EdgeInsets.fromLTRB(
-                        0, 0, MediaQuery.of(context).size.width * 0.05, 0),
-                    child: Icon(
-                      symbol,
-                      color: color,
-                      size: MediaQuery.of(context).size.width * 0.1,
+                    Container(
+                      alignment: AlignmentDirectional(1, 0),
+                      padding: EdgeInsets.fromLTRB(
+                          0, 0, MediaQuery.of(context).size.width * 0.05, 0),
+                      child: Icon(
+                        symbol,
+                        color: color,
+                        size: MediaQuery.of(context).size.width * 0.1,
+                      ),
                     ),
-                  ),
-                  //
-                ],
-              )),
+                    //
+                  ],
+                )),
+          ),
         ),
-      ),
-    );
-    // InfoCard(title: "Use my Current Location", onMoreTap: null)
+      );
+      // InfoCard(title: "Use my Current Location", onMoreTap: null)
+    } else {
+      return Container();
+    }
   }
 }

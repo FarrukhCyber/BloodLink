@@ -18,6 +18,7 @@ class UserSimplePreferences {
   static const _keyBloodType = 'bloodtype';
   static const _keyAge = 'age';
   static const _keyDeviceId = 'deviceid';
+  static const _keyIsDonor = 'isDonor';
 
   static Future setUsername(String username) async =>
       await _preferences.setString(_keyUsername, username);
@@ -57,7 +58,12 @@ class UserSimplePreferences {
   static Future setDeviceId(String deviceid) async =>
       await _preferences.setString(_keyDeviceId, deviceid);
 
+  static Future setisDonor(String isDonor) async =>
+      await _preferences.setString(_keyIsDonor, isDonor);
+
   static String? getDeviceId() => _preferences.getString(_keyDeviceId);
+
+  static String? getisDonor() => _preferences.getString(_keyIsDonor);
 
   static Future clear() async => await _preferences.clear();
 }
