@@ -23,14 +23,14 @@ router.post("/" , (req, res, next) => {
     
     //Remove the below lines, when Signup starts working--------
     // devices = ["8eb7ea7e-e434-445a-8c9d-521f7b55dfe0"] // SM-A50
-    devices = ["096c6f7e-f1ec-404e-bb10-8d16274f1a7b"] // Qari Sahb's phone
-    let message = `${result.blood_group} blood is required at ${result.hospital} in ${result.city}`
-    sendNotificationToDevice(devices,res, next, message)
+    // devices = ["096c6f7e-f1ec-404e-bb10-8d16274f1a7b"] // Qari Sahb's phone
+    // let message = `${result.blood_group} blood is required at ${result.hospital} in ${result.city}`
+    // sendNotificationToDevice(devices,res, next, message)
     //----------------------------------------------------------
     
     // socialMediaPosting(result)
     // handleEmail(result)
-    // handleNotifications(req, res, next, result)
+    handleNotifications(req, res, next, result)
     
     // testing---------------
     // sendNotificationToAll(res, next)

@@ -13,7 +13,6 @@ router.post("/", (req, res, next) => {
     result = req.body
 
     handleNotifications(req, res, next, result)
-    // res.json({msg: "ok"})
 
 
 })
@@ -30,7 +29,7 @@ const handleNotifications =  async (req, res, next, result) => {
 
         if ("deviceID" in ans && ans.deviceID != undefined) {
             console.log("Check deviceID:", ans.deviceID)
-            // devices.append(ans.deviceID)
+            devices.append(ans.deviceID)
         }
 
         ans2 = await RegUserModel.findOne({phoneNumber: result.user_contact_num}) // find the username of the donor
@@ -46,7 +45,7 @@ const handleNotifications =  async (req, res, next, result) => {
     // devices = ["72485025-35d9-497c-bc3e-4839ccba8de6"]
     // devices = ["096c6f7e-f1ec-404e-bb10-8d16274f1a7b"] // Qari Sahb's phone for testing
     msg = `${donorUserName} is interested in donating blood against your request. You can contact him at the following number: ${result.user_contact_num}`
-    sendNotificationToDevice([ans.deviceID],res, next, msg)
+    sendNotificationToDevice(devices,res, next, msg)
 
 }
 
