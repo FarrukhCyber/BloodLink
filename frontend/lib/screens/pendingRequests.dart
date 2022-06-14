@@ -592,7 +592,7 @@ class _RequestCardState extends State<RequestCard> {
                                         "There is an error on server");
                                   } else {
                                     var key;
-                                    Navigator.of(context).push(
+                                    Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 pendingRequests(key: key)));
@@ -633,7 +633,7 @@ class _RequestCardState extends State<RequestCard> {
                                         "There is an error on server");
                                   } else {
                                     var key;
-                                    Navigator.of(context).push(
+                                    Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 pendingRequests(key: key)));
