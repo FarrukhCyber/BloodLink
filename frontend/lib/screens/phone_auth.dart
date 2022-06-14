@@ -212,6 +212,8 @@ class _LoginWithPhoneState extends State<LoginWithPhone> {
                                       "92" + phoneController.text,
                                       "user_contact_num");
                                   var mess = (json.decode(msg.body));
+                                  print("line 215");
+                                  print(mess);
                                   var message = mess["msg"];
                                   if (message == "ERROR") {
                                     errorGenerator(
@@ -228,6 +230,7 @@ class _LoginWithPhoneState extends State<LoginWithPhone> {
                                         true);
                                     phoneController.clear();
                                   } else if (message == "null") {
+                                    print("line 233");
                                     loginWithPhone();
                                   }
                                 } else {
@@ -237,6 +240,7 @@ class _LoginWithPhoneState extends State<LoginWithPhone> {
                                       "+92" + phoneController.text,
                                       "user_contact_num");
                                   var mess = (json.decode(msg.body));
+                                  print(mess);
                                   var message = mess["msg"];
                                   if (message == "ERROR") {
                                     errorGenerator(

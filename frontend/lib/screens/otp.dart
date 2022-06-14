@@ -156,7 +156,7 @@ class _OtpState extends State<Otp> {
                   height: 18,
                 ),
                 Text(
-                  "Didn't you receive any code?",
+                  "Didn't receive any code?",
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,

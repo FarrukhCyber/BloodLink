@@ -11,8 +11,14 @@ router.get('/login', (req,res)=>{
 router.route("/phone").get((req, res) => {
     console.log("hi")
       User.findOne({ phoneNumber : req.headers.user_contact_num}, (err, result) => {
-        if (err) return res.json({ msg: "ERROR" });
-        if (result == null) return res.json({msg:"null"});
+        if (err) {
+            console.log(err);
+            return res.json({ msg: "ERROR" })
+        };
+        if (result == null) {
+            console.log("i got nulll")
+            return res.json({msg:"null"})
+        }
         else {
           console.log(result)
           return res.json({ msg:"exists" });}
