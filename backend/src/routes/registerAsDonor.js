@@ -51,10 +51,10 @@ router.post("/settings" , (req,res) => {
 router.route("/fetch").get((req, res) => {
      donor.find({ user_contact_num : req.body.user_contact_num}, (err, result) => {
        if (err) return res.json({ err: err });
-       if (result == null) return res.json({ data: [] });
+       if (result == null) res.json({ fetch: null });
        else {
          console.log(result)
-         return res.json({ email: result[0].email, available: result[0].available, notification: result[0].notification});}
+        res.json({ emailIs: result.email, availableIs: result.available, notificationIs: result.notification});}
     });
   });
 

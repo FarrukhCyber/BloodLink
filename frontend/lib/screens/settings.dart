@@ -23,20 +23,22 @@ bool email = true;
 bool notification = true;
 bool available = true;
 bool error = false;
+bool gotEm = false;
 
 NetworkHandler networkHandler = NetworkHandler();
 String userPhoneNum = UserSimplePreferences.getPhoneNumber() ?? "Error";
 Future<void> fetchData() async {
   final response = await networkHandler.get(
-      '/my_settings', userPhoneNum, "user_contact_num");
+      '/register_donor/fetch', userPhoneNum, "user_contact_num");
   if (response.statusCode == 200) {
     print(jsonDecode(response.body));
-    print(jsonDecode(response.body)["email"]);
-    print(jsonDecode(response.body)["notification"]);
-    print(jsonDecode(response.body)["available"]);
-    email = jsonDecode(response.body)["email"];
-    notification = jsonDecode(response.body)["notification"];
-    available = jsonDecode(response.body)["available"];
+    print(jsonDecode(response.body)["emailIs"]);
+    print(jsonDecode(response.body)["notificationIs"]);
+    print(jsonDecode(response.body)["availableIs"]);
+    email = jsonDecode(response.body)["emailIs"];
+    notification = jsonDecode(response.body)["notificationIs"];
+    available = jsonDecode(response.body)["availableIs"];
+    gotEm = true;
   } else {
     error = true;
   }
@@ -82,33 +84,39 @@ class _homepageState extends State<Settings>
         body: Center(
             child: Container(
           width: width,
-          child: ListView(children: <Widget>[
+          child: ListView(children: [
             Column(children: [
               AppBarFb2(),
               TopBarFb3(
                   title: "Settings",
                   upperTitle: "\n View and Edit your account settings"),
-              TextwithCheckBox(
-                title: "Send me an email in case of a blood request",
-                symbol: email
-                    ? Icons.check_box_rounded
-                    : Icons.check_box_outline_blank,
-                check: "email",
-              ),
-              TextwithCheckBox(
-                title: "Send me blood request notifications ",
-                symbol: notification
-                    ? Icons.check_box_rounded
-                    : Icons.check_box_outline_blank,
-                check: "notification",
-              ),
-              TextwithCheckBox(
-                title: "Mark me unavailable for donation",
-                symbol: available
-                    ? Icons.check_box_rounded
-                    : Icons.check_box_outline_blank,
-                check: "available",
-              ),
+              gotEm
+                  ? TextwithCheckBox(
+                      title: "Send me an email in case of a blood request",
+                      symbol: email
+                          ? Icons.check_box_rounded
+                          : Icons.check_box_outline_blank,
+                      check: "email",
+                    )
+                  : Text("Loading..."),
+              gotEm
+                  ? TextwithCheckBox(
+                      title: "Send me blood request notifications ",
+                      symbol: notification
+                          ? Icons.check_box_rounded
+                          : Icons.check_box_outline_blank,
+                      check: "notification",
+                    )
+                  : Text("Loading..."),
+              gotEm
+                  ? TextwithCheckBox(
+                      title: "Mark me unavailable for donation",
+                      symbol: available
+                          ? Icons.check_box_rounded
+                          : Icons.check_box_outline_blank,
+                      check: "available",
+                    )
+                  : Text("Loading..."),
               Container(
                 padding: EdgeInsets.fromLTRB(
                     0, MediaQuery.of(context).size.width * 0.02, 0, 0),
