@@ -85,7 +85,7 @@ class _addDonorState extends State<addDonor>
         name = value;
       },
       textInputAction: TextInputAction.next,
-      decoration: decoration("Username", "Required", red, opacity),
+      decoration: decoration("Username", "Required", darkred, opacity),
     );
     final statusField = TextFormField(
       autofocus: false,
@@ -96,7 +96,7 @@ class _addDonorState extends State<addDonor>
         status = value;
       },
       textInputAction: TextInputAction.next,
-      decoration: decoration("Status", "Required", red, opacity),
+      decoration: decoration("Status", "Required", darkred, opacity),
     );
     final lastContactField = TextFormField(
       autofocus: false,
@@ -107,7 +107,7 @@ class _addDonorState extends State<addDonor>
         lastContact = value;
       },
       textInputAction: TextInputAction.next,
-      decoration: decoration("Last Contact", "Required", red, opacity),
+      decoration: decoration("Last Contact", "Required", darkred, opacity),
     );
     final rollField = TextFormField(
       autofocus: false,
@@ -118,7 +118,7 @@ class _addDonorState extends State<addDonor>
         roll = value;
       },
       textInputAction: TextInputAction.next,
-      decoration: decoration("Roll Number", "Required", red, opacity),
+      decoration: decoration("Roll Number", "Required", darkred, opacity),
     );
     final cityField = TextFormField(
       autofocus: false,
@@ -129,7 +129,7 @@ class _addDonorState extends State<addDonor>
         city = value;
       },
       textInputAction: TextInputAction.next,
-      decoration: decoration("City", "Required", red, opacity),
+      decoration: decoration("City", "Required", darkred, opacity),
     );
     final numberField = TextFormField(
       autofocus: false,
@@ -140,13 +140,13 @@ class _addDonorState extends State<addDonor>
         phone = value;
       },
       textInputAction: TextInputAction.next,
-      decoration: decoration("Phone Number", "Required", red, opacity),
+      decoration: decoration("Phone Number", "Required", darkred, opacity),
     );
 
     final submitButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(6),
-      color: red,
+      color: Color(0xffc10110),
       child: MaterialButton(
           padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           minWidth: MediaQuery.of(context).size.width,
@@ -193,7 +193,7 @@ class _addDonorState extends State<addDonor>
     return Scaffold(
       appBar: AppBar(
         title: const Text("Bloodlink"),
-        backgroundColor: red,
+        backgroundColor: darkred,
         centerTitle: true,
       ),
       backgroundColor: backgroundColor,
