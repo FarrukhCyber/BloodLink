@@ -44,6 +44,7 @@ class _homepageState extends State<homepage>
         drawer: navBar(
           userName: widget.userName,
           userEmail: "Email",
+          admin: false,
         ),
         // backgroundColor: Color.fromARGB(255, 229, 229, 229),
         backgroundColor: Colors.white,

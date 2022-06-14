@@ -12,7 +12,12 @@ import 'package:bloodlink/utils/user_info.dart';
 class navBar extends StatelessWidget {
   final String userName;
   final String userEmail;
-  navBar({Key? key, required this.userName, required this.userEmail})
+  final bool admin;
+  navBar(
+      {Key? key,
+      required this.userName,
+      required this.userEmail,
+      required this.admin})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -23,8 +28,12 @@ class navBar extends StatelessWidget {
       child: ListView(
         children: [
           UserAccountsDrawerHeader(
-            accountName: Text(userName == null ? "ERROR" : userName),
-            accountEmail: Text(userEmail == null ? "ERROR" : userEmail),
+            accountName: admin == false
+                ? Text(userName == null ? "ERROR" : userName)
+                : Text("Admin"),
+            accountEmail: admin == false
+                ? Text(userEmail == null ? "ERROR" : userEmail)
+                : const Text(""),
             currentAccountPicture: CircleAvatar(
               child: ClipOval(
                   child: Image.asset(
@@ -45,18 +54,20 @@ class navBar extends StatelessWidget {
                             MaterialPageRoute(builder: (context) => Settings()))
                       })
               : Container(),
-          ListTile(
-            // logout
-            leading: Icon(Icons.person),
-            title: Text("Profile"),
-            onTap: () => {
-              print("User profile clicked"),
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => userProfile(
-                        phoneNum: phoneNo,
-                      )))
-            },
-          ),
+          admin == false
+              ? ListTile(
+                  // logout
+                  leading: Icon(Icons.person),
+                  title: Text("Profile"),
+                  onTap: () => {
+                    print("User profile clicked"),
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => userProfile(
+                              phoneNum: phoneNo,
+                            )))
+                  },
+                )
+              : Container(),
           ListTile(
             leading: const Icon(Icons.info_outline),
             title: const Text("About"),

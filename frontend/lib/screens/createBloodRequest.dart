@@ -549,11 +549,24 @@ class PairButton extends StatelessWidget {
                           borderRadius: BorderRadius.circular(borderRadius),
                         ),
                       )),
-                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => homepage(
-                            key: key,
-                            userName: "user",
-                          ))),
+                  onPressed: () => {
+                    if (admin == false)
+                      {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => homepage(
+                                  key: key,
+                                  userName:
+                                      UserSimplePreferences.getUsername() ?? "",
+                                )))
+                      }
+                    else
+                      {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => adminHomepage(
+                                  key: key,
+                                )))
+                      }
+                  },
                   child: Text(
                     "Cancel",
                     style: const TextStyle(color: primaryColor, fontSize: 16),

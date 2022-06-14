@@ -8,27 +8,10 @@ import 'package:bloodlink/utils/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:bloodlink/screens/networkHandler.dart';
-import 'package:material_design_icons_flutter/icon_map.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:bloodlink/screens/myDetails.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
-import 'package:bloodlink/base_url.dart';
-import 'package:bloodlink/screens/admin_dashboard.dart';
-import 'package:bloodlink/screens/changePassword.dart';
-import 'package:bloodlink/screens/otp.dart';
-import 'package:flutter/material.dart';
-import 'package:bloodlink/screens/homepage.dart';
-import 'package:bloodlink/screens/phone_auth.dart';
-import 'signup.dart';
-import 'package:email_validator/email_validator.dart';
-import 'package:bloodlink/screens/homepage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:bloodlink/utils/user_info.dart';
-import 'package:bloodlink/screens/signup.dart';
 
 List months = [
   'Jan',

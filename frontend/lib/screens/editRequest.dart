@@ -228,12 +228,14 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
         // )
       ],
       leading: IconButton(
-        icon: Icon(
-          Icons.keyboard_arrow_left,
-          color: accentColor,
-        ),
-        onPressed: () {},
-      ),
+          icon: Icon(
+            Icons.keyboard_arrow_left,
+            color: accentColor,
+          ),
+          // onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context, 'Ok');
+          }),
     );
   }
 }
@@ -544,8 +546,8 @@ createRequest_func(
     name, number, bloodType, time, date, location, city, quantity) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-var url = base_url + "/edit_request";  
-print("In createRequest");
+  var url = base_url + "/edit_request";
+  print("In createRequest");
   try {
     final http.Response response = await http.post(
       Uri.parse(url),
@@ -668,8 +670,11 @@ class _PairButtonState extends State<PairButton> {
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(borderRadius)),
                       )),
-                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                     builder: (context) => myRequests(key: widget.key))),
+                  // onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  //     builder: (context) => myRequests(key: widget.key))),
+                  onPressed: () {
+                    Navigator.pop(context, 'Ok');
+                  },
                   child: Text(
                     "Cancel",
                     style: const TextStyle(color: primaryColor, fontSize: 16),
@@ -737,7 +742,14 @@ class _PairButtonState extends State<PairButton> {
                       }
 
                       await createRequest_func(
-                         widget.name, widget.number, widget.bloodType, widget.time, widget.date, widget.location, widget.city, widget.quantity);
+                          widget.name,
+                          widget.number,
+                          widget.bloodType,
+                          widget.time,
+                          widget.date,
+                          widget.location,
+                          widget.city,
+                          widget.quantity);
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       String? msg = prefs.getString("createRequest");
