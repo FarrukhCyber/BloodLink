@@ -35,12 +35,16 @@ Future<void> fetchData() async {
     print(jsonDecode(response.body)["emailIs"]);
     print(jsonDecode(response.body)["notificationIs"]);
     print(jsonDecode(response.body)["availableIs"]);
-    email = jsonDecode(response.body)["emailIs"];
-    notification = jsonDecode(response.body)["notificationIs"];
-    available = jsonDecode(response.body)["availableIs"];
-    gotEm = true;
-  } else {
-    error = true;
+    if (jsonDecode(response.body)["fetch"] == null) {
+      print("fetch --- its null");
+      error = true;
+    } else {
+      email = jsonDecode(response.body)["emailIs"];
+      notification = jsonDecode(response.body)["notificationIs"];
+      available = jsonDecode(response.body)["availableIs"];
+      gotEm = true;
+      print("done with this");
+    }
   }
 }
 
@@ -55,6 +59,29 @@ class Settings extends StatefulWidget {
 class _homepageState extends State<Settings>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+
+  Future<void> fetchData() async {
+    final response = await networkHandler.get(
+        '/register_donor/fetch', userPhoneNum, "user_contact_num");
+    if (response.statusCode == 200) {
+      print(jsonDecode(response.body));
+      print(jsonDecode(response.body)["emailIs"]);
+      print(jsonDecode(response.body)["notificationIs"]);
+      print(jsonDecode(response.body)["availableIs"]);
+      if (jsonDecode(response.body)["fetch"] == null) {
+        print("fetch --- its null");
+        error = true;
+      } else {
+        setState(() {
+          email = jsonDecode(response.body)["emailIs"];
+          notification = jsonDecode(response.body)["notificationIs"];
+          available = jsonDecode(response.body)["availableIs"];
+          gotEm = true;
+        });
+        print("done with this");
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -110,7 +137,7 @@ class _homepageState extends State<Settings>
                   : Text("Loading..."),
               gotEm
                   ? TextwithCheckBox(
-                      title: "Mark me unavailable for donation",
+                      title: "Mark me available for donation",
                       symbol: available
                           ? Icons.check_box_rounded
                           : Icons.check_box_outline_blank,

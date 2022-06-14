@@ -36,7 +36,7 @@ router.post("/settings" , (req,res) => {
         res.json({setting: "null"})
     
     DonorsModel.findOneAndUpdate({user_contact_num: phone}, {email:email, notification:notification, available:available}, 
-        (err, res) => {
+        (err, response) => {
             if(err) {
                 console.log("Error\n", err)
                 res.json({setting:"null"})
@@ -49,13 +49,17 @@ router.post("/settings" , (req,res) => {
 })
 
 router.route("/fetch").get((req, res) => {
-     donor.find({ user_contact_num : req.body.user_contact_num}, (err, result) => {
-       if (err) return res.json({ err: err });
+    console.log(req.headers.user_contact_num)
+     DonorsModel.find({ user_contact_num : req.headers.user_contact_num}, (err, result) => {
+       if (err) res.json({ fetch: null });
        if (result == null) res.json({ fetch: null });
        else {
-         console.log(result)
-        res.json({ emailIs: result.email, availableIs: result.available, notificationIs: result.notification});}
+            console.log(result)
+            res.json({ fetch : "done", emailIs: result[0].email, availableIs: result[0].available, notificationIs: result[0].notification});
+        }
     });
   });
+
+
 
 module.exports = router
