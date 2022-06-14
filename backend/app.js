@@ -14,6 +14,7 @@ const changePassword = require('./src/routes/changePassword.js')
 const plasmaDonorRegister = require('./src/routes/plasmaDonorRegister.js')
 const resolvedRequests = require('./src/routes/resolvedRequest')
 const editRequest = require('./src/routes/editRequest')
+const mySetting = require('./src/routes/setting')
 
 app.use(express.json({extended:false}))
 
@@ -51,6 +52,7 @@ app.use("/plasma_donor_register",plasmaDonorRegister)
 app.use("/submit_request", submitRequestRoutes)
 app.use("/resolved_request", resolvedRequests);
 app.use("/edit_request", editRequest);
+app.use("/my_settings",mySetting);
 
 // 404 page
 // app.use((req, res) => {

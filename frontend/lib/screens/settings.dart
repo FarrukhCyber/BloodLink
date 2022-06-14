@@ -17,10 +17,30 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
 import 'package:bloodlink/utils/user_info.dart';
+import 'package:bloodlink/screens/networkHandler.dart';
 
 bool email = true;
 bool notification = true;
 bool available = true;
+bool error = false;
+
+NetworkHandler networkHandler = NetworkHandler();
+String userPhoneNum = UserSimplePreferences.getPhoneNumber() ?? "Error";
+Future<void> fetchData() async {
+  final response = await networkHandler.get(
+      '/my_settings', userPhoneNum, "user_contact_num");
+  if (response.statusCode == 200) {
+    print(jsonDecode(response.body));
+    print(jsonDecode(response.body)["email"]);
+    print(jsonDecode(response.body)["notification"]);
+    print(jsonDecode(response.body)["available"]);
+    email = jsonDecode(response.body)["email"];
+    notification = jsonDecode(response.body)["notification"];
+    available = jsonDecode(response.body)["available"];
+  } else {
+    error = true;
+  }
+}
 
 class Settings extends StatefulWidget {
   // final String userName;
@@ -38,6 +58,11 @@ class _homepageState extends State<Settings>
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
+    fetchData();
+    if (error) {
+      errorGenerator(
+          context, "Error", "Problem in Server Connection. Please try later");
+    }
   }
 
   @override
@@ -45,6 +70,8 @@ class _homepageState extends State<Settings>
     super.dispose();
     _controller.dispose();
   }
+
+//
 
   @override
   Widget build(BuildContext context) {
@@ -63,17 +90,23 @@ class _homepageState extends State<Settings>
                   upperTitle: "\n View and Edit your account settings"),
               TextwithCheckBox(
                 title: "Send me an email in case of a blood request",
-                symbol: Icons.check_box_rounded,
+                symbol: email
+                    ? Icons.check_box_rounded
+                    : Icons.check_box_outline_blank,
                 check: "email",
               ),
               TextwithCheckBox(
                 title: "Send me blood request notifications ",
-                symbol: Icons.check_box_rounded,
+                symbol: notification
+                    ? Icons.check_box_rounded
+                    : Icons.check_box_outline_blank,
                 check: "notification",
               ),
               TextwithCheckBox(
                 title: "Mark me unavailable for donation",
-                symbol: Icons.check_box_rounded,
+                symbol: available
+                    ? Icons.check_box_rounded
+                    : Icons.check_box_outline_blank,
                 check: "available",
               ),
               Container(
@@ -358,7 +391,7 @@ setting_func(email, notification, available) async {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{
+      body: jsonEncode(<String, dynamic>{
         "phone": phone ?? "",
         'email': email,
         'notification': notification,
@@ -372,14 +405,13 @@ setting_func(email, notification, available) async {
       print("it is null");
       await prefs.setString('setting', "null");
     } else {
-      await prefs.setString('setting', parse["msg"]);
+      await prefs.setString('setting', parse["msg"].toString());
 
       print("Here they are");
       print(parse["email"]);
       print(parse["notification"]);
       print(parse["available"]);
     }
-
     print("Message received:");
     print(parse["setting"]);
   } on HttpException catch (err) {

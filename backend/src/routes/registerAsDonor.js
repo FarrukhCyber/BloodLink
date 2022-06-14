@@ -45,11 +45,17 @@ router.post("/settings" , (req,res) => {
                 console.log("done")
                 res.json({setting:"done"})
             }
-            })
-
-            
-
-
+            })     
 })
+
+router.route("/fetch").get((req, res) => {
+     donor.find({ user_contact_num : req.body.user_contact_num}, (err, result) => {
+       if (err) return res.json({ err: err });
+       if (result == null) return res.json({ data: [] });
+       else {
+         console.log(result)
+         return res.json({ email: result[0].email, available: result[0].available, notification: result[0].notification});}
+    });
+  });
 
 module.exports = router
