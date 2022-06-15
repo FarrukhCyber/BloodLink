@@ -389,7 +389,7 @@ class CardwithRegisterDonor extends StatelessWidget {
   //     : super(key: key);
   @override
   Widget build(BuildContext context) {
-    if (donor == "false") {
+    if (donor == "false" || donor == false) {
       return Container(
         margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.1),
         // left: MediaQuery.of(context).size.width * 0.05),

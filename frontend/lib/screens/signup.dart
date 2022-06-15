@@ -86,7 +86,7 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
           ? 'Enter a valid email'
           : null,
       textInputAction: TextInputAction.next,
-      decoration: decoration("Email", "Required", red, opacity),
+      decoration: decoration("Email", "Required", darkred, opacity),
     );
     final passwordField = passwordBuilder(
         label: "Password",
@@ -105,12 +105,12 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
         name = value;
       },
       textInputAction: TextInputAction.next,
-      decoration: decoration("Username", "Required", red, opacity),
+      decoration: decoration("Username", "Required", darkred, opacity),
     );
     final signupButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(6),
-      color: red,
+      color: darkred,
       child: MaterialButton(
           padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           minWidth: MediaQuery.of(context).size.width,
@@ -202,7 +202,7 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Bloodlink"),
-        backgroundColor: red,
+        backgroundColor: darkred,
         centerTitle: true,
       ),
       backgroundColor: backgroundColor,
@@ -253,11 +253,32 @@ initPlatform() async {
   await OneSignal.shared.setAppId("0a075bcf-6425-4c41-9834-6fa9304050e0");
 
   //gives the device unique id. TODO: need to store it in Registeredusers collection
-  await OneSignal.shared.getDeviceState().then((value) => {
-        print("here is the device ID:"+ value!.userId.toString()),
-        device_id = value!.userId.toString()
-      });
+  // var devuceState = await OneSignal!.getDeviceState().then((value) => {
+  //       print("here is the device ID:" + value!.userId.toString()),
+  //       device_id = value.userId.toString()
+  OneSignal? _instance;
+  var deviceState;
+  while (OneSignal.shared.getDeviceState() == null) {
+    print("waiting");
+  }
+  // do {
+  deviceState = await OneSignal.shared.getDeviceState();
+  if (deviceState != null || deviceState?.userId != null) {
+    print("I am");
+    print(deviceState);
+    device_id = deviceState!.userId.toString();
+    print("TOKEN ID: " + device_id);
+  }
+  // } while (deviceState == null);
 }
+
+// Future<void> getUserTokenId() async {
+//   var deviceState = await _instance!.getDeviceState();
+//   if (deviceState != null || deviceState?.userId != null) {
+//     String tokenId = deviceState!.userId!;
+//     print("TOKEN ID: " + tokenId);
+//   }
+// }
 
 signup_func(name, pass, email, phone, blood, gender, age) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -331,8 +352,8 @@ class _DropDownState extends State<getDate> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime(2015, 8),
-      lastDate: DateTime(2101),
+      firstDate: DateTime(1900, 1),
+      lastDate: DateTime.now(),
       builder: (context, child) => Theme(
         data: ThemeData().copyWith(
           colorScheme: ColorScheme.dark(
@@ -387,7 +408,7 @@ class _DropDownState extends State<getDate> {
                 ))),
             onPressed: () => _selectDate(context),
             child: Text(
-              "Select Date",
+              "Please Enter you Date of Birth",
               style: TextStyle(color: Colors.white, fontSize: 18.0),
             ),
           ),
@@ -397,25 +418,25 @@ class _DropDownState extends State<getDate> {
   }
 }
 
-decoration(String label, String hint, red, opacity) => InputDecoration(
+decoration(String label, String hint, darkred, opacity) => InputDecoration(
       labelText: label,
       errorMaxLines: 4,
       floatingLabelBehavior: FloatingLabelBehavior.always,
       filled: true,
       contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
       hintText: hint,
-      labelStyle: TextStyle(color: red),
+      labelStyle: TextStyle(color: darkred),
       border: UnderlineInputBorder(
-        borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
+        borderSide: BorderSide(color: darkred.withOpacity(opacity), width: 2.0),
       ),
       focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: red, width: 2.0),
+        borderSide: BorderSide(color: darkred, width: 2.0),
       ),
       errorBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: red, width: 2.0),
+        borderSide: BorderSide(color: darkred, width: 2.0),
       ),
       enabledBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
+        borderSide: BorderSide(color: darkred.withOpacity(opacity), width: 2.0),
       ),
     );
 
@@ -447,23 +468,25 @@ class _passwordBuilderState extends State<passwordBuilder> {
         filled: true,
         contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
         hintText: widget.hint,
-        labelStyle: TextStyle(color: red),
+        labelStyle: TextStyle(color: darkred),
         suffixIcon: IconButton(
-          color: red,
+          color: darkred,
           icon: isHidden ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
           onPressed: togglePasswordVisibility,
         ),
         border: UnderlineInputBorder(
-          borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
+          borderSide:
+              BorderSide(color: darkred.withOpacity(opacity), width: 2.0),
         ),
         focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: red, width: 2.0),
+          borderSide: BorderSide(color: darkred, width: 2.0),
         ),
         errorBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: red, width: 2.0),
+          borderSide: BorderSide(color: darkred, width: 2.0),
         ),
         enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
+          borderSide:
+              BorderSide(color: darkred.withOpacity(opacity), width: 2.0),
         ),
       ),
       keyboardType: TextInputType.visiblePassword,
@@ -525,6 +548,7 @@ class _DropDownMenuState extends State<DropDownMenu> {
         margin: EdgeInsets.fromLTRB(
             0, MediaQuery.of(context).size.height * 0.01, 0, 0),
         child: DropdownButton(
+          isExpanded: true,
           value: widget.dropDownValue,
           icon: Icon(Icons.keyboard_arrow_down),
           items: widget.item.map<DropdownMenuItem<String>>((String items) {

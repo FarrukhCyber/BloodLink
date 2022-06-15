@@ -6,6 +6,7 @@ import 'package:bloodlink/screens/homepage.dart';
 import 'package:bloodlink/screens/request_success_msg.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // var bloodGroups = [
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -44,6 +45,7 @@ var items = [
   'O Negative (O-)'
 ];
 String dropDownValue = "Choose a Blood Group";
+var device_id = "";
 
 class CreateBloodRequest extends StatelessWidget {
   var admin;
@@ -443,10 +445,33 @@ class _getTimeState extends State<getTime> {
   }
 }
 
+initPlatform() async {
+  await OneSignal.shared.setAppId("0a075bcf-6425-4c41-9834-6fa9304050e0");
+
+  //gives the device unique id. TODO: need to store it in Registeredusers collection
+  // var devuceState = await OneSignal!.getDeviceState().then((value) => {
+  //       print("here is the device ID:" + value!.userId.toString()),
+  //       device_id = value.userId.toString()
+  OneSignal? _instance;
+  var deviceState;
+  while (OneSignal.shared.getDeviceState() == null) {
+    print("waiting");
+  }
+  // do {
+  deviceState = await OneSignal.shared.getDeviceState();
+  if (deviceState != null || deviceState?.userId != null) {
+    print("I am");
+    print(deviceState);
+    device_id = deviceState!.userId.toString();
+    print("TOKEN ID: " + device_id);
+  }
+  // } while (deviceState == null);
+}
+
 createRequest_func(
     name, number, bloodType, time, date, location, city, quantity) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-
+  await initPlatform();
   var url = base_url + "/submit_request"; // check what localhost is for you
   print("In createRequest");
   try {
@@ -465,6 +490,7 @@ createRequest_func(
         'city': city,
         'quantity': quantity,
         'user_contact_num': UserSimplePreferences.getPhoneNumber(),
+        'deviceID' : device_id
       }),
     );
     var parse = jsonDecode(response.body);

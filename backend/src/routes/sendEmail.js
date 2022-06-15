@@ -9,7 +9,7 @@ const handleEmail = async (result) => {
     let docs
     let emailList = []
     try {
-        docs = await RegUserModel.find({bloodType: result.blood_group})
+        docs = await RegUserModel.find({bloodType: result.blood_group , email : true , avaialble : false})
         // console.log(docs)
         for (const object of docs) {
             emailList.push(object.email)

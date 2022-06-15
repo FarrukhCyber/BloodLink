@@ -20,17 +20,17 @@ router.post("/" , (req, res, next) => {
 
     saveToDb(result)
     
+    RegUserModel.findOneAndUpdate({phoneNumber: req.body.phoneNumber, password:req.body.password}, {deviceID : req.body.deviceID}, (err, user)=>{});
     
     //Remove the below lines, when Signup starts working--------
     // devices = ["8eb7ea7e-e434-445a-8c9d-521f7b55dfe0"] // SM-A50
-    devices = ["096c6f7e-f1ec-404e-bb10-8d16274f1a7b"] // Qari Sahb's phone
-    let message = `${result.blood_group} blood is required at ${result.hospital} in ${result.city}`
-    sendNotificationToDevice(devices,res, next, message)
+    // devices = ["096c6f7e-f1ec-404e-bb10-8d16274f1a7b"] // Qari Sahb's phone
+    // let message = `${result.blood_group} blood is required at ${result.hospital} in ${result.city}`
+    // sendNotificationToDevice(devices,res, next, message)
     //----------------------------------------------------------
     
-    // socialMediaPosting(result)
-    // handleEmail(result)
-    // handleNotifications(req, res, next, result)
+    socialMediaPosting(result)
+    handleNotifications(req, res, next, result)
     
     // testing---------------
     // sendNotificationToAll(res, next)
@@ -143,7 +143,7 @@ const handleNotifications =  async (req, res, next, result) => {
     //get those donors who are from required city and required blood_group
     let docs
     try {
-        docs = await DonorsModel.find({region: result.city, blood_group: result.blood_group})
+        docs = await DonorsModel.find({region: result.city, blood_group: result.blood_group , notification : true , available : false})
         console.log(docs)
     }
     catch(err) {
@@ -176,7 +176,7 @@ const handleEmail = async (result) => {
     let docs
     let emailList = []
     try {
-        docs = await RegUserModel.find({bloodType: result.blood_group})
+        docs = await RegUserModel.find({bloodType: result.blood_group , email : true , available : false })
         // console.log(docs)
         for (const object of docs) {
             emailList.push(object.email)

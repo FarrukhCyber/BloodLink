@@ -8,6 +8,7 @@ import 'package:bloodlink/screens/otp.dart';
 import 'package:flutter/material.dart';
 import 'package:bloodlink/screens/homepage.dart';
 import 'package:bloodlink/screens/phone_auth.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'signup.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:bloodlink/screens/homepage.dart';
@@ -22,6 +23,8 @@ var opacity = 0.3;
 var darkred = Color(0xffc10110);
 var pass = "";
 var white = Colors.white;
+
+var device_id = "";
 
 class login extends StatefulWidget {
   const login({Key? key}) : super(key: key);
@@ -245,6 +248,7 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
 }
 
 login_func(name, pass, phone) async {
+  await initPlatform();
   var url = base_url + "/auth/login";
   print("In login");
   try {
@@ -257,6 +261,7 @@ login_func(name, pass, phone) async {
         'userName': name,
         'password': pass,
         'phoneNumber': phone.toString(),
+        'deviceID': device_id
       }),
     );
     print("this one");
@@ -476,4 +481,27 @@ class _passwordBuilderState extends State<passwordBuilder> {
       onSaved: (password) => {password != null ? pass = password : null});
 
   void togglePasswordVisibility() => setState(() => isHidden = !isHidden);
+}
+
+initPlatform() async {
+  await OneSignal.shared.setAppId("0a075bcf-6425-4c41-9834-6fa9304050e0");
+
+  //gives the device unique id. TODO: need to store it in Registeredusers collection
+  // var devuceState = await OneSignal!.getDeviceState().then((value) => {
+  //       print("here is the device ID:" + value!.userId.toString()),
+  //       device_id = value.userId.toString()
+  OneSignal? _instance;
+  var deviceState;
+  while (OneSignal.shared.getDeviceState() == null) {
+    print("waiting");
+  }
+  // do {
+  deviceState = await OneSignal.shared.getDeviceState();
+  if (deviceState != null || deviceState?.userId != null) {
+    print("I am");
+    print(deviceState);
+    device_id = deviceState!.userId.toString();
+    print("TOKEN ID: " + device_id);
+  }
+  // } while (deviceState == null);
 }

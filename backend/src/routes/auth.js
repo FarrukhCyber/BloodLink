@@ -53,6 +53,7 @@ router.post('/login', (req, res) => {
                         }
                         else
                         {
+                            User.findOneAndUpdate({phoneNumber: req.body.phoneNumber, password:req.body.password}, {deviceID : req.body.deviceID}, (err, user)=>{});
                             console.log("exists", user)
                             res.json({msg:"Login Successful", 
                                 userName: user.userName,
@@ -62,7 +63,8 @@ router.post('/login', (req, res) => {
                                 bloodType:user.bloodType,
                                 age:String(user.age),
                                 phoneNumber:String(user.phoneNumber),
-                                donor: String(user.donor)})
+                                donor: String(user.donor),
+                            })
                         }
                     }
                     
