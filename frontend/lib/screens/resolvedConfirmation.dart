@@ -1,12 +1,6 @@
 import 'package:bloodlink/screens/homepage.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:bloodlink/utils/user_info.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'dart:io';
-import 'package:material_design_icons_flutter/icon_map.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class ResolvedConfirmation extends StatelessWidget {
   bool zarourat;
@@ -63,7 +57,9 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
         ),
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => homepage(userName: "farrukh", key: key)));
+              builder: (context) => homepage(
+                  userName: UserSimplePreferences.getUsername() ?? "",
+                  key: key)));
         },
       ),
     );

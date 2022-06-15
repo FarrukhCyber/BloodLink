@@ -97,7 +97,8 @@ class _myDetailsState extends State<myDetails> {
             PairButton(
                 text: "Hello",
                 attendNumber: widget.attendantNum,
-                userContact: widget.userContact)
+                userContact: widget.userContact,
+                id: widget.id)
           ],
         ));
   }
@@ -335,11 +336,13 @@ class PairButton extends StatelessWidget {
   final String text;
   final String attendNumber;
   final String userContact;
+  var id;
   // final Function() onPressed;
-  const PairButton(
+  PairButton(
       {required this.text,
       required this.attendNumber,
       required this.userContact,
+      required this.id,
       Key? key})
       : super(key: key);
 
@@ -389,7 +392,7 @@ class PairButton extends StatelessWidget {
                         print("Notify button is pressed");
                         print("userContact: " + userContact);
                         print("Attend Number: " + attendNumber);
-                        await sendNotification(userContact, attendNumber);
+                        await sendNotification(userContact, attendNumber, id);
                         // SharedPreferences prefs =
                         //     await SharedPreferences.getInstance();
                         // String? msg = prefs.getString("send");
@@ -398,22 +401,24 @@ class PairButton extends StatelessWidget {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                                return Expanded(
-                                  child: AlertDialog(
-                                    title: Text('Notified Successfully'),
-                                    content: Text('The requestor has been notified that you are interested in donating blood'),
-                                    actions: [
-                                      FlatButton(
-                                        textColor: Colors.black,
-                                        onPressed: () {Navigator.pop(context);},
-                                        child: Text('Ok'),
-                                      ),
-                                    ],
+                            return Expanded(
+                              child: AlertDialog(
+                                title: Text('Notified Successfully'),
+                                content: Text(
+                                    'The requestor has been notified that you are interested in donating blood'),
+                                actions: [
+                                  FlatButton(
+                                    textColor: Colors.black,
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text('Ok'),
                                   ),
-                                );
+                                ],
+                              ),
+                            );
                           },
                         );
-
                       },
                       child: Row(
                         children: [
@@ -493,7 +498,7 @@ Future<void> _makePhoneCall(String url) async {
   }
 }
 
-sendNotification(userContact, attendNumber) async {
+sendNotification(userContact, attendNumber, id) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var url = base_url + "/notify";
   print("In sendNotification");
@@ -507,6 +512,7 @@ sendNotification(userContact, attendNumber) async {
       body: jsonEncode(<String, dynamic>{
         'attendant_num': attendNumber,
         'user_contact_num': userContact,
+        'id': id
       }),
     );
 

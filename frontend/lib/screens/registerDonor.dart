@@ -1,6 +1,6 @@
 import 'dart:convert';
-
 import 'package:bloodlink/screens/myRequests.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:csc_picker/csc_picker.dart';
@@ -209,8 +209,10 @@ class _registerDonorState extends State<registerDonor> {
                 "gender": UserSimplePreferences.getGender(),
                 "plasma": plasmaSelection
               };
+              print("sent to server");
               var responseRegister =
-                  await networkHandler.post('/register_donor', res);
+                  await networkHandler.post('/register_donor/add', res);
+              print("waiting for server");
               if (responseRegister.statusCode == 200 ||
                   responseRegister.statusCode == 201) {
                 print('successful');
@@ -223,7 +225,11 @@ class _registerDonorState extends State<registerDonor> {
                     textColor: Colors.white,
                     fontSize: 16.0);
                 UserSimplePreferences.setisDonor("true");
-                Navigator.pop(context, 'Ok');
+                var key;
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => homepage(
+                        userName: UserSimplePreferences.getUsername() ?? "",
+                        key: key)));
               } else {
                 errorGenerator(context, 'There was an error in server',
                     'Please try again in some time');

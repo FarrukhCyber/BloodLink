@@ -44,6 +44,7 @@ class _homepageState extends State<homepage>
         drawer: navBar(
           userName: widget.userName,
           userEmail: "Email",
+          admin: false,
         ),
         // backgroundColor: Color.fromARGB(255, 229, 229, 229),
         backgroundColor: Colors.white,
@@ -388,7 +389,7 @@ class CardwithRegisterDonor extends StatelessWidget {
   //     : super(key: key);
   @override
   Widget build(BuildContext context) {
-    if (donor == "false") {
+    if (donor == "false" || donor == false) {
       return Container(
         margin: EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.1),
         // left: MediaQuery.of(context).size.width * 0.05),
