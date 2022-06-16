@@ -31,6 +31,21 @@ router.route("/email").post((req,res) => {
     
 })
 
+router.route("/password").post((req,res) => {
+    const {phone, password} = req.body
+    console.log("In Password: ", password, phone)
+    
+    User.findOneAndUpdate({phoneNumber : phone}, {password: password}, (err,result) => {
+        if(err) {
+            consolelog("Error \n", err)
+            res.json({password : null})}
+        else{ 
+            console.log("Success\n", result)
+            res.json({password: "done"}) }
+    })
+})
+
+
 router.route("/phone").get((req, res) => {
     console.log("hi")
       User.findOne({ phoneNumber : req.headers.user_contact_num}, (err, result) => {
