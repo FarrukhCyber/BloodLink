@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:bloodlink/screens/activeDetails.dart';
+import 'package:bloodlink/screens/homepage.dart';
 import 'package:bloodlink/screens/resolvedConfirmation.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:flutter/material.dart';
@@ -90,31 +91,32 @@ class Data {
   final String quantity;
   final String attendantNum;
   var id;
-  Data({
-    required this.name,
-    required this.bloodgroup,
-    required this.date,
-    required this.time,
-    required this.location,
-    required this.city,
-    required this.quantity,
-    required this.status,
-    required this.attendantNum,
-    required this.id,
-  });
+  final String details;
+  Data(
+      {required this.name,
+      required this.bloodgroup,
+      required this.date,
+      required this.time,
+      required this.location,
+      required this.city,
+      required this.quantity,
+      required this.status,
+      required this.attendantNum,
+      required this.id,
+      required this.details});
   factory Data.fromJson(Map<String, dynamic> json) {
     return Data(
-      name: json['attendant_name'],
-      bloodgroup: json['blood_group'],
-      date: json['date'],
-      time: json['time'],
-      location: json['hospital'],
-      status: json['status'] == true ? "Active" : "Resolved",
-      city: json["city"],
-      quantity: json["quantity"],
-      attendantNum: json["attendant_num"],
-      id: json["_id"],
-    );
+        name: json['attendant_name'],
+        bloodgroup: json['blood_group'],
+        date: json['date'],
+        time: json['time'],
+        location: json['hospital'],
+        status: json['status'] == true ? "Active" : "Resolved",
+        city: json["city"],
+        quantity: json["quantity"],
+        attendantNum: json["attendant_num"],
+        id: json["_id"],
+        details: json["details"]);
   }
 }
 
@@ -163,19 +165,19 @@ class _activeRequestsState extends State<myRequests> {
                         itemCount: data.length,
                         itemBuilder: (BuildContext context, int index) {
                           return RequestCard(
-                            name: data[index].name,
-                            date: data[index].date,
-                            time: data[index].time,
-                            location: data[index].location,
-                            bloodgroup: data[index].bloodgroup,
-                            status: data[index].status,
-                            attendantNum: data[index].attendantNum,
-                            city: data[index].city,
-                            quantity: data[index].quantity,
-                            id: data[index].id,
-                            visible:
-                                data[index].status == "Active" ? false : true,
-                          );
+                              name: data[index].name,
+                              date: data[index].date,
+                              time: data[index].time,
+                              location: data[index].location,
+                              bloodgroup: data[index].bloodgroup,
+                              status: data[index].status,
+                              attendantNum: data[index].attendantNum,
+                              city: data[index].city,
+                              quantity: data[index].quantity,
+                              id: data[index].id,
+                              visible:
+                                  data[index].status == "Active" ? false : true,
+                              details: data[index].details);
                         });
                   } else if (snapshot.hasError) {
                     return Text("${snapshot.error}");
@@ -210,6 +212,7 @@ class RequestCard extends StatefulWidget {
   final String status;
   final String quantity;
   bool visible;
+  final String details;
   // Function moreDetails;
 
   // final Size preferredSize;
@@ -225,6 +228,7 @@ class RequestCard extends StatefulWidget {
       required this.status,
       required this.id,
       required this.visible,
+      required this.details,
       Key? key})
       : super(key: key);
 
@@ -626,6 +630,7 @@ class _RequestCardState extends State<RequestCard> {
                                             id: widget.id,
                                             city: widget.city,
                                             ownership: true,
+                                            details: widget.details,
                                           )));
                                 },
                                 style: ButtonStyle(

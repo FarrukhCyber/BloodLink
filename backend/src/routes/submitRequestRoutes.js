@@ -74,7 +74,8 @@ function saveToDb(result) {
         time: result.time,
         hospital : result.hospital,
         city: result.city,
-        email : "2"
+        email : "2", 
+        details : result.details
     })
 
     blood_req.save().then( ()=> console.log("Request added successfully")).catch((err)=>console.log(`${err} occurred while saving request to db`))

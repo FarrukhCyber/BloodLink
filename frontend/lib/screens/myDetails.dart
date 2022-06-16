@@ -27,6 +27,7 @@ class myDetails extends StatefulWidget {
   String id;
   String city;
   bool ownership;
+  String details;
   myDetails(
       {Key? key,
       required this.attendantName,
@@ -40,7 +41,8 @@ class myDetails extends StatefulWidget {
       required this.quantity,
       required this.id,
       required this.city,
-      required this.ownership})
+      required this.ownership,
+      required this.details})
       : super(key: key);
 
   @override
@@ -52,53 +54,67 @@ class _myDetailsState extends State<myDetails> {
     return Scaffold(
         backgroundColor: Colors.white,
         // appBar: AppBar(title: Text("Bloodlink")),
-        body: Column(
+        body: ListView(
           children: [
-            AppBarFb2(),
-            TopBarFb3(title: "BloodLink", upperTitle: "\nRequest Information"),
-            Heading(
-              title: "\n  Request Information",
-              name: widget.attendantName,
-              number: widget.attendantNum,
-              bloodType: widget.bloodGroup,
-              date: widget.date,
-              time: widget.time,
-              location: widget.hospital,
-              city: widget.city,
-              quantity: widget.quantity,
-              owner: widget.ownership,
+            Center(
+              child: Container(
+                child: Column(
+                  children: [
+                    AppBarFb2(),
+                    TopBarFb3(
+                        title: "BloodLink",
+                        upperTitle: "\nRequest Information"),
+                    Heading(
+                      title: "\n  Request Information",
+                      name: widget.attendantName,
+                      number: widget.attendantNum,
+                      bloodType: widget.bloodGroup,
+                      date: widget.date,
+                      time: widget.time,
+                      location: widget.hospital,
+                      city: widget.city,
+                      quantity: widget.quantity,
+                      owner: widget.ownership,
+                    ),
+                    Divider(
+                      height: 5,
+                      color: Color(0xffc10110),
+                      indent: MediaQuery.of(context).size.width * 0.05,
+                      endIndent: MediaQuery.of(context).size.width * 0.05,
+                    ),
+                    Padding(padding: EdgeInsets.fromLTRB(0, 5, 0, 10)),
+                    DisplayInfo(
+                        label: "Attendent Name", data: widget.attendantName),
+                    DisplayInfo(
+                        label: "Attendent Number", data: widget.attendantNum),
+                    DisplayInfo(label: "Blood Group", data: widget.bloodGroup),
+                    DisplayInfo(label: "Quantity", data: widget.quantity),
+                    DisplayInfo(
+                        label: "Date",
+                        data: (widget.date.split('T')[0]).split('-')[2] +
+                            "-" +
+                            (widget.date.split('T')[0]).split('-')[1] +
+                            "-" +
+                            (widget.date.split('T')[0]).split('-')[0]),
+                    DisplayInfo(
+                        label: "Time",
+                        data: (widget.time.split('T')[1]).split(':')[0] +
+                            ':' +
+                            (widget.time.split('T')[1]).split(':')[1]),
+                    DisplayInfo(label: "Status", data: widget.status),
+                    DisplayInfo(
+                        label: "Hospital",
+                        data: "${widget.hospital} , ${widget.city}"),
+                    DisplayInfo(label: "Other Details", data: widget.details),
+                    PairButton(
+                        text: "Hello",
+                        attendNumber: widget.attendantNum,
+                        userContact: widget.userContact,
+                        id: widget.id)
+                  ],
+                ),
+              ),
             ),
-            Divider(
-              height: 5,
-              color: Color(0xffc10110),
-              indent: MediaQuery.of(context).size.width * 0.05,
-              endIndent: MediaQuery.of(context).size.width * 0.05,
-            ),
-            Padding(padding: EdgeInsets.fromLTRB(0, 5, 0, 10)),
-            DisplayInfo(label: "Attendent Name", data: widget.attendantName),
-            DisplayInfo(label: "Attendent Number", data: widget.attendantNum),
-            DisplayInfo(label: "Blood Group", data: widget.bloodGroup),
-            DisplayInfo(label: "Quantity", data: widget.quantity),
-            DisplayInfo(
-                label: "Date",
-                data: (widget.date.split('T')[0]).split('-')[2] +
-                    "-" +
-                    (widget.date.split('T')[0]).split('-')[1] +
-                    "-" +
-                    (widget.date.split('T')[0]).split('-')[0]),
-            DisplayInfo(
-                label: "Time",
-                data: (widget.time.split('T')[1]).split(':')[0] +
-                    ':' +
-                    (widget.time.split('T')[1]).split(':')[1]),
-            DisplayInfo(label: "Status", data: widget.status),
-            DisplayInfo(
-                label: "Hospital", data: "${widget.hospital} , ${widget.city}"),
-            PairButton(
-                text: "Hello",
-                attendNumber: widget.attendantNum,
-                userContact: widget.userContact,
-                id: widget.id)
           ],
         ));
   }
