@@ -67,6 +67,7 @@ class _myDetailsState extends State<myDetails> {
               city: widget.city,
               quantity: widget.quantity,
               owner: widget.ownership,
+              id: widget.id,
             ),
             Divider(
               height: 5,
@@ -179,6 +180,7 @@ class Heading extends StatefulWidget {
   var city;
   var quantity;
   var owner;
+  var id;
 
   Heading(
       {Key? key,
@@ -190,6 +192,7 @@ class Heading extends StatefulWidget {
       required this.time,
       required this.location,
       required this.city,
+      required this.id,
       required this.quantity,
       required this.owner})
       : super(key: key);
@@ -255,6 +258,7 @@ class _HeadingState extends State<Heading> {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => editRequest(
                               name: widget.name,
+                              id: widget.id,
                               number: widget.number,
                               bloodType: widget.bloodType,
                               date: widget.date,
