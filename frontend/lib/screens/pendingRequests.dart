@@ -77,31 +77,32 @@ class Data {
   final String quantity;
   final String attendantNum;
   var id;
-  Data({
-    required this.name,
-    required this.bloodgroup,
-    required this.date,
-    required this.time,
-    required this.location,
-    required this.city,
-    required this.quantity,
-    required this.status,
-    required this.attendantNum,
-    required this.id,
-  });
+  final String details;
+  Data(
+      {required this.name,
+      required this.bloodgroup,
+      required this.date,
+      required this.time,
+      required this.location,
+      required this.city,
+      required this.quantity,
+      required this.status,
+      required this.attendantNum,
+      required this.id,
+      required this.details});
   factory Data.fromJson(Map<String, dynamic> json) {
     return Data(
-      name: json['attendant_name'],
-      bloodgroup: json['blood_group'],
-      date: json['date'],
-      time: json['time'],
-      location: json['hospital'],
-      status: json['status'] == true ? "Active" : "Resolved",
-      city: json["city"],
-      quantity: json["quantity"],
-      attendantNum: json["attendant_num"],
-      id: json["_id"],
-    );
+        name: json['attendant_name'],
+        bloodgroup: json['blood_group'],
+        date: json['date'],
+        time: json['time'],
+        location: json['hospital'],
+        status: json['status'] == true ? "Active" : "Resolved",
+        city: json["city"],
+        quantity: json["quantity"],
+        attendantNum: json["attendant_num"],
+        id: json["_id"],
+        details: json["details"]);
   }
 }
 
@@ -133,44 +134,48 @@ class _pendingRequestsState extends State<pendingRequests> {
           TopBarFb3(
               title: "Resolved Requests",
               upperTitle: "\nFollowing are your blood requests."),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.7,
-            margin: EdgeInsets.only(top: 20),
-            child: FutureBuilder<List<Data>>(
-              future: widget.futureData,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  List<Data> data = snapshot.data!;
-                  return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return RequestCard(
-                          name: data[index].name,
-                          date: data[index].date,
-                          time: data[index].time,
-                          location: data[index].location,
-                          bloodgroup: data[index].bloodgroup,
-                          status: data[index].status,
-                          attendantNum: data[index].attendantNum,
-                          city: data[index].city,
-                          quantity: data[index].quantity,
-                          id: data[index].id,
-                          visible:
-                              data[index].status == "Active" ? false : true,
-                        );
-                      });
-                } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
-                }
-                // By default show a loading spinner.
-                // return CircularProgressIndicator(
-                //     valueColor: new AlwaysStoppedAnimation<Color>(Colors.red));
-                return Container(
-                    alignment: Alignment.center,
-                    child: CircularProgressIndicator(color: Color(0xffc10110)));
-              },
+          Expanded(
+            child: Container(
+              // height: MediaQuery.of(context).size.height * 0.7,
+              // margin: EdgeInsets.only(top: 20),
+              child: FutureBuilder<List<Data>>(
+                future: widget.futureData,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<Data> data = snapshot.data!;
+                    return ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: data.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return RequestCard(
+                            name: data[index].name,
+                            date: data[index].date,
+                            time: data[index].time,
+                            location: data[index].location,
+                            bloodgroup: data[index].bloodgroup,
+                            status: data[index].status,
+                            attendantNum: data[index].attendantNum,
+                            city: data[index].city,
+                            quantity: data[index].quantity,
+                            id: data[index].id,
+                            visible:
+                                data[index].status == "Active" ? false : true,
+                            details: data[index].details,
+                          );
+                        });
+                  } else if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
+                  // By default show a loading spinner.
+                  // return CircularProgressIndicator(
+                  //     valueColor: new AlwaysStoppedAnimation<Color>(Colors.red));
+                  return Container(
+                      alignment: Alignment.center,
+                      child:
+                          CircularProgressIndicator(color: Color(0xffc10110)));
+                },
+              ),
             ),
           ),
         ],
@@ -192,6 +197,7 @@ class RequestCard extends StatefulWidget {
   final String status;
   final String quantity;
   bool visible;
+  final String details;
   // Function moreDetails;
 
   // final Size preferredSize;
@@ -207,6 +213,7 @@ class RequestCard extends StatefulWidget {
       required this.status,
       required this.id,
       required this.visible,
+      required this.details,
       Key? key})
       : super(key: key);
 
@@ -648,19 +655,19 @@ class _RequestCardState extends State<RequestCard> {
                                   print("hi");
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => myDetails(
-                                            attendantName: widget.name,
-                                            attendantNum: widget.attendantNum,
-                                            bloodGroup: widget.bloodgroup,
-                                            status: widget.status,
-                                            userContact: userPhoneNum,
-                                            date: widget.date,
-                                            time: widget.time,
-                                            quantity: widget.quantity,
-                                            hospital: widget.location,
-                                            id: widget.id,
-                                            city: widget.city,
-                                            ownership: true,
-                                          )));
+                                          attendantName: widget.name,
+                                          attendantNum: widget.attendantNum,
+                                          bloodGroup: widget.bloodgroup,
+                                          status: widget.status,
+                                          userContact: userPhoneNum,
+                                          date: widget.date,
+                                          time: widget.time,
+                                          quantity: widget.quantity,
+                                          hospital: widget.location,
+                                          id: widget.id,
+                                          city: widget.city,
+                                          ownership: true,
+                                          details: widget.details)));
                                 },
                                 style: ButtonStyle(
                                   shape: MaterialStateProperty.all(

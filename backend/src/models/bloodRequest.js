@@ -14,7 +14,8 @@ const bloodRequestSchema = new mongoose.Schema({
     time: Date,
     hospital : String,
     city: String,
-    email: String
+    email: String, 
+    details: String
 });
 
 const RequestModel = mongoose.model("blood_requests", bloodRequestSchema);

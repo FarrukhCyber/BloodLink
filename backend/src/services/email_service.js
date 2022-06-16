@@ -2,8 +2,10 @@ var nodeoutlook = require('nodejs-nodemailer-outlook')
 
 function sendEmail(to, content) {
 
-    user = "bloodlink.lcss@outlook.com"
-    pass = "bloodlink@SEproject"
+    var user = "23100240@lums.edu.pk"
+    var pass = "786@mf12"
+    // user: "bloodlink.lcss@outlook.com",
+    // pass: "bloodlink@SEproject"
 
     nodeoutlook.sendEmail({
         auth: {

@@ -3,7 +3,9 @@
 import 'package:bloodlink/base_url.dart';
 import 'package:bloodlink/screens/admin_dashboard.dart';
 import 'package:bloodlink/screens/homepage.dart';
+import 'package:bloodlink/screens/requestDetails.dart';
 import 'package:bloodlink/screens/request_success_msg.dart';
+// import 'package:bloodlink/utils/request_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -445,76 +447,6 @@ class _getTimeState extends State<getTime> {
   }
 }
 
-initPlatform() async {
-  await OneSignal.shared.setAppId("0a075bcf-6425-4c41-9834-6fa9304050e0");
-
-  //gives the device unique id. TODO: need to store it in Registeredusers collection
-  // var devuceState = await OneSignal!.getDeviceState().then((value) => {
-  //       print("here is the device ID:" + value!.userId.toString()),
-  //       device_id = value.userId.toString()
-  OneSignal? _instance;
-  var deviceState;
-  while (OneSignal.shared.getDeviceState() == null) {
-    print("waiting");
-  }
-  // do {
-  deviceState = await OneSignal.shared.getDeviceState();
-  if (deviceState != null || deviceState?.userId != null) {
-    print("I am");
-    print(deviceState);
-    device_id = deviceState!.userId.toString();
-    print("TOKEN ID: " + device_id);
-  }
-  // } while (deviceState == null);
-}
-
-createRequest_func(
-    name, number, bloodType, time, date, location, city, quantity) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await initPlatform();
-  var url = base_url + "/submit_request"; // check what localhost is for you
-  print("In createRequest");
-  try {
-    final http.Response response = await http.post(
-      Uri.parse(url),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, dynamic>{
-        'attendant_name': name,
-        'time': time,
-        'date': date,
-        'blood_group': bloodType,
-        'attendant_num': number,
-        'hospital': location,
-        'city': city,
-        'quantity': quantity,
-        'user_contact_num': UserSimplePreferences.getPhoneNumber(),
-        'deviceID' : device_id
-      }),
-    );
-    var parse = jsonDecode(response.body);
-    if (parse["createRequest"] == null) {
-      print("it is null");
-      // message = "null";
-      await prefs.setString('createRequest', "null");
-    } else
-      await prefs.setString('createRequest', parse["createRequest"]);
-
-    print("Message received:");
-    print(parse["createRequest"]);
-  } on HttpException catch (err) {
-    print(err);
-    return null;
-  } on Error catch (error) {
-    print(error);
-    return null;
-  } on Object catch (error) {
-    print(error);
-    return null;
-  }
-}
-
 errorGenerator(context, title, message) {
   showDialog(
       context: context,
@@ -614,10 +546,6 @@ class PairButton extends StatelessWidget {
                             borderRadius: BorderRadius.circular(borderRadius)),
                       )),
                   //TODO: For turning On the maps uncomment the below section---------------------------
-                  // onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                  //     builder: (context) => CreateBloodRequestPage2(key: key))),
-                  //------------------------------------------------------------------------------------
-                  // onPressed: () => {print("here")},
                   onPressed: () async {
                     print(name);
                     print(number);
@@ -636,26 +564,22 @@ class PairButton extends StatelessWidget {
                       errorGenerator(
                           context, "Empty fields", "Please fill all fileds");
                     } else {
-                      await createRequest_func(name, number, bloodType, time,
-                          date, location, city, quantity);
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      String? msg = prefs.getString("createRequest");
-                      print("message is:");
-                      print(msg);
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              RequestConfirmation(admin: admin)));
-                      // if (msg == "Request Added") {
-                      //   Navigator.of(context).push(MaterialPageRoute(
-                      //       builder: (context) => Confirmation()));
-                      // }
+                          builder: (context) => RequestDetails(
+                              attendantName: name,
+                              phoneNumber: number,
+                              bloodGroup: bloodType,
+                              date: date,
+                              time: time,
+                              city: city,
+                              location: location,
+                              quantity: quantity,
+                              admin: admin)));
                     }
                   },
-                  // onPressed: () => CreateBloodRequestPage2(key: key),
-                  child: Text(
-                    "Submit",
-                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  child: const Text(
+                    "Continue",
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
               )
