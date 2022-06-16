@@ -127,18 +127,8 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
               print(gender);
               print("Hello from signup on press");
               if (pass != confirmPass) {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                          title: const Text('Passwords dont match'),
-                          content: const Text('Please re-enter the passwords'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'Ok'),
-                              child: const Text('Ok'),
-                            ),
-                          ],
-                        ));
+                errorGenerator(context, 'Passwords dont match',
+                    'Please re-enter the passwords');
               } else {
                 DateTime dateonly = DateTime(
                     dateSelection.year, dateSelection.month, dateSelection.day);
@@ -175,19 +165,6 @@ class _signupState extends State<signup> with SingleTickerProviderStateMixin {
                   print("THERE WAS AN ERROR");
                   errorGenerator(context, 'There was an error in server',
                       'Please try again in some time');
-                  // showDialog(
-                  //     context: context,
-                  //     builder: (BuildContext context) => AlertDialog(
-                  //           title: const Text('There was an error in server'),
-                  //           content:
-                  //               const Text('Please try again in some time'),
-                  //           actions: <Widget>[
-                  //             TextButton(
-                  //               onPressed: () => Navigator.pop(context, 'Ok'),
-                  //               child: const Text('Ok'),
-                  //             ),
-                  //           ],
-                  //         ));
                 }
               }
             }
@@ -254,7 +231,7 @@ initPlatform() async {
 
   //gives the device unique id. TODO: need to store it in Registeredusers collection
   await OneSignal.shared.getDeviceState().then((value) => {
-        print("here is the device ID:"+ value!.userId.toString()),
+        print("here is the device ID:" + value!.userId.toString()),
         device_id = value!.userId.toString()
       });
 }

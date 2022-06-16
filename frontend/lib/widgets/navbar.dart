@@ -8,6 +8,7 @@ import 'package:bloodlink/screens/user_profile.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:bloodlink/utils/user_info.dart';
+import 'package:bloodlink/screens/editPageProfile.dart';
 
 class navBar extends StatelessWidget {
   final String userName;
@@ -55,6 +56,16 @@ class navBar extends StatelessWidget {
                   builder: (context) => userProfile(
                         phoneNum: phoneNo,
                       )))
+            },
+          ),
+          ListTile(
+            // logout
+            leading: Icon(Icons.person),
+            title: Text("User Profile Page"),
+            onTap: () => {
+              print("User profile page clicked"),
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => editPageProfile()))
             },
           ),
           ListTile(

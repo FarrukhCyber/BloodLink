@@ -59,22 +59,6 @@ class _loginState extends State<login> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    // final passwordField = TextFormField(
-    //     // try to replace with the one in signup
-    //     autofocus: false,
-    //     obscureText: true,
-    //     controller: passwordEditingController, //check this
-    //     onSaved: (value) {
-    //       value != null ? pass = value : null;
-    //     },
-    //     onChanged: (value) {
-    //       pass = value;
-    //     },
-    //     validator: (password) => checkPass(password ?? "") == false
-    //         ? 'Enter minimum 8 characters + 1 Uppercase + 1 Digit + 1 Special Character'
-    //         : null,
-    //     textInputAction: TextInputAction.next,
-    //     decoration: decoration("Password", "Required", red, opacity));
     final passwordField = passwordBuilder(
         label: "Password",
         hint: "Required",
