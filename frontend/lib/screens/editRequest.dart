@@ -1,4 +1,5 @@
 import 'package:bloodlink/base_url.dart';
+import 'package:bloodlink/screens/myDetails.dart';
 import 'package:bloodlink/screens/myRequests.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:flutter/cupertino.dart';
@@ -33,17 +34,18 @@ var items = [
   'O Negative (O-)'
 ];
 
-var name1;
-var number1;
-var bloodType1;
-var date1;
-var time1;
-var location1;
-var city1;
-var quantity1;
-var bloodgroup;
-var time2;
-var date2;
+String name1 = "";
+String number1 = "";
+String bloodType1 = "";
+String date1 = "";
+String time1 = "";
+String location1 = "";
+String city1 = "";
+String quantity1 = "";
+String bloodgroup = "";
+String time2 = "";
+String date2 = "";
+String details1 = "";
 
 class editRequest extends StatefulWidget {
   var name;
@@ -54,6 +56,9 @@ class editRequest extends StatefulWidget {
   var location;
   var city;
   var quantity;
+  var details;
+  var id;
+  var owner;
   editRequest(
       {Key? key,
       required this.name,
@@ -63,6 +68,9 @@ class editRequest extends StatefulWidget {
       required this.time,
       required this.location,
       required this.city,
+      required this.id,
+      required this.details,
+      required this.owner,
       required this.quantity})
       : super(key: key);
 
@@ -143,6 +151,8 @@ class _editRequestState extends State<editRequest> {
                 quantity: widget.quantity,
                 bloodType: widget.bloodType,
                 date: widget.date,
+                id: widget.id,
+                details: widget.details,
                 time: widget.time)
           ],
         ),
@@ -542,8 +552,8 @@ class _getTimeState extends State<getTime> {
   }
 }
 
-createRequest_func(
-    name, number, bloodType, time, date, location, city, quantity) async {
+createRequest_func(name, number, bloodType, time, date, location, city,
+    quantity, id, details) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
   var url = base_url + "/edit_request";
@@ -565,6 +575,8 @@ createRequest_func(
         'hospital': location,
         'city': city,
         'user_contact_num': UserSimplePreferences.getPhoneNumber(),
+        'id': id,
+        'details': details
       }),
     );
     var parse = jsonDecode(response.body);
@@ -614,6 +626,8 @@ class PairButton extends StatefulWidget {
   String bloodType;
   String date;
   String time;
+  String id;
+  String details;
   // final Function() onPressed;
   PairButton(
       {required this.text,
@@ -625,6 +639,8 @@ class PairButton extends StatefulWidget {
       required this.quantity,
       required this.bloodType,
       required this.date,
+      required this.id,
+      required this.details,
       required this.time})
       : super(key: key);
 
@@ -716,29 +732,40 @@ class _PairButtonState extends State<PairButton> {
                       errorGenerator(
                           context, "Empty fields", "Please fill all fileds");
                     } else {
-                      if (time2 != widget.time) {
+                      if (time2 != widget.time && time2 != "") {
                         print("time");
+                        widget.time = time2;
                       }
-                      if (name1 != widget.name) {
-                        print("name");
+                      if (name1 != widget.name && name1 != "") {
+                        print("name1: " + name1);
+                        widget.name = name1;
+                        print("new widget.name is " + widget.name);
                       }
-                      if (date2 != widget.date) {
-                        print("date");
+                      if (location1 != widget.location && location1 != "") {
+                        print("location1: " + location1);
+                        print("widget.location: " + widget.location);
+                        widget.location = location1;
                       }
-                      if (location1 != widget.location) {
-                        print("location");
-                      }
-                      if (quantity1 != widget.quantity) {
+                      if (quantity1 != widget.quantity && quantity1 != "") {
                         print("quantity");
+                        widget.quantity = quantity1;
                       }
-                      if (number1 != widget.number) {
+                      if (number1 != widget.number && number1 != "") {
                         print("number");
+                        widget.number = number1;
                       }
-                      if (city1 != widget.city) {
+                      if (date2 != widget.date && date2 != "") {
+                        print("date2 is: " + date2);
+                        print("widget.date is: " + widget.date);
+                        widget.date = date2;
+                      }
+                      if (city1 != widget.city && city1 != "") {
                         print("city");
+                        widget.city = city1;
                       }
-                      if (bloodType1 != widget.bloodType) {
+                      if (bloodType1 != widget.bloodType && bloodType1 != "") {
                         print("bloodtype");
+                        widget.bloodType = bloodType1;
                       }
 
                       await createRequest_func(
@@ -749,29 +776,44 @@ class _PairButtonState extends State<PairButton> {
                           widget.date,
                           widget.location,
                           widget.city,
-                          widget.quantity);
+                          widget.quantity,
+                          widget.id,
+                          widget.details);
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       String? msg = prefs.getString("createRequest");
                       print("message is:");
                       print(msg);
-                      Fluttertoast.showToast(
-                          msg: "Request Updated",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Color.fromARGB(255, 193, 0, 0),
-                          textColor: Colors.white,
-                          fontSize: 16.0);
-                      Navigator.pop(context, 'Ok');
+                      if (msg == "ok") {
+                        Fluttertoast.showToast(
+                            msg: "Request Updated",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Color.fromARGB(255, 32, 193, 0),
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                        // Navigator.pop(context, 'Ok');
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) =>myDetails(
+                              attendantName: widget.name,
+                              attendantNum: widget.number,
+                              bloodGroup: widget.bloodType,
+                              status: "true",
+                              userContact: userPhoneNum,
+                              date: widget.date,
+                              time: widget.time,
+                              quantity: widget.quantity,
+                              hospital: widget.location,
+                              id: widget.id,
+                              city: widget.city,
+                              ownership: true,
+                              details: widget.details,
+                            )));
+                      }
 
-                      // if (msg == "Request Added") {
-                      //   Navigator.of(context).push(MaterialPageRoute(
-                      //       builder: (context) => dummyPage()));
-                      // }
                     }
                   },
-                  // onPressed: () => CreateBloodRequestPage2(key: key),
                   child: Text(
                     "Update",
                     style: const TextStyle(color: Colors.white, fontSize: 16),

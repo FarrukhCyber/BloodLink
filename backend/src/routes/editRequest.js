@@ -22,43 +22,87 @@ async function updateDb(result, res) {
     // console.log(result)
     //-------------------------
 
-    //Check if the request being edited is of admin or not------------
-    let docs
-    userName = ""
     try {
-        docs = await RegUserModel.findOne({phoneNumber: result.user_contact_num})
-        console.log("docs:",docs)
-        userName = docs.userName
-    }
-    catch(err) {
-        console.log(err + "while querying to donors")
+        ans = await RequestModel.findById(result.id)
+        console.log("ans: ", ans)
+    } catch(err) {
+        console.log(err)
     }
 
-    isAdmin = userName=="ADMIN" ? true : false
+    RequestModel.findByIdAndUpdate(result.id,{
+        req_id: 4 ,
+        attendant_name: result.attendant_name,
+        attendant_num: result.attendant_num ,
+        blood_group: result.blood_group ,
+        status: true,
+        quantity: ('quantity' in result ? result.quantity : "500ml"),
+        user_contact_num: result.user_contact_num,
+        admin_id: null,
+        moderator_id: null,
+        date: result.date,
+        time: result.time,
+        hospital : result.hospital,
+        city: result.city
+
+    }, function(err, result){
+
+        if(err){
+            res.json({"createRequest": "err"})
+        }
+        else{
+            console.log("result", result)
+            res.json({"createRequest": "ok"})
+        }
+
+    })
+
 
     //updating in db
-    try {
-        res = await RequestModel.updateOne({user_contact_num: result.user_contact_num}, {
-            req_id: 4 ,
-            attendant_name: result.attendant_name,
-            attendant_num: result.attendant_num ,
-            blood_group: result.blood_group ,
-            status: true,
-            quantity: ('quantity' in result ? result.quantity : "500ml"),
-            user_contact_num: (!isAdmin ? result.user_contact_num : null),
-            admin_id: (isAdmin ? result.user_contact_num : null),
-            moderator_id: ('moderator_id' in result ? result.moderator_id : null) ,
-            date: result.date,
-            time: result.time,
-            hospital : result.hospital,
-            city: result.city
-        })
+    // try {
+    //     // ans = await RequestModel.updateOne({__id: result.id}, {
+    //     //     req_id: 4 ,
+    //     //     attendant_name: result.attendant_name,
+    //     //     attendant_num: result.attendant_num ,
+    //     //     blood_group: result.blood_group ,
+    //     //     status: true,
+    //     //     quantity: ('quantity' in result ? result.quantity : "500ml"),
+    //     //     user_contact_num: result.user_contact_num,
+    //     //     admin_id: null,
+    //     //     moderator_id: null,
+    //     //     date: result.date,
+    //     //     time: result.time,
+    //     //     hospital : result.hospital,
+    //     //     city: result.city
+    //     // })
+    //     ans = await RequestModel.findById(result.id)
+    //     console.log("ans: ", ans)
 
-        return res.acknowledged
-    }
-    catch(err) {
-        console.log("error while updating blood request:", err)
-    }
+    //     // test = await RequestModel.findByIdAndUpdate(result.id)
+
+    //     hurray = await RequestModel.findByIdAndUpdate(result.id,{
+    //         req_id: 4 ,
+    //         attendant_name: result.attendant_name,
+    //         attendant_num: result.attendant_num ,
+    //         blood_group: result.blood_group ,
+    //         status: true,
+    //         quantity: ('quantity' in result ? result.quantity : "500ml"),
+    //         user_contact_num: result.user_contact_num,
+    //         admin_id: null,
+    //         moderator_id: null,
+    //         date: result.date,
+    //         time: result.time,
+    //         hospital : result.hospital,
+    //         city: result.city
+    //     })
+    //     console.log("hurray:" , hurray)
+
+
+    //     res.json({"createRequest": "ok"})
+    // }
+    // catch(err) {
+    //     console.log("error while updating blood request:", err)
+    //     res.json({"createRequest": "err"})
+    // }
 }
 
 

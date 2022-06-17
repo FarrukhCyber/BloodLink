@@ -75,6 +75,8 @@ class _myDetailsState extends State<myDetails> {
                       city: widget.city,
                       quantity: widget.quantity,
                       owner: widget.ownership,
+                      id: widget.id,
+                      details: widget.details,
                     ),
                     Divider(
                       height: 5,
@@ -194,6 +196,8 @@ class Heading extends StatefulWidget {
   var location;
   var city;
   var quantity;
+  var id;
+  var details;
   var owner;
 
   Heading(
@@ -207,6 +211,8 @@ class Heading extends StatefulWidget {
       required this.location,
       required this.city,
       required this.quantity,
+      required this.id,
+      required this.details,
       required this.owner})
       : super(key: key);
 
@@ -276,6 +282,9 @@ class _HeadingState extends State<Heading> {
                               date: widget.date,
                               time: widget.time,
                               location: widget.location,
+                              id: widget.id,
+                              details: widget.details,
+                              owner: widget.owner,
                               city: widget.city,
                               quantity: widget.quantity)))
                     },
