@@ -19,10 +19,10 @@ import 'dart:io';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:bloodlink/screens/networkHandler.dart';
 
-bool email = true;
-bool notification = true;
-bool available = true;
-bool plasma = true;
+bool email = false;
+bool notification = false;
+bool available = false;
+bool plasma = false;
 bool disease = false;
 bool diabetes = false;
 bool vaccinated = false;
@@ -31,26 +31,6 @@ bool error = false;
 
 NetworkHandler networkHandler = NetworkHandler();
 String userPhoneNum = UserSimplePreferences.getPhoneNumber() ?? "Error";
-// Future<void> fetchData() async {
-//   final response = await networkHandler.get(
-//       '/register_donor/fetch', userPhoneNum, "user_contact_num");
-//   if (response.statusCode == 200) {
-//     print(jsonDecode(response.body));
-//     print(jsonDecode(response.body)["emailIs"]);
-//     print(jsonDecode(response.body)["notificationIs"]);
-//     print(jsonDecode(response.body)["availableIs"]);
-//     if (jsonDecode(response.body)["fetch"] == null) {
-//       print("fetch --- its null");
-//       error = true;
-//     } else {
-//       email = jsonDecode(response.body)["emailIs"];
-//       notification = jsonDecode(response.body)["notificationIs"];
-//       available = jsonDecode(response.body)["availableIs"];
-//       gotEm = true;
-//       print("done with this");
-//     }
-//   }
-// }
 
 class Settings extends StatefulWidget {
   // final String userName;
@@ -74,7 +54,14 @@ class _homepageState extends State<Settings>
       print(jsonDecode(response.body)["availableIs"]);
       if (jsonDecode(response.body)["fetch"] == null) {
         print("fetch --- its null");
-        error = true;
+        setState(() {
+          errorGenerator(context, "Error",
+              "Problem in Server Connection. Please try later");
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => homepage(
+                    userName: "user",
+                  )));
+        });
       } else {
         setState(() {
           email = jsonDecode(response.body)["emailIs"];
@@ -96,10 +83,10 @@ class _homepageState extends State<Settings>
     super.initState();
     _controller = AnimationController(vsync: this);
     fetchData();
-    if (error) {
-      errorGenerator(
-          context, "Error", "Problem in Server Connection. Please try later");
-    }
+    // if (error) {
+    //   errorGenerator(
+    //       context, "Error", "Problem in Server Connection. Please try later");
+    // }
   }
 
   @override
@@ -126,6 +113,7 @@ class _homepageState extends State<Settings>
                   title: "Settings",
                   upperTitle: "\n View and Edit your account settings"),
               gotEm ? Text("") : Text("Loading..."),
+              gotEm ? Text("\nCheck for Yes. Uncheck for No\n") : Text(""),
               gotEm
                   ? TextwithCheckBox(
                       title: "Send me an email in case of a blood request",
@@ -156,7 +144,7 @@ class _homepageState extends State<Settings>
               gotEm
                   ? TextwithCheckBox(
                       title: "Mark me available for plasma donation",
-                      symbol: available
+                      symbol: plasma
                           ? Icons.check_box_rounded
                           : Icons.check_box_outline_blank,
                       check: "plasma",
@@ -164,9 +152,8 @@ class _homepageState extends State<Settings>
                   : Text(""),
               gotEm
                   ? TextwithCheckBox(
-                      title:
-                          "Are you vaccinated? \n(Check for Yes. Uncheck for No)",
-                      symbol: available
+                      title: "Are you vaccinated?)",
+                      symbol: vaccinated
                           ? Icons.check_box_rounded
                           : Icons.check_box_outline_blank,
                       check: "vaccinated",
@@ -174,9 +161,8 @@ class _homepageState extends State<Settings>
                   : Text(""),
               gotEm
                   ? TextwithCheckBox(
-                      title:
-                          "Do you have diabetes? \n(Check for Yes. Uncheck for No)",
-                      symbol: available
+                      title: "Do you have diabetes?)",
+                      symbol: diabetes
                           ? Icons.check_box_rounded
                           : Icons.check_box_outline_blank,
                       check: "diabetes",
@@ -184,9 +170,8 @@ class _homepageState extends State<Settings>
                   : Text(""),
               gotEm
                   ? TextwithCheckBox(
-                      title:
-                          "Do you have any blood diseases? \n(Check for Yes. Uncheck for No)",
-                      symbol: available
+                      title: "Do you have any blood diseases?)",
+                      symbol: disease
                           ? Icons.check_box_rounded
                           : Icons.check_box_outline_blank,
                       check: "disease",
@@ -502,7 +487,7 @@ setting_func(email, notification, available, vaccinated, diabetes, disease,
       print("it is null");
       await prefs.setString('setting', "null");
     } else {
-      await prefs.setString('setting', parse["msg"].toString());
+      await prefs.setString('setting', parse["setting"].toString());
 
       print("Here they are");
       print(parse["email"]);
