@@ -22,31 +22,35 @@ import 'package:bloodlink/screens/networkHandler.dart';
 bool email = true;
 bool notification = true;
 bool available = true;
-bool error = false;
+bool plasma = true;
+bool disease = false;
+bool diabetes = false;
+bool vaccinated = false;
 bool gotEm = false;
+bool error = false;
 
 NetworkHandler networkHandler = NetworkHandler();
 String userPhoneNum = UserSimplePreferences.getPhoneNumber() ?? "Error";
-Future<void> fetchData() async {
-  final response = await networkHandler.get(
-      '/register_donor/fetch', userPhoneNum, "user_contact_num");
-  if (response.statusCode == 200) {
-    print(jsonDecode(response.body));
-    print(jsonDecode(response.body)["emailIs"]);
-    print(jsonDecode(response.body)["notificationIs"]);
-    print(jsonDecode(response.body)["availableIs"]);
-    if (jsonDecode(response.body)["fetch"] == null) {
-      print("fetch --- its null");
-      error = true;
-    } else {
-      email = jsonDecode(response.body)["emailIs"];
-      notification = jsonDecode(response.body)["notificationIs"];
-      available = jsonDecode(response.body)["availableIs"];
-      gotEm = true;
-      print("done with this");
-    }
-  }
-}
+// Future<void> fetchData() async {
+//   final response = await networkHandler.get(
+//       '/register_donor/fetch', userPhoneNum, "user_contact_num");
+//   if (response.statusCode == 200) {
+//     print(jsonDecode(response.body));
+//     print(jsonDecode(response.body)["emailIs"]);
+//     print(jsonDecode(response.body)["notificationIs"]);
+//     print(jsonDecode(response.body)["availableIs"]);
+//     if (jsonDecode(response.body)["fetch"] == null) {
+//       print("fetch --- its null");
+//       error = true;
+//     } else {
+//       email = jsonDecode(response.body)["emailIs"];
+//       notification = jsonDecode(response.body)["notificationIs"];
+//       available = jsonDecode(response.body)["availableIs"];
+//       gotEm = true;
+//       print("done with this");
+//     }
+//   }
+// }
 
 class Settings extends StatefulWidget {
   // final String userName;
@@ -76,6 +80,10 @@ class _homepageState extends State<Settings>
           email = jsonDecode(response.body)["emailIs"];
           notification = jsonDecode(response.body)["notificationIs"];
           available = jsonDecode(response.body)["availableIs"];
+          vaccinated = jsonDecode(response.body)["vaccinatedIs"];
+          disease = jsonDecode(response.body)["diseaseIs"];
+          diabetes = jsonDecode(response.body)["diabetesIs"];
+          plasma = jsonDecode(response.body)["plasmaIs"];
           gotEm = true;
         });
         print("done with this");
@@ -117,6 +125,7 @@ class _homepageState extends State<Settings>
               TopBarFb3(
                   title: "Settings",
                   upperTitle: "\n View and Edit your account settings"),
+              gotEm ? Text("") : Text("Loading..."),
               gotEm
                   ? TextwithCheckBox(
                       title: "Send me an email in case of a blood request",
@@ -125,7 +134,7 @@ class _homepageState extends State<Settings>
                           : Icons.check_box_outline_blank,
                       check: "email",
                     )
-                  : Text("Loading..."),
+                  : Text(""),
               gotEm
                   ? TextwithCheckBox(
                       title: "Send me blood request notifications ",
@@ -134,7 +143,7 @@ class _homepageState extends State<Settings>
                           : Icons.check_box_outline_blank,
                       check: "notification",
                     )
-                  : Text("Loading..."),
+                  : Text(""),
               gotEm
                   ? TextwithCheckBox(
                       title: "Mark me available for donation",
@@ -143,7 +152,46 @@ class _homepageState extends State<Settings>
                           : Icons.check_box_outline_blank,
                       check: "available",
                     )
-                  : Text("Loading..."),
+                  : Text(""),
+              gotEm
+                  ? TextwithCheckBox(
+                      title: "Mark me available for plasma donation",
+                      symbol: available
+                          ? Icons.check_box_rounded
+                          : Icons.check_box_outline_blank,
+                      check: "plasma",
+                    )
+                  : Text(""),
+              gotEm
+                  ? TextwithCheckBox(
+                      title:
+                          "Are you vaccinated? \n(Check for Yes. Uncheck for No)",
+                      symbol: available
+                          ? Icons.check_box_rounded
+                          : Icons.check_box_outline_blank,
+                      check: "vaccinated",
+                    )
+                  : Text(""),
+              gotEm
+                  ? TextwithCheckBox(
+                      title:
+                          "Do you have diabetes? \n(Check for Yes. Uncheck for No)",
+                      symbol: available
+                          ? Icons.check_box_rounded
+                          : Icons.check_box_outline_blank,
+                      check: "diabetes",
+                    )
+                  : Text(""),
+              gotEm
+                  ? TextwithCheckBox(
+                      title:
+                          "Do you have any blood diseases? \n(Check for Yes. Uncheck for No)",
+                      symbol: available
+                          ? Icons.check_box_rounded
+                          : Icons.check_box_outline_blank,
+                      check: "disease",
+                    )
+                  : Text(""),
               Container(
                 padding: EdgeInsets.fromLTRB(
                     0, MediaQuery.of(context).size.width * 0.02, 0, 0),
@@ -289,6 +337,14 @@ class _TextwithCheckBoxState extends State<TextwithCheckBox> {
                             notification = !notification;
                           else if (widget.check == "available")
                             available = !available;
+                          else if (widget.check == "vaccinated")
+                            vaccinated = !vaccinated;
+                          else if (widget.check == "plasma")
+                            plasma = !plasma;
+                          else if (widget.check == "diabetes")
+                            diabetes = !diabetes;
+                          else if (widget.check == "disease")
+                            disease = !disease;
                         },
                         icon: Icon(widget.symbol,
                             color: Color(0xffc10110),
@@ -369,7 +425,8 @@ class PairButton extends StatelessWidget {
                   onPressed: () async {
                     print("Continue pls");
 
-                    await setting_func(email, notification, available);
+                    await setting_func(email, notification, available,
+                        vaccinated, diabetes, disease, plasma);
                     SharedPreferences prefs =
                         await SharedPreferences.getInstance();
                     String? msg = prefs.getString("setting");
@@ -416,7 +473,8 @@ errorGenerator(context, title, message) {
           ));
 }
 
-setting_func(email, notification, available) async {
+setting_func(email, notification, available, vaccinated, diabetes, disease,
+    plasma) async {
   var url = base_url + "/register_donor/settings";
   var phone = UserSimplePreferences.getPhoneNumber();
   print("In settings");
@@ -431,6 +489,10 @@ setting_func(email, notification, available) async {
         'email': email,
         'notification': notification,
         'available': available,
+        'vaccinated': vaccinated,
+        'disease': disease,
+        'plasma': plasma,
+        'diabetes': diabetes
       }),
     );
     print("this one");
