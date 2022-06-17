@@ -24,21 +24,20 @@ const primaryColor = Color(0xffc10110);
 const accentColor = Color(0xffffffff);
 const double borderRadius = 15;
 var opacity = 0.3;
-var gender = "";
-var genderItems = ['Choose a gender', 'Male', 'Female', 'Other'];
-String genderValue = 'Choose a gender';
+var name = "";
 
-class editGender extends StatefulWidget {
-  const editGender({Key? key}) : super(key: key);
+class editName extends StatefulWidget {
+  const editName({Key? key}) : super(key: key);
 
   @override
-  State<editGender> createState() => _editGenderState();
+  State<editName> createState() => _editNameState();
 }
 
-class _editGenderState extends State<editGender>
+class _editNameState extends State<editName>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   final _formkey = GlobalKey<FormState>();
+  final userNameEditingController = new TextEditingController();
 
   @override
   void initState() {
@@ -50,11 +49,24 @@ class _editGenderState extends State<editGender>
   void dispose() {
     super.dispose();
     _controller.dispose();
+    userNameEditingController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
+    final userNameField = TextFormField(
+      autofocus: false,
+      keyboardType: TextInputType.name,
+      controller: userNameEditingController, //check this
+      onChanged: (value) {
+        // userNameEditingController.text = value!;
+        name = value;
+      },
+      textInputAction: TextInputAction.next,
+      decoration: decoration("Username", "Required", red, opacity),
+    );
+
     return Scaffold(
         body: Container(
             width: width,
@@ -69,10 +81,7 @@ class _editGenderState extends State<editGender>
                           SizedBox(
                             height: width * 0.1,
                           ),
-                          DropDownMenu(
-                              item: genderItems,
-                              dropDownValue: genderValue,
-                              selection: "gender"),
+                          userNameField,
                           DecoratedBox(
                               decoration: BoxDecoration(
                                   borderRadius:
@@ -163,12 +172,12 @@ class _editGenderState extends State<editGender>
                                           final form = _formkey.currentState;
                                           if (form != null && form.validate()) {
                                             print("worked!");
-                                            await edit_func(gender);
+                                            await edit_func(name);
                                             SharedPreferences prefs =
                                                 await SharedPreferences
                                                     .getInstance();
                                             String? msg =
-                                                prefs.getString("gender");
+                                                prefs.getString("name");
                                             print("message is:");
                                             print(msg);
                                             if (msg == "null") {
@@ -241,10 +250,10 @@ errorGenerator(context, title, message) {
           ));
 }
 
-edit_func(gender) async {
-  var url = base_url + "/editProfile/gender";
+edit_func(name) async {
+  var url = base_url + "/editProfile/name";
   var phone = UserSimplePreferences.getPhoneNumber();
-  print("In gender");
+  print("In name");
   print(phone);
   try {
     final http.Response response = await http.post(
@@ -254,19 +263,19 @@ edit_func(gender) async {
       },
       body: jsonEncode(<String, dynamic>{
         "phone": phone.toString(),
-        'gender': gender,
+        'name': name,
       }),
     );
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var parse = jsonDecode(response.body);
-    if (parse["gender"] == null) {
+    if (parse["name"] == null) {
       print("it is null");
-      await prefs.setString('gender', "null");
+      await prefs.setString('name', "null");
     } else {
-      await prefs.setString('gender', parse["gender"].toString());
+      await prefs.setString('name', parse["name"].toString());
     }
     print("Message received:");
-    print(parse["gender"]);
+    print(parse["name"]);
   } on HttpException catch (err) {
     print(err);
     return null;
@@ -279,40 +288,24 @@ edit_func(gender) async {
   }
 }
 
-class DropDownMenu extends StatefulWidget {
-  var item;
-  String dropDownValue;
-  String selection;
-  DropDownMenu(
-      {Key? key,
-      required this.item,
-      required this.dropDownValue,
-      required this.selection})
-      : super(key: key);
-
-  @override
-  State<DropDownMenu> createState() => _DropDownMenuState();
-}
-
-class _DropDownMenuState extends State<DropDownMenu> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        width: MediaQuery.of(context).size.width * 0.85,
-        margin: EdgeInsets.fromLTRB(
-            0, MediaQuery.of(context).size.height * 0.01, 0, 0),
-        child: DropdownButton(
-          value: widget.dropDownValue,
-          icon: Icon(Icons.keyboard_arrow_down),
-          items: widget.item.map<DropdownMenuItem<String>>((String items) {
-            return DropdownMenuItem(value: items, child: Text(items));
-          }).toList(),
-          onChanged: (String? newValue) {
-            setState(() {
-              widget.dropDownValue = newValue!;
-              gender = newValue;
-            });
-          },
-        ));
-  }
-}
+decoration(String label, String hint, red, opacity) => InputDecoration(
+      labelText: label,
+      errorMaxLines: 4,
+      floatingLabelBehavior: FloatingLabelBehavior.always,
+      filled: true,
+      contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+      hintText: hint,
+      labelStyle: TextStyle(color: red),
+      border: UnderlineInputBorder(
+        borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
+      ),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: red, width: 2.0),
+      ),
+      errorBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: red, width: 2.0),
+      ),
+      enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
+      ),
+    );

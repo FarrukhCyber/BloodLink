@@ -1,4 +1,5 @@
 import 'package:bloodlink/screens/createBloodRequest.dart';
+import 'package:bloodlink/screens/editGender.dart';
 import 'package:bloodlink/screens/login.dart';
 import 'package:bloodlink/screens/registerDonor.dart';
 import 'package:bloodlink/screens/viewActiveRequest.dart';
@@ -14,6 +15,9 @@ import 'package:bloodlink/utils/user_info.dart';
 import 'package:bloodlink/screens/editEmail.dart';
 import 'editPassword.dart';
 import 'editPhone.dart';
+import 'editBlood.dart';
+import 'editAge.dart';
+import 'editName.dart';
 
 class editPageProfile extends StatefulWidget {
   editPageProfile({Key? key}) : super(key: key);
@@ -140,18 +144,21 @@ class CardWithIconInitiateRequest extends StatelessWidget {
             else if (func == "password")
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => editPassword(key: key)))
-            else if (func == "phone")
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => editPhone(key: key)))
-            else if (func == "age")
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => editPhone(key: key)))
+            // else if (func == "phone")
+            //   Navigator.of(context).push(
+            //       MaterialPageRoute(builder: (context) => editPhone(key: key)))
+            // else if (func == "age")
+            //   Navigator.of(context).push(
+            //       MaterialPageRoute(builder: (context) => editPhone(key: key)))
             else if (func == "blood")
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => editPhone(key: key)))
+                  MaterialPageRoute(builder: (context) => editBlood(key: key)))
+            else if (func == "name")
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => editName(key: key)))
             else if (func == "gender")
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => editPhone(key: key)))
+                  MaterialPageRoute(builder: (context) => editGender(key: key)))
           },
           // onTap: () => {},
           // print('Card tapped.');

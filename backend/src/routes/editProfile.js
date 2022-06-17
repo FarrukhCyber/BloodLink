@@ -45,6 +45,47 @@ router.route("/password").post((req,res) => {
     })
 })
 
+router.route("/gender").post((req,res) => {
+    const {phone, gender} = req.body
+    console.log("In Gender: ", gender, phone)
+    
+    User.findOneAndUpdate({phoneNumber : phone}, {gender: gender}, (err,result) => {
+        if(err) {
+            consolelog("Error \n", err)
+            res.json({gender : null})}
+        else{ 
+            console.log("Success\n", result)
+            res.json({gender: "done"}) }
+    })
+})
+
+router.route("/blood").post((req,res) => {
+    const {phone, blood} = req.body
+    console.log("In Blood: ", phone, blood)
+    
+    User.findOneAndUpdate({phoneNumber : phone}, {bloodType: blood}, (err,result) => {
+        if(err) {
+            consolelog("Error \n", err)
+            res.json({blood : null})}
+        else{ 
+            console.log("Success\n", result)
+            res.json({blood: "done"}) }
+    })
+})
+
+router.route("/name").post((req,res) => {
+    const {phone, name} = req.body
+    console.log("In Blood: ", phone, name)
+    
+    User.findOneAndUpdate({phoneNumber : phone}, {userName: name}, (err,result) => {
+        if(err) {
+            consolelog("Error \n", err)
+            res.json({name : null})}
+        else{ 
+            console.log("Success\n", result)
+            res.json({name: "done"}) }
+    })
+})
 
 router.route("/phone").get((req, res) => {
     console.log("hi")
