@@ -42,7 +42,7 @@ String time1 = "";
 String location1 = "";
 String city1 = "";
 String quantity1 = "";
-String bloodgroup = "";
+// String bloodgroup = "";
 String time2 = "";
 String date2 = "";
 String details1 = "";
@@ -396,10 +396,13 @@ class _DropDownMenuState extends State<DropDownMenu> {
             return DropdownMenuItem(value: items, child: Text(items));
           }).toList(),
           onChanged: (String? newValue) {
+            print("new value: " + newValue!);
+            print("bloodType1 value: " + bloodType1);
             setState(() {
               dropDownValue1 = newValue!;
               widget.bloodType = newValue;
             });
+            bloodType1 = widget.bloodType;
           },
         ));
   }
@@ -450,6 +453,8 @@ class _DropDownState extends State<getDate> {
         widget.date = picked.toIso8601String();
         finalDate = picked.toIso8601String();
       });
+      date2 = widget.date;
+      print("new value of date2: " + date2);
     }
   }
 
@@ -546,8 +551,11 @@ class _getTimeState extends State<getTime> {
         widget.time = obtainedTime.toString();
         time2 = obtainedTime.toString();
         widget.finalTime = obtainedTime.toString();
-        ;
       });
+
+      print("Selected Time: ");
+      print(obtainedTime);
+      print("Selected Time in String: " + obtainedTime.toString());
     }
   }
 }
@@ -732,9 +740,11 @@ class _PairButtonState extends State<PairButton> {
                       errorGenerator(
                           context, "Empty fields", "Please fill all fileds");
                     } else {
+                      print("time2: " + time2);
                       if (time2 != widget.time && time2 != "") {
                         print("time");
                         widget.time = time2;
+                        print("widget.time: " + widget.time);
                       }
                       if (name1 != widget.name && name1 != "") {
                         print("name1: " + name1);
@@ -790,28 +800,36 @@ class _PairButtonState extends State<PairButton> {
                             toastLength: Toast.LENGTH_SHORT,
                             gravity: ToastGravity.CENTER,
                             timeInSecForIosWeb: 1,
-                            backgroundColor: Color.fromARGB(255, 32, 193, 0),
+                            backgroundColor: Color.fromARGB(255, 33, 189, 2),
                             textColor: Colors.white,
                             fontSize: 16.0);
                         // Navigator.pop(context, 'Ok');
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) =>myDetails(
-                              attendantName: widget.name,
-                              attendantNum: widget.number,
-                              bloodGroup: widget.bloodType,
-                              status: "true",
-                              userContact: userPhoneNum,
-                              date: widget.date,
-                              time: widget.time,
-                              quantity: widget.quantity,
-                              hospital: widget.location,
-                              id: widget.id,
-                              city: widget.city,
-                              ownership: true,
-                              details: widget.details,
-                            )));
+                            builder: (context) => myDetails(
+                                  attendantName: widget.name,
+                                  attendantNum: widget.number,
+                                  bloodGroup: widget.bloodType,
+                                  status: "true",
+                                  userContact: userPhoneNum,
+                                  date: widget.date,
+                                  time: widget.time,
+                                  quantity: widget.quantity,
+                                  hospital: widget.location,
+                                  id: widget.id,
+                                  city: widget.city,
+                                  ownership: true,
+                                  details: widget.details,
+                                )));
+                      } else {
+                        Fluttertoast.showToast(
+                            msg: "Request Failed to Updated",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 2,
+                            backgroundColor: Color.fromARGB(255, 212, 32, 9),
+                            textColor: Colors.white,
+                            fontSize: 16.0);
                       }
-
                     }
                   },
                   child: Text(

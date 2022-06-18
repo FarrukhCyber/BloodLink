@@ -8,23 +8,26 @@ const RegUserModel = require("../models/user_model")
 router.post("/" , (req, res, next) => {
     const result = req.body
     console.log("Check:", result)
+    console.log("time: ", result.time, typeof(result.time))
     updateDb(result, res)
 
 })
 
 async function updateDb(result, res) {
     //handling time data
-    // let temp = result.time
-    // result.time = temp.substr(10,5)
-    // //2022-04-21T00:00:00.000+05:30
-    // let newDate = result.date
-    // result.time = newDate.replace("00:00", result.time)
-    // console.log(result)
-    //-------------------------
+    if(result.time.includes("TimeOfDay")) {
+        console.log("Inside IF", result.time)
+        let temp = result.time
+        result.time = temp.substr(10,5)
+        //2022-04-21T00:00:00.000+05:30
+        let newDate = result.date
+        result.time = newDate.replace("00:00", result.time)
+        console.log("After Updating Time:", result)
+    }
 
     try {
         ans = await RequestModel.findById(result.id)
-        console.log("ans: ", ans)
+        // console.log("ans: ", ans)
     } catch(err) {
         console.log(err)
     }
@@ -42,15 +45,17 @@ async function updateDb(result, res) {
         date: result.date,
         time: result.time,
         hospital : result.hospital,
-        city: result.city
+        city: result.city,
+        details: result.details
 
     }, function(err, result){
 
         if(err){
+            console.log("err: ",err)
             res.json({"createRequest": "err"})
         }
         else{
-            console.log("result", result)
+            // console.log("result", result)
             res.json({"createRequest": "ok"})
         }
 
