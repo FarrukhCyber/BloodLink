@@ -14,14 +14,15 @@ import 'package:bloodlink/screens/viewActiveRequest.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:bloodlink/screens/editEmail.dart';
 import 'editPassword.dart';
-import 'editPhone.dart';
 import 'editBlood.dart';
 import 'editAge.dart';
 import 'editName.dart';
+import 'package:bloodlink/screens/editPhone.dart';
+
+var isDonor = UserSimplePreferences.getisDonor();
 
 class editPageProfile extends StatefulWidget {
   editPageProfile({Key? key}) : super(key: key);
-  var isDonor = UserSimplePreferences.getisDonor();
 
   @override
   State<editPageProfile> createState() => _editPageProfileState();
@@ -34,6 +35,8 @@ class _editPageProfileState extends State<editPageProfile>
   @override
   void initState() {
     super.initState();
+    print(isDonor);
+
     _controller = AnimationController(vsync: this);
   }
 
@@ -83,6 +86,12 @@ class _editPageProfileState extends State<editPageProfile>
                     text: "Edit Age",
                     func: "age",
                   ),
+                  isDonor == "true"
+                      ? CardWithIconInitiateRequest(
+                          text: "Edit Region",
+                          func: "region",
+                        )
+                      : Text(""),
                 ],
               ),
             ]),
@@ -144,9 +153,11 @@ class CardWithIconInitiateRequest extends StatelessWidget {
             else if (func == "password")
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => editPassword(key: key)))
-            // else if (func == "phone")
-            //   Navigator.of(context).push(
-            //       MaterialPageRoute(builder: (context) => editPhone(key: key)))
+            else if (func == "phone")
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => editPhone(
+                        forget: false,
+                      )))
             // else if (func == "age")
             //   Navigator.of(context).push(
             //       MaterialPageRoute(builder: (context) => editPhone(key: key)))

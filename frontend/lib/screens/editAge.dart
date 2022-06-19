@@ -12,15 +12,14 @@ import 'package:bloodlink/screens/myRequests.dart';
 import 'package:bloodlink/screens/viewActiveRequest.dart';
 import 'package:bloodlink/utils/user_info.dart';
 
-class editPhone extends StatefulWidget {
-  const editPhone({Key? key}) : super(key: key);
+class editAge extends StatefulWidget {
+  const editAge({Key? key}) : super(key: key);
 
   @override
-  State<editPhone> createState() => _editPhoneState();
+  State<editAge> createState() => _editAgeState();
 }
 
-class _editPhoneState extends State<editPhone> {
-  @override
+class _editAgeState extends State<editAge> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
 
