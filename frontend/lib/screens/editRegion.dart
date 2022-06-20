@@ -1,30 +1,43 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:bloodlink/base_url.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
-import 'package:bloodlink/utils/user_info.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bloodlink/screens/createBloodRequest.dart';
 import 'package:bloodlink/screens/editPageProfile.dart';
 import 'package:bloodlink/screens/homepage.dart';
+import 'package:bloodlink/screens/login.dart';
+import 'package:bloodlink/screens/registerDonor.dart';
+import 'package:bloodlink/screens/viewActiveRequest.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:bloodlink/widgets/navbar.dart';
+import 'package:bloodlink/widgets/optionCard.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:material_design_icons_flutter/icon_map.dart';
+import 'package:bloodlink/screens/myRequests.dart';
+import 'package:bloodlink/screens/viewActiveRequest.dart';
+import 'package:bloodlink/utils/user_info.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bloodlink/base_url.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:csc_picker/csc_picker.dart';
 
 const red = Color(0xffde2c2c);
 const primaryColor = Color(0xffc10110);
 const accentColor = Color(0xffffffff);
 const double borderRadius = 15;
-DateTime dateSelection = DateTime.now();
-var age = "";
 var opacity = 0.3;
+String city = "";
 
-class editAge extends StatefulWidget {
-  const editAge({Key? key}) : super(key: key);
+class editRegion extends StatefulWidget {
+  const editRegion({Key? key}) : super(key: key);
 
   @override
-  State<editAge> createState() => _editAgeState();
+  State<editRegion> createState() => _editRegionState();
 }
 
-class _editAgeState extends State<editAge> with SingleTickerProviderStateMixin {
+class _editRegionState extends State<editRegion>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  final _formkey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -54,7 +67,17 @@ class _editAgeState extends State<editAge> with SingleTickerProviderStateMixin {
                       SizedBox(
                         height: width * 0.1,
                       ),
-                      getDate(title: "Please select your date of birth"),
+                      Text(
+                        'Region',
+                        style: TextStyle(
+                          fontSize: 12,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.015,
+                      ),
+                      regionFunction(),
                       DecoratedBox(
                           decoration: BoxDecoration(
                               borderRadius:
@@ -135,20 +158,20 @@ class _editAgeState extends State<editAge> with SingleTickerProviderStateMixin {
                                         )),
                                     onPressed: () async {
                                       print("Continue pls");
-                                      print(dateSelection);
 
-                                      await edit_func(dateSelection);
+                                      final form = _formkey.currentState;
+                                      print("worked!");
+                                      print(city);
+                                      await edit_func(city);
                                       SharedPreferences prefs =
                                           await SharedPreferences.getInstance();
-                                      String? msg = prefs.getString("ageIs");
+                                      String? msg = prefs.getString("region");
                                       print("message is:");
                                       print(msg);
                                       if (msg == "null") {
                                         errorGenerator(context, "Error",
                                             "There was an error with the server. \nPlease try again later.");
                                       } else {
-                                        UserSimplePreferences.setAge(
-                                            dateSelection.toString());
                                         Navigator.of(context)
                                             .push(MaterialPageRoute(
                                                 builder: (context) => homepage(
@@ -239,11 +262,10 @@ errorGenerator(context, title, message) {
           ));
 }
 
-edit_func(age) async {
-  var url = base_url + "/editProfile/age";
+edit_func(city) async {
+  var url = base_url + "/editProfile/region";
   var phone = UserSimplePreferences.getPhoneNumber();
-  print("In age");
-  print(age);
+  print("In region");
   print(phone);
   try {
     final http.Response response = await http.post(
@@ -253,112 +275,138 @@ edit_func(age) async {
       },
       body: jsonEncode(<String, dynamic>{
         "phone": phone.toString(),
-        'age': age.toString(),
+        'region': city,
       }),
     );
-    print("here0");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var parse = jsonDecode(response.body);
-    print("here");
-    if (parse["ageIs"] == null) {
+    if (parse["region"] == null) {
       print("it is null");
-      await prefs.setString('ageIs', "null");
+      await prefs.setString('region', "null");
     } else {
-      await prefs.setString('ageIs', parse["ageIs"].toString());
+      await prefs.setString('region', parse["region"].toString());
     }
     print("Message received:");
-    print(parse["ageIs"]);
+    print(parse["region"]);
   } on HttpException catch (err) {
-    print("e1");
     print(err);
     return null;
   } on Error catch (error) {
-    print("e2");
     print(error);
     return null;
   } on Object catch (error) {
-    print("e3");
     print(error);
     return null;
   }
 }
 
-class getDate extends StatefulWidget {
-  getDate({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+class regionFunction extends StatefulWidget {
+  const regionFunction({Key? key}) : super(key: key);
 
   @override
-  _DropDownState createState() => _DropDownState();
+  State<regionFunction> createState() => _regionFunctionState();
 }
 
-class _DropDownState extends State<getDate> {
-  DateTime selectedDate = DateTime.now();
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(1950),
-      lastDate: DateTime.now(),
-      builder: (context, child) => Theme(
-        data: ThemeData().copyWith(
-          colorScheme: ColorScheme.dark(
-            primary: Color(0xffc10110),
-            onPrimary: Colors.white,
-            surface: Color(0xffc10110),
-            onSurface: Colors.black,
-          ),
-          dialogBackgroundColor: Colors.white,
-        ),
-        child: child!,
-      ),
-    );
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-        dateSelection = picked;
-      });
-    }
-  }
-
+class _regionFunctionState extends State<regionFunction> {
   @override
   Widget build(BuildContext context) {
-    // throw UnimplementedError();
+    String countryValue = "";
+    String stateValue = "";
+    String cityValue = "";
+    String address = "";
     return Container(
-      width: MediaQuery.of(context).size.width * 0.85,
-      margin: EdgeInsets.fromLTRB(
-          0, MediaQuery.of(context).size.height * 0.03, 0, 0),
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      height: 100,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            "${selectedDate.toLocal()}".split(' ')[0],
-            style: TextStyle(
-              color: Color(0xffc10110),
-              decoration: TextDecoration.underline,
+          ///Adding CSC Picker Widget in app
+          CSCPicker(
+            ///Enable disable state dropdown [OPTIONAL PARAMETER]
+            ///
+            ///
+            showStates: true,
+
+            /// Enable disable city drop down [OPTIONAL PARAMETER]
+            showCities: true,
+
+            ///Enable (get flag with country name) / Disable (Disable flag) / ShowInDropdownOnly (display flag in dropdown only) [OPTIONAL PARAMETER]
+            flagState: CountryFlag.DISABLE,
+
+            ///Dropdown box decoration to style your dropdown selector [OPTIONAL PARAMETER] (USE with disabledDropdownDecoration)
+            dropdownDecoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: Colors.white,
+                border: Border.all(color: Colors.white, width: 1)),
+
+            ///Disabled Dropdown box decoration to style your dropdown selector [OPTIONAL PARAMETER]  (USE with disabled dropdownDecoration)
+            disabledDropdownDecoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: Colors.white,
+                border: Border.all(color: Colors.grey, width: 1)),
+
+            ///placeholders for dropdown search field
+            countrySearchPlaceholder: "Pakistan",
+            stateSearchPlaceholder: "State",
+            citySearchPlaceholder: "City",
+
+            ///labels for dropdown
+            stateDropdownLabel: "Province",
+            cityDropdownLabel: "City",
+
+            ///Default Country
+            defaultCountry: DefaultCountry.Pakistan,
+
+            ///Disable country dropdown (Note: use it with default country)
+            disableCountry: true,
+
+            ///selected item style [OPTIONAL PARAMETER]
+            selectedItemStyle: TextStyle(
+              color: Colors.black,
+              fontSize: 14,
             ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.015,
-          ),
-          ElevatedButton(
-            //padding: EdgeInsets.all(1.0),
-            //olor: Color(0xffc10110),
-            style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all(Colors.white),
-                backgroundColor: MaterialStateProperty.all(Color(0xffc10110)),
-                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                    EdgeInsets.symmetric(vertical: 10, horizontal: 50)),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ))),
-            onPressed: () => _selectDate(context),
-            child: Text(
-              "Select Date",
-              style: TextStyle(color: Colors.white, fontSize: 18.0),
+
+            ///DropdownDialog Heading style [OPTIONAL PARAMETER]
+            dropdownHeadingStyle: TextStyle(
+                color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
+
+            ///DropdownDialog Item style [OPTIONAL PARAMETER]
+            dropdownItemStyle: TextStyle(
+              color: Colors.black,
+              fontSize: 14,
             ),
-          ),
+
+            ///Dialog box radius [OPTIONAL PARAMETER]
+            dropdownDialogRadius: 5.0,
+
+            ///Search bar radius [OPTIONAL PARAMETER]
+            searchBarRadius: 5.0,
+
+            ///triggers once country selected in dropdown
+
+            ///triggers once state selected in dropdown
+            onCountryChanged: (value) {
+              setState(() {
+                ///store value in state variable
+                stateValue = value;
+              });
+            },
+            onStateChanged: (value) {
+              setState(() {
+                ///store value in state variable
+                stateValue = value ?? "";
+              });
+            },
+
+            ///triggers once city selected in dropdown
+            onCityChanged: (value) {
+              setState(() {
+                ///store value in city variable
+                cityValue = value ?? "";
+                city = value ?? "";
+              });
+            },
+          )
         ],
       ),
     );

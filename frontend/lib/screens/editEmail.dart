@@ -212,6 +212,8 @@ class _editEmailState extends State<editEmail>
                                                     "Email exists",
                                                     "Please enter another email");
                                               } else {
+                                                UserSimplePreferences.setEmail(
+                                                    email);
                                                 Navigator.of(context).push(
                                                     MaterialPageRoute(
                                                         builder: (context) =>

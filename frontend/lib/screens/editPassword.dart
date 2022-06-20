@@ -198,6 +198,8 @@ class _editPasswordState extends State<editPassword>
                                               errorGenerator(context, "Error",
                                                   "There was an error with the server. \nPlease try again later.");
                                             } else {
+                                              UserSimplePreferences.setPassword(
+                                                  password);
                                               Navigator.of(context).push(
                                                   MaterialPageRoute(
                                                       builder: (context) =>

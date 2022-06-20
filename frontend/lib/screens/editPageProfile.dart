@@ -1,23 +1,13 @@
-import 'package:bloodlink/screens/createBloodRequest.dart';
-import 'package:bloodlink/screens/editGender.dart';
-import 'package:bloodlink/screens/login.dart';
-import 'package:bloodlink/screens/registerDonor.dart';
-import 'package:bloodlink/screens/viewActiveRequest.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:bloodlink/widgets/navbar.dart';
-import 'package:bloodlink/widgets/optionCard.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:material_design_icons_flutter/icon_map.dart';
-import 'package:bloodlink/screens/myRequests.dart';
-import 'package:bloodlink/screens/viewActiveRequest.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:bloodlink/screens/editEmail.dart';
-import 'editPassword.dart';
-import 'editBlood.dart';
-import 'editAge.dart';
-import 'editName.dart';
 import 'package:bloodlink/screens/editPhone.dart';
+import 'package:bloodlink/screens/editAge.dart';
+import 'package:bloodlink/screens/editName.dart';
+import 'package:bloodlink/screens/editBlood.dart';
+import 'package:bloodlink/screens/editPassword.dart';
+import 'package:bloodlink/screens/editGender.dart';
+import 'package:bloodlink/screens/editRegion.dart';
 
 var isDonor = UserSimplePreferences.getisDonor();
 
@@ -119,12 +109,6 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
       centerTitle: true,
       title: const Text("BloodLink", style: TextStyle(color: Colors.white)),
       backgroundColor: primaryColor,
-      // leading: IconButton(
-      //   icon: Icon(
-      //     Icons.keyboard_arrow_left,
-      //     color: accentColor,
-      //   ),
-      //   onPressed: () {},
     );
   }
 }
@@ -158,21 +142,22 @@ class CardWithIconInitiateRequest extends StatelessWidget {
                   builder: (context) => editPhone(
                         forget: false,
                       )))
-            // else if (func == "age")
-            //   Navigator.of(context).push(
-            //       MaterialPageRoute(builder: (context) => editPhone(key: key)))
+            else if (func == "age")
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => editAge(key: key)))
             else if (func == "blood")
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => editBlood(key: key)))
             else if (func == "name")
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => editName(key: key)))
+            else if (func == "region")
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => editRegion(key: key)))
             else if (func == "gender")
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => editGender(key: key)))
           },
-          // onTap: () => {},
-          // print('Card tapped.');
           child: SizedBox(
               width: MediaQuery.of(context).size.width *
                   0.85, // determines the size of the card
@@ -192,13 +177,10 @@ class CardWithIconInitiateRequest extends StatelessWidget {
                           fontSize: MediaQuery.of(context).size.width * 0.05),
                     ),
                   ),
-
-                  //
                 ],
               )),
         ),
       ),
     );
-    // InfoCard(title: "Use my Current Location", onMoreTap: null)
   }
 }
