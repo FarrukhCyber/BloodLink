@@ -1,3 +1,4 @@
+import 'package:bloodlink/screens/viewProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -166,10 +167,9 @@ class Heading extends StatelessWidget {
                             borderRadius: BorderRadius.circular(borderRadius)),
                       )),
                   onPressed: () => {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => editProfile(
-                              phoneNo: phoneNum,
-                            )))
+                    print("going to view"),
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => viewProfile()))
                   },
                   child: Text(
                     "Edit",
