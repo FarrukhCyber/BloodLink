@@ -62,140 +62,145 @@ class _editNameState extends State<editName>
             width: width,
             child: ListView(children: <Widget>[
               Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   AppBarFb2(),
-                  Form(
-                      key: _formkey,
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: width * 0.1,
-                          ),
-                          userNameField,
-                          DecoratedBox(
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.circular(borderRadius)),
-                              child: Container(
-                                margin: EdgeInsets.fromLTRB(
-                                    0,
-                                    MediaQuery.of(context).size.height * 0.03,
-                                    0,
-                                    0),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      margin: EdgeInsets.fromLTRB(
-                                          MediaQuery.of(context).size.height *
-                                              0.1,
-                                          0,
-                                          0,
-                                          0),
-                                      child: OutlinedButton(
-                                        style: ButtonStyle(
-                                            elevation:
-                                                MaterialStateProperty.all(0),
-                                            alignment: Alignment.center,
-                                            padding: MaterialStateProperty.all(
-                                                const EdgeInsets.only(
-                                                    right: 30,
-                                                    left: 30,
-                                                    top: 10,
-                                                    bottom: 10)),
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Colors.white),
-                                            side: MaterialStateProperty.all(
-                                                BorderSide(
-                                                    color: Colors.grey,
-                                                    width: 1.0,
-                                                    style: BorderStyle.solid)),
-                                            shape: MaterialStateProperty.all(
-                                              RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        borderRadius),
-                                              ),
-                                            )),
-                                        onPressed: () => Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                                builder: (context) =>
-                                                    editPageProfile())),
-                                        child: Text(
-                                          "Cancel",
-                                          style: const TextStyle(
-                                              color: primaryColor,
-                                              fontSize: 16),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.fromLTRB(
-                                          MediaQuery.of(context).size.height *
-                                              0.02,
-                                          0,
-                                          0,
-                                          0),
-                                      child: ElevatedButton(
-                                        style: ButtonStyle(
-                                            elevation:
-                                                MaterialStateProperty.all(0),
-                                            alignment: Alignment.center,
-                                            padding: MaterialStateProperty.all(
-                                                const EdgeInsets.only(
-                                                    right: 30,
-                                                    left: 30,
-                                                    top: 10,
-                                                    bottom: 10)),
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    primaryColor),
-                                            shape: MaterialStateProperty.all(
-                                              RoundedRectangleBorder(
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                    child: Form(
+                        key: _formkey,
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: width * 0.1,
+                            ),
+                            userNameField,
+                            DecoratedBox(
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.circular(borderRadius)),
+                                child: Container(
+                                  margin: EdgeInsets.fromLTRB(
+                                      0,
+                                      MediaQuery.of(context).size.height * 0.03,
+                                      0,
+                                      0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                        child: OutlinedButton(
+                                          style: ButtonStyle(
+                                              elevation:
+                                                  MaterialStateProperty.all(0),
+                                              alignment: Alignment.center,
+                                              padding:
+                                                  MaterialStateProperty.all(
+                                                      const EdgeInsets.only(
+                                                          right: 30,
+                                                          left: 30,
+                                                          top: 10,
+                                                          bottom: 10)),
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Colors.white),
+                                              side: MaterialStateProperty.all(
+                                                  BorderSide(
+                                                      color: Colors.grey,
+                                                      width: 1.0,
+                                                      style:
+                                                          BorderStyle.solid)),
+                                              shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(
-                                                          borderRadius)),
-                                            )),
-                                        onPressed: () async {
-                                          print("Continue pls");
-
-                                          final form = _formkey.currentState;
-                                          if (form != null && form.validate()) {
-                                            print("worked!");
-                                            await edit_func(name);
-                                            SharedPreferences prefs =
-                                                await SharedPreferences
-                                                    .getInstance();
-                                            String? msg =
-                                                prefs.getString("name");
-                                            print("message is:");
-                                            print(msg);
-                                            if (msg == "null") {
-                                              errorGenerator(context, "Error",
-                                                  "There was an error with the server. \nPlease try again later.");
-                                            } else {
-                                              Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          homepage(
-                                                            userName: "user",
-                                                          )));
-                                            }
-                                          }
-                                        },
-                                        child: Text(
-                                          "Submit",
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16),
+                                                          borderRadius),
+                                                ),
+                                              )),
+                                          onPressed: () => Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      editPageProfile())),
+                                          child: Text(
+                                            "Cancel",
+                                            style: const TextStyle(
+                                                color: primaryColor,
+                                                fontSize: 16),
+                                          ),
                                         ),
                                       ),
-                                    )
-                                  ],
-                                ),
-                              ))
-                        ],
-                      ))
+                                      Container(
+                                        margin: EdgeInsets.fromLTRB(
+                                            MediaQuery.of(context).size.height *
+                                                0.02,
+                                            0,
+                                            0,
+                                            0),
+                                        child: ElevatedButton(
+                                          style: ButtonStyle(
+                                              elevation:
+                                                  MaterialStateProperty.all(0),
+                                              alignment: Alignment.center,
+                                              padding:
+                                                  MaterialStateProperty.all(
+                                                      const EdgeInsets.only(
+                                                          right: 30,
+                                                          left: 30,
+                                                          top: 10,
+                                                          bottom: 10)),
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      primaryColor),
+                                              shape: MaterialStateProperty.all(
+                                                RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            borderRadius)),
+                                              )),
+                                          onPressed: () async {
+                                            print("Continue pls");
+
+                                            final form = _formkey.currentState;
+                                            if (form != null &&
+                                                form.validate()) {
+                                              print("worked!");
+                                              await edit_func(name);
+                                              SharedPreferences prefs =
+                                                  await SharedPreferences
+                                                      .getInstance();
+                                              String? msg =
+                                                  prefs.getString("name");
+                                              print("message is:");
+                                              print(msg);
+                                              if (msg == "null") {
+                                                errorGenerator(context, "Error",
+                                                    "There was an error with the server. \nPlease try again later.");
+                                              } else {
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            homepage(
+                                                              userName: "user",
+                                                            )));
+                                              }
+                                            }
+                                          },
+                                          child: Text(
+                                            "Submit",
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ))
+                          ],
+                        )),
+                  )
                 ],
               ),
             ])));
