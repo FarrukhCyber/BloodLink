@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:bloodlink/base_url.dart';
+import 'package:bloodlink/screens/viewProfile.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:bloodlink/widgets/navbar.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:bloodlink/screens/editPageProfile.dart';
 import 'package:bloodlink/screens/homepage.dart';
 
 const red = Color(0xffde2c2c);
@@ -50,7 +50,6 @@ class _editNameState extends State<editName>
       keyboardType: TextInputType.name,
       controller: userNameEditingController, //check this
       onChanged: (value) {
-        // userNameEditingController.text = value!;
         name = value;
       },
       textInputAction: TextInputAction.next,
@@ -76,128 +75,10 @@ class _editNameState extends State<editName>
                               height: width * 0.1,
                             ),
                             userNameField,
-                            DecoratedBox(
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.circular(borderRadius)),
-                                child: Container(
-                                  margin: EdgeInsets.fromLTRB(
-                                      0,
-                                      MediaQuery.of(context).size.height * 0.03,
-                                      0,
-                                      0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                        child: OutlinedButton(
-                                          style: ButtonStyle(
-                                              elevation:
-                                                  MaterialStateProperty.all(0),
-                                              alignment: Alignment.center,
-                                              padding:
-                                                  MaterialStateProperty.all(
-                                                      const EdgeInsets.only(
-                                                          right: 30,
-                                                          left: 30,
-                                                          top: 10,
-                                                          bottom: 10)),
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Colors.white),
-                                              side: MaterialStateProperty.all(
-                                                  BorderSide(
-                                                      color: Colors.grey,
-                                                      width: 1.0,
-                                                      style:
-                                                          BorderStyle.solid)),
-                                              shape: MaterialStateProperty.all(
-                                                RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          borderRadius),
-                                                ),
-                                              )),
-                                          onPressed: () => Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      editPageProfile())),
-                                          child: Text(
-                                            "Cancel",
-                                            style: const TextStyle(
-                                                color: primaryColor,
-                                                fontSize: 16),
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.fromLTRB(
-                                            MediaQuery.of(context).size.height *
-                                                0.02,
-                                            0,
-                                            0,
-                                            0),
-                                        child: ElevatedButton(
-                                          style: ButtonStyle(
-                                              elevation:
-                                                  MaterialStateProperty.all(0),
-                                              alignment: Alignment.center,
-                                              padding:
-                                                  MaterialStateProperty.all(
-                                                      const EdgeInsets.only(
-                                                          right: 30,
-                                                          left: 30,
-                                                          top: 10,
-                                                          bottom: 10)),
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      primaryColor),
-                                              shape: MaterialStateProperty.all(
-                                                RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            borderRadius)),
-                                              )),
-                                          onPressed: () async {
-                                            print("Continue pls");
-
-                                            final form = _formkey.currentState;
-                                            if (form != null &&
-                                                form.validate()) {
-                                              print("worked!");
-                                              await edit_func(name);
-                                              SharedPreferences prefs =
-                                                  await SharedPreferences
-                                                      .getInstance();
-                                              String? msg =
-                                                  prefs.getString("name");
-                                              print("message is:");
-                                              print(msg);
-                                              if (msg == "null") {
-                                                errorGenerator(context, "Error",
-                                                    "There was an error with the server. \nPlease try again later.");
-                                              } else {
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            homepage(
-                                                              userName: "user",
-                                                            )));
-                                              }
-                                            }
-                                          },
-                                          child: Text(
-                                            "Submit",
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 16),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ))
+                            buttonPair(
+                              formkey: _formkey,
+                              context: context,
+                            ),
                           ],
                         )),
                   )
@@ -304,3 +185,96 @@ decoration(String label, String hint, red, opacity) => InputDecoration(
         borderSide: BorderSide(color: red.withOpacity(opacity), width: 2.0),
       ),
     );
+
+class buttonPair extends StatelessWidget {
+  GlobalKey<FormState> formkey;
+  var context;
+  buttonPair({required this.formkey, required this.context, Key? key})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+        decoration:
+            BoxDecoration(borderRadius: BorderRadius.circular(borderRadius)),
+        child: Container(
+          margin: EdgeInsets.fromLTRB(
+              0, MediaQuery.of(context).size.height * 0.03, 0, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                child: OutlinedButton(
+                  style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(0),
+                      alignment: Alignment.center,
+                      padding: MaterialStateProperty.all(const EdgeInsets.only(
+                          right: 30, left: 30, top: 10, bottom: 10)),
+                      backgroundColor: MaterialStateProperty.all(Colors.white),
+                      side: MaterialStateProperty.all(BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                          style: BorderStyle.solid)),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(borderRadius),
+                        ),
+                      )),
+                  onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => viewProfile())),
+                  child: Text(
+                    "Cancel",
+                    style: const TextStyle(color: primaryColor, fontSize: 16),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.height * 0.02, 0, 0, 0),
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(0),
+                      alignment: Alignment.center,
+                      padding: MaterialStateProperty.all(const EdgeInsets.only(
+                          right: 30, left: 30, top: 10, bottom: 10)),
+                      backgroundColor: MaterialStateProperty.all(primaryColor),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(borderRadius)),
+                      )),
+                  onPressed: () async {
+                    print("Continue pls");
+
+                    final form = formkey.currentState;
+                    if (form != null && form.validate()) {
+                      print("worked!");
+                      await edit_func(name);
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      String? msg = prefs.getString("name");
+                      print("message is:");
+                      print(msg);
+                      if (msg == "null") {
+                        errorGenerator(context, "Error",
+                            "There was an error with the server. \nPlease try again later.");
+                      } else {
+                        UserSimplePreferences.setUsername(name);
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => homepage(
+                                  userName: "user",
+                                )));
+                      }
+                    }
+                  },
+                  child: Text(
+                    "Submit",
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ));
+  }
+}

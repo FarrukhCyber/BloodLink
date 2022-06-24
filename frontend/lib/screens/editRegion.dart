@@ -1,23 +1,13 @@
-import 'package:bloodlink/screens/createBloodRequest.dart';
-import 'package:bloodlink/screens/editPageProfile.dart';
-import 'package:bloodlink/screens/homepage.dart';
-import 'package:bloodlink/screens/login.dart';
-import 'package:bloodlink/screens/registerDonor.dart';
-import 'package:bloodlink/screens/viewActiveRequest.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:bloodlink/widgets/navbar.dart';
-import 'package:bloodlink/widgets/optionCard.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:material_design_icons_flutter/icon_map.dart';
-import 'package:bloodlink/screens/myRequests.dart';
-import 'package:bloodlink/screens/viewActiveRequest.dart';
-import 'package:bloodlink/utils/user_info.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:bloodlink/base_url.dart';
 import 'dart:convert';
 import 'dart:io';
+import 'package:bloodlink/base_url.dart';
+import 'package:bloodlink/screens/viewProfile.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
+import 'package:bloodlink/widgets/navbar.dart';
+import 'package:bloodlink/utils/user_info.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bloodlink/screens/homepage.dart';
 import 'package:csc_picker/csc_picker.dart';
 
 const red = Color(0xffde2c2c);
@@ -78,117 +68,7 @@ class _editRegionState extends State<editRegion>
                         height: MediaQuery.of(context).size.height * 0.015,
                       ),
                       regionFunction(),
-                      DecoratedBox(
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.circular(borderRadius)),
-                          child: Container(
-                            margin: EdgeInsets.fromLTRB(
-                                0,
-                                MediaQuery.of(context).size.height * 0.03,
-                                0,
-                                0),
-                            child: Row(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(
-                                      MediaQuery.of(context).size.height * 0.1,
-                                      0,
-                                      0,
-                                      0),
-                                  child: OutlinedButton(
-                                    style: ButtonStyle(
-                                        elevation: MaterialStateProperty.all(0),
-                                        alignment: Alignment.center,
-                                        padding: MaterialStateProperty.all(
-                                            const EdgeInsets.only(
-                                                right: 30,
-                                                left: 30,
-                                                top: 10,
-                                                bottom: 10)),
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Colors.white),
-                                        side: MaterialStateProperty.all(
-                                            BorderSide(
-                                                color: Colors.grey,
-                                                width: 1.0,
-                                                style: BorderStyle.solid)),
-                                        shape: MaterialStateProperty.all(
-                                          RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                borderRadius),
-                                          ),
-                                        )),
-                                    onPressed: () => Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                editPageProfile())),
-                                    child: Text(
-                                      "Cancel",
-                                      style: const TextStyle(
-                                          color: primaryColor, fontSize: 16),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.fromLTRB(
-                                      MediaQuery.of(context).size.height * 0.02,
-                                      0,
-                                      0,
-                                      0),
-                                  child: ElevatedButton(
-                                    style: ButtonStyle(
-                                        elevation: MaterialStateProperty.all(0),
-                                        alignment: Alignment.center,
-                                        padding: MaterialStateProperty.all(
-                                            const EdgeInsets.only(
-                                                right: 30,
-                                                left: 30,
-                                                top: 10,
-                                                bottom: 10)),
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                primaryColor),
-                                        shape: MaterialStateProperty.all(
-                                          RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      borderRadius)),
-                                        )),
-                                    onPressed: () async {
-                                      print("Continue pls");
-
-                                      final form = _formkey.currentState;
-                                      print("worked!");
-                                      print(city);
-                                      await edit_func(city);
-                                      SharedPreferences prefs =
-                                          await SharedPreferences.getInstance();
-                                      String? msg = prefs.getString("region");
-                                      print("message is:");
-                                      print(msg);
-                                      if (msg == "null") {
-                                        errorGenerator(context, "Error",
-                                            "There was an error with the server. \nPlease try again later.");
-                                      } else {
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                                builder: (context) => homepage(
-                                                      userName: "user",
-                                                    )));
-                                      }
-                                    },
-                                    child: Text(
-                                      "Submit",
-                                      style: const TextStyle(
-                                          color: Colors.white, fontSize: 16),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ))
+                      buttonPair(formkey: _formkey, context: context)
                     ],
                   )
                 ],
@@ -216,12 +96,6 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
       centerTitle: true,
       title: const Text("BloodLink", style: TextStyle(color: Colors.white)),
       backgroundColor: primaryColor,
-      // leading: IconButton(
-      //   icon: Icon(
-      //     Icons.keyboard_arrow_left,
-      //     color: accentColor,
-      //   ),
-      //   onPressed: () {},
     );
   }
 }
@@ -410,5 +284,96 @@ class _regionFunctionState extends State<regionFunction> {
         ],
       ),
     );
+  }
+}
+
+class buttonPair extends StatelessWidget {
+  GlobalKey<FormState> formkey;
+  var context;
+  buttonPair({required this.formkey, required this.context, Key? key})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+        decoration:
+            BoxDecoration(borderRadius: BorderRadius.circular(borderRadius)),
+        child: Container(
+          margin: EdgeInsets.fromLTRB(
+              0, MediaQuery.of(context).size.height * 0.03, 0, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                child: OutlinedButton(
+                  style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(0),
+                      alignment: Alignment.center,
+                      padding: MaterialStateProperty.all(const EdgeInsets.only(
+                          right: 30, left: 30, top: 10, bottom: 10)),
+                      backgroundColor: MaterialStateProperty.all(Colors.white),
+                      side: MaterialStateProperty.all(BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                          style: BorderStyle.solid)),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(borderRadius),
+                        ),
+                      )),
+                  onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => viewProfile())),
+                  child: Text(
+                    "Cancel",
+                    style: const TextStyle(color: primaryColor, fontSize: 16),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.height * 0.02, 0, 0, 0),
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      elevation: MaterialStateProperty.all(0),
+                      alignment: Alignment.center,
+                      padding: MaterialStateProperty.all(const EdgeInsets.only(
+                          right: 30, left: 30, top: 10, bottom: 10)),
+                      backgroundColor: MaterialStateProperty.all(primaryColor),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(borderRadius)),
+                      )),
+                  onPressed: () async {
+                    print("Continue pls");
+
+                    final form = formkey.currentState;
+                    print("worked!");
+                    print(city);
+                    await edit_func(city);
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    String? msg = prefs.getString("region");
+                    print("message is:");
+                    print(msg);
+                    if (msg == "null") {
+                      errorGenerator(context, "Error",
+                          "There was an error with the server. \nPlease try again later.");
+                    } else {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => homepage(
+                                userName: "user",
+                              )));
+                    }
+                  },
+                  child: Text(
+                    "Submit",
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ));
   }
 }

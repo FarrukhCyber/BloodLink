@@ -68,28 +68,28 @@ class _viewProfileState extends State<viewProfile>
                     value: UserSimplePreferences.getPassword() ?? "404",
                   ),
                   editSomething2(
-                    text: "Edit Phone",
+                    text: "Phone Number",
                     func: "phone",
                     value: UserSimplePreferences.getPhoneNumber() ?? "404",
                   ),
                   editSomething2(
-                    text: "Edit Blood Group",
+                    text: "Blood Group",
                     func: "blood",
                     value: UserSimplePreferences.getBloodType() ?? "404",
                   ),
                   editSomething2(
-                    text: "Edit Gender",
+                    text: "Gender",
                     func: "gender",
                     value: UserSimplePreferences.getGender() ?? "404",
                   ),
                   editSomething2(
-                    text: "Edit Age",
+                    text: "Age",
                     func: "age",
                     value: UserSimplePreferences.getAge() ?? "404",
                   ),
                   isDonor == "true"
                       ? editSomething2(
-                          text: "Edit Region",
+                          text: "Region",
                           func: "region",
                           value: UserSimplePreferences.getRegion() ?? "404",
                         )
