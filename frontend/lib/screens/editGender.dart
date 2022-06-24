@@ -259,6 +259,7 @@ class buttonPair extends StatelessWidget {
                         errorGenerator(context, "Error",
                             "There was an error with the server. \nPlease try again later.");
                       } else {
+                        UserSimplePreferences.setGender(gender);
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => homepage(
                                   userName: "user",

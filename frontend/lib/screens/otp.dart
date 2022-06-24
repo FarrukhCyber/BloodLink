@@ -1,5 +1,4 @@
 import 'package:bloodlink/screens/changePassword.dart';
-import 'package:bloodlink/screens/user_profile.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -259,7 +258,7 @@ class _OtpState extends State<Otp> {
               // builder: (context) => signup(phoneNo: widget.phoneNo))); // UNCOMMENT
               builder: (context) => changePassword(phoneNo: widget.phoneNo)));
         } else {
-          print(phoneNo);
+          // print(phoneNo);
           Navigator.of(context).push(MaterialPageRoute(
               // builder: (context) => signup(phoneNo: widget.phoneNo))); // UNCOMMENT
               builder: (context) => signup(phoneNo: widget.phoneNo)));

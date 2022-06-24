@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:bloodlink/widgets/navbar.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:bloodlink/screens/editPageProfile.dart';
 import 'package:bloodlink/screens/homepage.dart';
 
 const red = Color(0xffde2c2c);

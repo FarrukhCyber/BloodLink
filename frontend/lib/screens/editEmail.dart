@@ -29,7 +29,6 @@ class _editEmailState extends State<editEmail>
   final emailEditingController = new TextEditingController();
   final _formkey = GlobalKey<FormState>();
 
-  var email = "";
   var opacity = 0.3;
 
   @override
@@ -253,6 +252,7 @@ class buttonPair extends StatelessWidget {
                       )),
                   onPressed: () async {
                     print("Continue pls");
+                    print(email);
                     var oldEmail = UserSimplePreferences.getEmail();
 
                     final form = formkey.currentState;
@@ -280,6 +280,8 @@ class buttonPair extends StatelessWidget {
                           errorGenerator(context, "Email exists",
                               "Please enter another email");
                         } else {
+                          print("setting this");
+                          print(email);
                           UserSimplePreferences.setEmail(email);
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => homepage(
