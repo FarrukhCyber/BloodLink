@@ -244,7 +244,8 @@ class AppBarFb2 extends StatelessWidget with PreferredSizeWidget {
           ),
           // onPressed: () {},
           onPressed: () {
-            Navigator.pop(context, 'Ok');
+            var data = {'update': 'false'};
+            Navigator.pop(context, data);
           }),
     );
   }
@@ -697,7 +698,8 @@ class _PairButtonState extends State<PairButton> {
                   // onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                   //     builder: (context) => myRequests(key: widget.key))),
                   onPressed: () {
-                    Navigator.pop(context, 'Ok');
+                    var data = {'update': 'false'};
+                    Navigator.pop(context, data);
                   },
                   child: Text(
                     "Cancel",
@@ -803,23 +805,36 @@ class _PairButtonState extends State<PairButton> {
                             backgroundColor: Color.fromARGB(255, 33, 189, 2),
                             textColor: Colors.white,
                             fontSize: 16.0);
-                        // Navigator.pop(context, 'Ok');
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => myDetails(
-                                  attendantName: widget.name,
-                                  attendantNum: widget.number,
-                                  bloodGroup: widget.bloodType,
-                                  status: "true",
-                                  userContact: userPhoneNum,
-                                  date: widget.date,
-                                  time: widget.time,
-                                  quantity: widget.quantity,
-                                  hospital: widget.location,
-                                  id: widget.id,
-                                  city: widget.city,
-                                  ownership: true,
-                                  details: widget.details,
-                                )));
+                        var data = {
+                          'name': widget.name,
+                          'number': widget.number,
+                          'bloodType': widget.bloodType,
+                          'time': widget.time,
+                          'date': widget.date,
+                          'location': widget.location,
+                          'city': widget.city,
+                          'quantity': widget.quantity,
+                          'id': widget.id,
+                          'details': widget.details,
+                          'update': 'true'
+                        };
+                        Navigator.pop(context, data);
+                        // Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        //     builder: (context) => myDetails(
+                        //           attendantName: widget.name,
+                        //           attendantNum: widget.number,
+                        //           bloodGroup: widget.bloodType,
+                        //           status: "true",
+                        //           userContact: userPhoneNum,
+                        //           date: widget.date,
+                        //           time: widget.time,
+                        //           quantity: widget.quantity,
+                        //           hospital: widget.location,
+                        //           id: widget.id,
+                        //           city: widget.city,
+                        //           ownership: true,
+                        //           details: widget.details,
+                        //         )));
                       } else {
                         Fluttertoast.showToast(
                             msg: "Request Failed to Updated",

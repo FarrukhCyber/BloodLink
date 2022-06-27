@@ -54,9 +54,18 @@ function saveToDb(result) {
     let temp = result.time
     result.time = temp.substr(10,5)
     //2022-04-21T00:00:00.000+05:30
-    let newDate = result.date
-    result.time = newDate.replace("00:00", result.time)
-    console.log(result)
+    // let newDate = result.date
+    // result.time = newDate.replace("00:00", result.time)
+    // console.log(result)
+
+    //New Code-----------------
+    console.log(result.time)
+    let newStr = result.date.substr(0,11) + result.time + ":00.000Z"
+    console.log("newStr:", newStr)
+    //2022-04-21T00:00:00.000+05:30
+    result.time = newStr
+    console.log("After Updating Time in submit request:", result)
+
     //-------------------------
 
     //Storing the data in db

@@ -50,6 +50,24 @@ class myDetails extends StatefulWidget {
 }
 
 class _myDetailsState extends State<myDetails> {
+  void _update(var data) {
+    setState(() => {
+          print("setState is called"),
+          print("Time check:"),
+          print(widget.time),
+          widget.attendantName = data['name'],
+          widget.attendantNum = data['number'],
+          widget.bloodGroup = data['bloodType'],
+          widget.date = data['date'],
+          widget.time = data['time'],
+          widget.hospital = data['location'],
+          widget.city = data['city'],
+          widget.quantity = data['quantity'],
+          widget.id = data['id'],
+          widget.details = data['details']
+        });
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
@@ -65,19 +83,19 @@ class _myDetailsState extends State<myDetails> {
                         title: "BloodLink",
                         upperTitle: "\nRequest Information"),
                     Heading(
-                      title: "\n  Request Information",
-                      name: widget.attendantName,
-                      number: widget.attendantNum,
-                      bloodType: widget.bloodGroup,
-                      date: widget.date,
-                      time: widget.time,
-                      location: widget.hospital,
-                      city: widget.city,
-                      quantity: widget.quantity,
-                      owner: widget.ownership,
-                      id: widget.id,
-                      details: widget.details,
-                    ),
+                        title: "\n  Request Information",
+                        name: widget.attendantName,
+                        number: widget.attendantNum,
+                        bloodType: widget.bloodGroup,
+                        date: widget.date,
+                        time: widget.time,
+                        location: widget.hospital,
+                        city: widget.city,
+                        quantity: widget.quantity,
+                        owner: widget.ownership,
+                        id: widget.id,
+                        details: widget.details,
+                        update: _update),
                     Divider(
                       height: 5,
                       color: Color(0xffc10110),
@@ -100,9 +118,14 @@ class _myDetailsState extends State<myDetails> {
                             (widget.date.split('T')[0]).split('-')[0]),
                     DisplayInfo(
                         label: "Time",
-                        data: (widget.time.split('T')[1]).split(':')[0] +
-                            ':' +
-                            (widget.time.split('T')[1]).split(':')[1]),
+                        data: (widget.time.contains("TimeofDay"))
+                            ? ((widget.time.split('(')[1]).substring(0, 5))
+                            : (widget.time.split('T')[1]).split(':')[0] +
+                                ':' +
+                                (widget.time.split('T')[1]).split(':')[1]),
+                    // data: (widget.time.split('T')[1]).split(':')[0] +
+                    //     ':' +
+                    //     (widget.time.split('T')[1]).split(':')[1]),
                     DisplayInfo(label: "Status", data: widget.status),
                     DisplayInfo(
                         label: "Hospital",
@@ -199,6 +222,7 @@ class Heading extends StatefulWidget {
   var id;
   var details;
   var owner;
+  final ValueChanged<Map> update;
 
   Heading(
       {Key? key,
@@ -213,6 +237,7 @@ class Heading extends StatefulWidget {
       required this.quantity,
       required this.id,
       required this.details,
+      required this.update,
       required this.owner})
       : super(key: key);
 
@@ -272,21 +297,28 @@ class _HeadingState extends State<Heading> {
                               borderRadius:
                                   BorderRadius.circular(borderRadius)),
                         )),
-                    onPressed: () => {
-                      print(widget.time),
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => editRequest(
-                              name: widget.name,
-                              number: widget.number,
-                              bloodType: widget.bloodType,
-                              date: widget.date,
-                              time: widget.time,
-                              location: widget.location,
-                              id: widget.id,
-                              details: widget.details,
-                              owner: widget.owner,
-                              city: widget.city,
-                              quantity: widget.quantity)))
+                    onPressed: () async {
+                      print(widget.time);
+                      final result = await Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => editRequest(
+                                  name: widget.name,
+                                  number: widget.number,
+                                  bloodType: widget.bloodType,
+                                  date: widget.date,
+                                  time: widget.time,
+                                  location: widget.location,
+                                  id: widget.id,
+                                  details: widget.details,
+                                  owner: widget.owner,
+                                  city: widget.city,
+                                  quantity: widget.quantity)));
+                      print("Got data from edit page:");
+                      print(result);
+                      if (result['update'] == 'true') {
+                        print("inside if");
+                        widget.update(result);
+                      }
                     },
                     child: Text(
                       "Edit",
