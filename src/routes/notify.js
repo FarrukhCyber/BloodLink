@@ -30,7 +30,7 @@ const handleNotifications =  async (req, res, next, result) => {
 
         if ("deviceID" in ans && ans.deviceID != undefined) {
             console.log("Check deviceID:", ans.deviceID)
-            // devices.append(ans.deviceID)
+            devices.append(ans.deviceID)
         }
 
         ans2 = await RegUserModel.findOne({phoneNumber: result.user_contact_num}) // find the username of the donor
