@@ -209,7 +209,7 @@ class _registerDonorState extends State<registerDonor> {
                 "gender": UserSimplePreferences.getGender(),
                 "plasma": plasmaSelection
               };
-              print("sent to server");
+              UserSimplePreferences.setRegion(city); // THIS IS NEW
               var responseRegister =
                   await networkHandler.post('/register_donor/add', res);
               print("waiting for server");

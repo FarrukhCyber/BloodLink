@@ -8,7 +8,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:bloodlink/screens/edit_profile.dart';
 import 'package:bloodlink/screens/login.dart';
-import 'package:bloodlink/screens/user_profile.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 

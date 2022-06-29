@@ -2,7 +2,6 @@ const mongoose = require("mongoose")
 const express = require('express')
 const port = process.env.PORT || 8080 
 const app = express()
-
 const submitRequestRoutes = require('./src/routes/submitRequestRoutes')
 const registerAsDonor = require('./src/routes/registerAsDonor')
 const myRequests = require('./src/routes/myRequests')
@@ -15,11 +14,7 @@ const changePassword = require('./src/routes/changePassword.js')
 const plasmaDonorRegister = require('./src/routes/plasmaDonorRegister.js')
 const resolvedRequests = require('./src/routes/resolvedRequest')
 const editRequest = require('./src/routes/editRequest')
-const notify = require("./src/routes/notify")
-const donorCatalouge = require("./src/routes/donorCat")
-const rejectEmail = require("./src/routes/rejectEmail")
-const pendingRequest = require("./src/routes/pendingRequests")
-const sendEmail = require("./src/routes/sendEmail")
+const editProfile = require('./src/routes/editProfile')
 
 app.use(express.json({extended:false}))
 
@@ -57,12 +52,7 @@ app.use("/plasma_donor_register",plasmaDonorRegister)
 app.use("/submit_request", submitRequestRoutes)
 app.use("/resolved_request", resolvedRequests);
 app.use("/edit_request", editRequest);
-app.use("/notify", notify )
-app.use("/cat", donorCatalouge);
-app.use("/rejectEmail" , rejectEmail);
-app.use("/pending_request", pendingRequest);
-app.use("/sendEmail" , sendEmail);
-
+app.use("/editProfile", editProfile)
 // 404 page
 // app.use((req, res) => {
 //     res.status(404).render('404', { title: '404' });

@@ -5,24 +5,23 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:bloodlink/screens/signup.dart';
 
-class Otp extends StatefulWidget {
+class editPhoneOTP extends StatefulWidget {
   FirebaseAuth authen;
   String verify;
   String phoneNo;
   bool forget;
-  Otp(
+  editPhoneOTP(
       {Key? key,
       required this.authen,
       required this.verify,
       required this.phoneNo,
       required this.forget})
       : super(key: key);
-
   @override
-  _OtpState createState() => _OtpState();
+  State<editPhoneOTP> createState() => _editPhoneOTPState();
 }
 
-class _OtpState extends State<Otp> {
+class _editPhoneOTPState extends State<editPhoneOTP> {
   TextEditingController otpDigit1 = TextEditingController();
   TextEditingController otpDigit2 = TextEditingController();
   TextEditingController otpDigit3 = TextEditingController();
@@ -155,7 +154,7 @@ class _OtpState extends State<Otp> {
                   height: 18,
                 ),
                 Text(
-                  "Didn't receive any code?",
+                  "Didn't you receive any code?",
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,

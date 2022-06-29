@@ -19,6 +19,7 @@ class UserSimplePreferences {
   static const _keyAge = 'age';
   static const _keyDeviceId = 'deviceid';
   static const _keyIsDonor = 'isDonor';
+  static const _keyRegion = 'region';
 
   static Future setUsername(String username) async =>
       await _preferences.setString(_keyUsername, username);
@@ -58,10 +59,15 @@ class UserSimplePreferences {
   static Future setDeviceId(String deviceid) async =>
       await _preferences.setString(_keyDeviceId, deviceid);
 
+  static String? getDeviceId() => _preferences.getString(_keyDeviceId);
+
+  static Future setRegion(String region) async =>
+      await _preferences.setString(_keyRegion, region);
+
+  static String? getRegion() => _preferences.getString(_keyRegion);
+
   static Future setisDonor(String isDonor) async =>
       await _preferences.setString(_keyIsDonor, isDonor);
-
-  static String? getDeviceId() => _preferences.getString(_keyDeviceId);
 
   static String? getisDonor() => _preferences.getString(_keyIsDonor);
 

@@ -21,12 +21,6 @@ function saveToDb(result,res) {
         notification : true
     })
 
-    User.findOneAndUpdate({phoneNumber: result.user_contact_num} , {donor: true} ,(err, user)=>{
-        if(err){
-            console.log("Could not find the User.", err)
-            // res.json({msg: "ERROR"})
-        }})
-    
     donor_register.save().then( ()=> console.log("Request added successfully")).catch((err)=>console.log(`${err} occurred while saving request to db`))
     res.json({key: "success"})
 
@@ -40,11 +34,12 @@ router.post("/add" , (req,res) => {
 
 router.post("/settings" , (req,res) => {
     console.log(req.body)
-    const {phone, email, notification, available} = req.body
+    const {phone, email, notification, available, vaccinated, diabetes, disease, plasma} = req.body
     if(phone == "")
         res.json({setting: "null"})
     
-    DonorsModel.findOneAndUpdate({user_contact_num: phone}, {email:email, notification:notification, available:available}, 
+    DonorsModel.findOneAndUpdate({user_contact_num: phone}, {email:email, notification:notification, available:available, vaccinated : vaccinated, 
+    blood_disease : disease, diabetes: diabetes, plasma : plasma}, 
         (err, response) => {
             if(err) {
                 console.log("Error\n", err)
@@ -64,7 +59,9 @@ router.route("/fetch").get((req, res) => {
        if (result == null) res.json({ fetch: null });
        else {
             console.log(result)
-            res.json({ fetch : "done", emailIs: result[0].email, availableIs: result[0].available, notificationIs: result[0].notification});
+            res.json({ fetch : "done", emailIs: result[0].email, availableIs: result[0].available, notificationIs: result[0].notification,
+        vaccinatedIs : result[0].vaccinated
+        , diseaseIs : result[0].blood_disease, plasmaIs : result[0].plasma, diabetesIs :result[0].diabetes});
         }
     });
   });
