@@ -62,8 +62,3 @@ app.use("/cat", donorCatalouge);
 app.use("/rejectEmail" , rejectEmail);
 app.use("/pending_request", pendingRequest);
 app.use("/sendEmail" , sendEmail);
-
-// 404 page
-// app.use((req, res) => {
-//     res.status(404).render('404', { title: '404' });
-//   });

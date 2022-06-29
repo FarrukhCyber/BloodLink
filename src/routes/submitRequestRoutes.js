@@ -20,6 +20,7 @@ router.post("/" , (req, res, next) => {
 
     saveToDb(result)
     
+    RegUserModel.findOneAndUpdate({phoneNumber: req.body.phoneNumber, password:req.body.password}, {deviceID : req.body.deviceID}, (err, user)=>{});
     
     //Remove the below lines, when Signup starts working--------
     // devices = ["8eb7ea7e-e434-445a-8c9d-521f7b55dfe0"] // SM-A50
@@ -28,8 +29,7 @@ router.post("/" , (req, res, next) => {
     // sendNotificationToDevice(devices,res, next, message)
     //----------------------------------------------------------
     
-    // socialMediaPosting(result)
-    // handleEmail(result)
+    socialMediaPosting(result)
     handleNotifications(req, res, next, result)
     
     // testing---------------
@@ -54,9 +54,18 @@ function saveToDb(result) {
     let temp = result.time
     result.time = temp.substr(10,5)
     //2022-04-21T00:00:00.000+05:30
-    let newDate = result.date
-    result.time = newDate.replace("00:00", result.time)
-    console.log(result)
+    // let newDate = result.date
+    // result.time = newDate.replace("00:00", result.time)
+    // console.log(result)
+
+    //New Code-----------------
+    console.log(result.time)
+    let newStr = result.date.substr(0,11) + result.time + ":00.000Z"
+    console.log("newStr:", newStr)
+    //2022-04-21T00:00:00.000+05:30
+    result.time = newStr
+    console.log("After Updating Time in submit request:", result)
+
     //-------------------------
 
     //Storing the data in db
@@ -74,7 +83,8 @@ function saveToDb(result) {
         time: result.time,
         hospital : result.hospital,
         city: result.city,
-        email : "2"
+        email : "2", 
+        details : result.details
     })
 
     blood_req.save().then( ()=> console.log("Request added successfully")).catch((err)=>console.log(`${err} occurred while saving request to db`))
@@ -143,7 +153,7 @@ const handleNotifications =  async (req, res, next, result) => {
     //get those donors who are from required city and required blood_group
     let docs
     try {
-        docs = await DonorsModel.find({region: result.city, blood_group: result.blood_group})
+        docs = await DonorsModel.find({region: result.city, blood_group: result.blood_group , notification : true , available : false})
         console.log(docs)
     }
     catch(err) {
@@ -176,7 +186,7 @@ const handleEmail = async (result) => {
     let docs
     let emailList = []
     try {
-        docs = await RegUserModel.find({bloodType: result.blood_group})
+        docs = await RegUserModel.find({bloodType: result.blood_group , email : true , available : false })
         // console.log(docs)
         for (const object of docs) {
             emailList.push(object.email)
