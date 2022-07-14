@@ -257,7 +257,7 @@ class _OtpState extends State<Otp> {
         if (widget.forget) {
           Navigator.of(context).push(MaterialPageRoute(
               // builder: (context) => signup(phoneNo: widget.phoneNo))); // UNCOMMENT
-              builder: (context) => changePassword(phoneNo: widget.phoneNo)));
+              builder: (context) => changePassword(phoneNo: widget.phoneNo.substring(1))));
         } else {
           print(phoneNo);
           Navigator.of(context).push(MaterialPageRoute(
