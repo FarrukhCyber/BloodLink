@@ -67,7 +67,7 @@ class _changePasswordState extends State<changePassword> {
       decoration: decoration("Email", "Required", red, opacity),
     );
     final passwordField = passwordBuilder(
-        label: "New Password",
+        label: "Password",
         hint: "Required",
         controller: passwordEditingController);
     final confirmPasswordField = passwordBuilder(
@@ -98,7 +98,7 @@ class _changePasswordState extends State<changePassword> {
               print(name);
               print(pass);
               print(confirmPass);
-              print(phone);
+              print(widget.phoneNo);
               print("Hello from signup on press");
               if (pass != confirmPass) {
                 showDialog(
