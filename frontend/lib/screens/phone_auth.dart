@@ -207,6 +207,7 @@ class _LoginWithPhoneState extends State<LoginWithPhone> {
                                 phoneController.clear();
                               } else {
                                 if (widget.forget == false) {
+                                  print("Hi-----------------------------");
                                   var msg = await networkHandler.get(
                                       '/auth/phone',
                                       "92" + phoneController.text,
@@ -234,10 +235,11 @@ class _LoginWithPhoneState extends State<LoginWithPhone> {
                                     loginWithPhone();
                                   }
                                 } else {
+                                  print("Bye-----------------------------");
                                   print(phoneController.text);
                                   var msg = await networkHandler.get(
                                       '/auth/phone',
-                                      "+92" + phoneController.text,
+                                      "92" + phoneController.text,
                                       "user_contact_num");
                                   var mess = (json.decode(msg.body));
                                   print(mess);
