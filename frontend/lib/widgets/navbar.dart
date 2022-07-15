@@ -1,6 +1,7 @@
 import 'package:bloodlink/screens/aboutPage.dart';
 import 'package:bloodlink/screens/settings.dart';
 import 'package:flutter/material.dart';
+import 'package:bloodlink/screens/viewProfile.dart';
 import 'package:bloodlink/screens/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -61,12 +62,23 @@ class navBar extends StatelessWidget {
                   title: Text("Profile"),
                   onTap: () => {
                     print("User profile clicked"),
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => userProfile(
-                              phoneNum: phoneNo,
-                            )))
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => viewProfile()))
                   },
                 )
+
+              // ListTile(
+              //     // logout
+              //     leading: Icon(Icons.person),
+              //     title: Text("Profile"),
+              //     onTap: () => {
+              //       print("User profile clicked"),
+              //       Navigator.of(context).push(MaterialPageRoute(
+              //           builder: (context) => userProfile(
+              //                 phoneNum: phoneNo,
+              //               )))
+              //     },
+              //   )
               : Container(),
           ListTile(
             leading: const Icon(Icons.info_outline),
