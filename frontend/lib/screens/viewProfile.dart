@@ -40,6 +40,7 @@ class _viewProfileState extends State<viewProfile>
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
+    var ht = MediaQuery.of(context).size.width * 0.05;
     return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
@@ -93,7 +94,10 @@ class _viewProfileState extends State<viewProfile>
                           func: "region",
                           value: UserSimplePreferences.getRegion() ?? "404",
                         )
-                      : Text("")
+                      : Text(""),
+                  SizedBox(
+                    height: ht,
+                  )
                 ],
               ),
             ]),
