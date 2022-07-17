@@ -1,22 +1,30 @@
+import 'package:bloodlink/base_url.dart';
 import 'package:bloodlink/screens/changePassword.dart';
 import 'package:bloodlink/screens/user_profile.dart';
+import 'package:bloodlink/screens/viewProfile.dart';
 import 'package:bloodlink/utils/user_info.dart';
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:bloodlink/screens/signup.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Otp extends StatefulWidget {
   FirebaseAuth authen;
   String verify;
   String phoneNo;
   bool forget;
+  bool edit;
   Otp(
       {Key? key,
       required this.authen,
       required this.verify,
       required this.phoneNo,
-      required this.forget})
+      required this.forget,
+      required this.edit})
       : super(key: key);
 
   @override
@@ -244,8 +252,10 @@ class _OtpState extends State<Otp> {
 
     try {
       await widget.authen.signInWithCredential(credential).then((value) {
-        print("Phone Number Verified");
-        UserSimplePreferences.setPhoneNumber(widget.phoneNo.substring(1));
+        print(
+            "Phone Number Verified-----------------------------------------------------");
+        print(widget.forget);
+        print(widget.edit);
         Fluttertoast.showToast(
             msg: "Verification Sucessful",
             toastLength: Toast.LENGTH_SHORT,
@@ -254,17 +264,65 @@ class _OtpState extends State<Otp> {
             backgroundColor: Color.fromARGB(255, 193, 0, 0),
             textColor: Colors.white,
             fontSize: 16.0);
-        if (widget.forget) {
-          Navigator.of(context).push(MaterialPageRoute(
-              // builder: (context) => signup(phoneNo: widget.phoneNo))); // UNCOMMENT
-              builder: (context) => changePassword(phoneNo: widget.phoneNo.substring(1))));
-        } else {
-          print(phoneNo);
-          Navigator.of(context).push(MaterialPageRoute(
-              // builder: (context) => signup(phoneNo: widget.phoneNo))); // UNCOMMENT
-              builder: (context) => signup(phoneNo: widget.phoneNo)));
-        }
       });
+      if (widget.forget) {
+        Navigator.of(context).push(MaterialPageRoute(
+            // builder: (context) => signup(phoneNo: widget.phoneNo))); // UNCOMMENT
+            builder: (context) =>
+                changePassword(phoneNo: widget.phoneNo.substring(1))));
+      } else if (widget.forget == false && widget.edit == false) {
+        print(phoneNo);
+        Navigator.of(context).push(MaterialPageRoute(
+            // builder: (context) => signup(phoneNo: widget.phoneNo))); // UNCOMMENT
+            builder: (context) => signup(phoneNo: widget.phoneNo)));
+      } else if (widget.edit) {
+        var url = base_url + "/editProfile/phone";
+        var phone = UserSimplePreferences.getPhoneNumber();
+        print("In phone");
+        print(phone);
+        try {
+          final http.Response response = await http.post(
+            Uri.parse(url),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(<String, dynamic>{
+              "phone": phone.toString(),
+              'newPhone': widget.phoneNo.substring(1),
+            }),
+          );
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          var parse = jsonDecode(response.body);
+          if (parse["blood"] == null) {
+            print("it is null");
+            await prefs.setString('blood', "null");
+          } else {
+            await prefs.setString('blood', parse["blood"].toString());
+            Fluttertoast.showToast(
+                msg: "Phone Number Updated",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Color.fromARGB(255, 193, 0, 0),
+                textColor: Colors.white,
+                fontSize: 16.0);
+            UserSimplePreferences.setPhoneNumber(widget.phoneNo.substring(1));
+          }
+          print("Message received:");
+          print(parse["blood"]);
+        } on HttpException catch (err) {
+          print(err);
+          return null;
+        } on Error catch (error) {
+          print(error);
+          return null;
+        } on Object catch (error) {
+          print(error);
+          return null;
+        }
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => viewProfile()));
+      }
     } catch (error) {
       Fluttertoast.showToast(
           msg: "Invalid OTP",
