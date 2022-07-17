@@ -133,20 +133,28 @@ router.route("/age").post((req,res) => {
 })
 
 
-router.route("/phone").get((req, res) => {
-    console.log("hi")
-      User.findOne({ phoneNumber : req.headers.user_contact_num}, (err, result) => {
-        if (err) return res.json({ msg: "ERROR" });
-        if (result == null) return res.json({msg:"null"});
-        else {
-          console.log(result)
-          return res.json({ msg:"exists" });}
-      });
-    });
+router.route("/phone").post((req,res) => {
+    const {phone, newPhone} = req.body
+    console.log("In Phone: ", phone, newPhone)
+    
+    User.findOneAndUpdate({phoneNumber : phone}, {phoneNumber: newPhone}, (err,result) => {
+        if(err) {
+            consolelog("Error \n", err)
+            res.json({blood : null})}
+        else{ 
+            console.log("Success\n", result)
+            Donor.findOneAndUpdate({user_contact_num : phone}, {user_contact_num: newPhone}, (err,result) => {
+                if(err){
+                    consolelog("Error \n", err)
+                    res.json({blood : null})}
+                else{
+                    console.log("Final success\n", result)
+                    res.json({blood: "done"}) 
+                }
+            }) 
+    }
+})})
 
 
 
 module.exports = router;
-
-
-
