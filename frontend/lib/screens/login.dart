@@ -394,7 +394,7 @@ class SigupButton extends StatelessWidget {
         TextButton(
             onPressed: () => {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => LoginWithPhone(forget: false)))
+                      builder: (context) => LoginWithPhone(forget: false, edit:false)))
                 },
             child: const Text(
               "Sign up",
