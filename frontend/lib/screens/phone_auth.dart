@@ -9,7 +9,8 @@ import 'package:bloodlink/screens/otp.dart';
 
 class LoginWithPhone extends StatefulWidget {
   bool forget;
-  LoginWithPhone({Key? key, required this.forget}) : super(key: key);
+  bool edit;
+  LoginWithPhone({Key? key, required this.forget, required this.edit}) : super(key: key);
 
   @override
   _LoginWithPhoneState createState() => _LoginWithPhoneState();
@@ -194,6 +195,7 @@ class _LoginWithPhoneState extends State<LoginWithPhone> {
                                           verify: verificationID,
                                           phoneNo: "+92" + phone,
                                           forget: widget.forget,
+                                          edit:widget.edit
                                         )),
                               );
                               //verifyOTP();
@@ -206,7 +208,7 @@ class _LoginWithPhoneState extends State<LoginWithPhone> {
                                     false);
                                 phoneController.clear();
                               } else {
-                                if (widget.forget == false) {
+                                if (widget.forget == false || widget.edit==true) {
                                   var msg = await networkHandler.get(
                                       '/auth/phone',
                                       "92" + phoneController.text,
@@ -220,14 +222,14 @@ class _LoginWithPhoneState extends State<LoginWithPhone> {
                                         context,
                                         "There was an error in server",
                                         "Please try again in some time",
-                                        true);
+                                        !widget.edit);
                                     phoneController.clear();
                                   } else if (message == "exists") {
                                     errorGenerator(
                                         context,
                                         "Number already registered",
                                         "Please use some other Phone Number or LogIn",
-                                        true);
+                                        !widget.edit);
                                     phoneController.clear();
                                   } else if (message == "null") {
                                     print("line 233");
@@ -237,7 +239,7 @@ class _LoginWithPhoneState extends State<LoginWithPhone> {
                                   print(phoneController.text);
                                   var msg = await networkHandler.get(
                                       '/auth/phone',
-                                      "+92" + phoneController.text,
+                                      "92" + phoneController.text,
                                       "user_contact_num");
                                   var mess = (json.decode(msg.body));
                                   print(mess);
@@ -247,7 +249,7 @@ class _LoginWithPhoneState extends State<LoginWithPhone> {
                                         context,
                                         "There was an error in server",
                                         "Please try again in some time",
-                                        true);
+                                        false);
                                     phoneController.clear();
                                   } else if (message == "exists") {
                                     loginWithPhone();
@@ -256,7 +258,7 @@ class _LoginWithPhoneState extends State<LoginWithPhone> {
                                         context,
                                         "Number not registered",
                                         "Please Create a New Account",
-                                        true);
+                                        false);
                                     //Navigator.of(context)
                                     //    .push(MaterialPageRoute(
                                     //  builder: (context) => login(),

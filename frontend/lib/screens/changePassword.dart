@@ -311,13 +311,13 @@ class _passwordBuilderState extends State<passwordBuilder> {
           ? 'Enter minimum 8 characters + 1 Uppercase + 1 Digit + 1 Special Character'
           : null,
       onChanged: (password) => {
-            if (widget.label == "Password")
+            if (widget.label == "New Password")
               pass = password
             else
               confirmPass = password
           },
       onSaved: (password) => {
-            if (widget.label == "Password")
+            if (widget.label == "New Password")
               password != null ? pass = password : null
             else
               password != null ? confirmPass = password : null

@@ -3,4 +3,5 @@
 // var base_url = "http://10.130.8.169:8080"; //LUMS Wireless
 // var base_url = "http://192.168.10.5:8080"; // Home wifi
 // var base_url = "http://localhost:8080";
-var base_url = "https://bloodlink-new-server.herokuapp.com";
+// var base_url = "https://bloodlink-new-server.herokuapp.com";
+var base_url = "http://192.168.18.11:8080"; //Daim Home Wifi

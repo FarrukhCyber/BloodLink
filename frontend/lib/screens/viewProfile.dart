@@ -1,4 +1,5 @@
 import 'package:bloodlink/screens/addDonor.dart';
+import 'package:bloodlink/screens/phone_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bloodlink/utils/user_info.dart';
 import 'package:bloodlink/screens/editEmail.dart';
@@ -71,7 +72,7 @@ class _viewProfileState extends State<viewProfile>
                   editSomething2(
                     text: "Phone Number",
                     func: "phone",
-                    value: UserSimplePreferences.getPhoneNumber() ?? "404",
+                    value: "0"+UserSimplePreferences.getPhoneNumber()!.substring(2),
                   ),
                   editSomething2(
                     text: "Blood Group",
@@ -270,8 +271,9 @@ class editSomething2 extends StatelessWidget {
                         builder: (context) => editPassword(key: key)))
                   else if (func == "phone")
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => editPhone(
+                        builder: (context) => LoginWithPhone(
                               forget: false,
+                              edit:true
                             )))
                   else if (func == "age")
                     Navigator.of(context).push(MaterialPageRoute(
