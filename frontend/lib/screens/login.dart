@@ -415,7 +415,7 @@ class forgetButton extends StatelessWidget {
     return TextButton(
         onPressed: () => {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => LoginWithPhone(forget: true)))
+                  builder: (context) => LoginWithPhone(forget: true,edit:false,)))
             },
         child: const Text(
           "Forget Password?",
